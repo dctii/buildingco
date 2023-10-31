@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class Person implements PersonalName, PhoneNumbers, Addresses, Emails {
+public abstract class Person {
     private String[] nameParts;
     private String[] postNominals;
     // TODO: consider creating objects for building addresses
@@ -28,7 +28,6 @@ public abstract class Person implements PersonalName, PhoneNumbers, Addresses, E
         return nameParts;
     }
 
-    @Override
     public String getForename() {
         return nameParts[0];
     }
@@ -37,7 +36,6 @@ public abstract class Person implements PersonalName, PhoneNumbers, Addresses, E
         nameParts[0] = forename;
     }
 
-    @Override
     public String getMiddleName() {
         return nameParts[1];
     }
@@ -46,7 +44,6 @@ public abstract class Person implements PersonalName, PhoneNumbers, Addresses, E
         nameParts[1] = middleName;
     }
 
-    @Override
     public String getSurname() {
         return nameParts[2];
     }
@@ -55,7 +52,6 @@ public abstract class Person implements PersonalName, PhoneNumbers, Addresses, E
         nameParts[2] = surname;
     }
 
-    @Override
     public String getSuffix() {
         return nameParts[3];
     }
@@ -64,7 +60,6 @@ public abstract class Person implements PersonalName, PhoneNumbers, Addresses, E
         nameParts[3] = suffix;
     }
 
-    @Override
     public String[] getPostNominals() {
         return postNominals;
     }
@@ -73,7 +68,6 @@ public abstract class Person implements PersonalName, PhoneNumbers, Addresses, E
         this.postNominals = postNominals;
     }
 
-    @Override
     public String getFullName() {
         return buildFullName(new String[]{});
     }

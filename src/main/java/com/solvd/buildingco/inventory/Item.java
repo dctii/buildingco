@@ -1,4 +1,4 @@
-package com.solvd.buildingco.inventory.items;
+package com.solvd.buildingco.inventory;
 
 import java.math.BigDecimal;
 

@@ -1,5 +1,5 @@
 package com.solvd.buildingco.buildings;
-public class IndustrialBuilding {
+public class Building {
     public static void main(String[] args) {
         
     }

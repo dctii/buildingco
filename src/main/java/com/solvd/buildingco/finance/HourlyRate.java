@@ -1,4 +1,4 @@
-package com.solvd.buildingco.finance.payrates;
+package com.solvd.buildingco.finance;
 
 import java.math.BigDecimal;
 
@@ -18,14 +18,11 @@ public class HourlyRate extends PayRate{
         this.ratePerHour = ratePerHour;
     }
 
-    @Override
-    public BigDecimal calculatePay(int workedHours, BigDecimal overtimeRate) {
+    public BigDecimal calculatePay(int workedHours) {
         BigDecimal regularHours = new BigDecimal(Math.min(workedHours, 40));
-        BigDecimal overtimeHours = new BigDecimal(Math.max(workedHours - 40, 0));
 
         BigDecimal regularPay = regularHours.multiply(ratePerHour);
-        BigDecimal overtimePay = overtimeHours.multiply(ratePerHour).multiply(overtimeRate);
 
-        return regularPay.add(overtimePay);
+        return regularPay;
     }
 }

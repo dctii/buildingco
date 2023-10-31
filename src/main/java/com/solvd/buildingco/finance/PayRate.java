@@ -1,4 +1,4 @@
-package com.solvd.buildingco.finance.payrates;
+package com.solvd.buildingco.finance;
 
 import java.math.BigDecimal;
 
@@ -17,5 +17,5 @@ public abstract class PayRate {
         this.rate = baseRate;
     }
 
-    public abstract BigDecimal calculatePay(int timeWorked, BigDecimal overtimeRate);
+    public abstract BigDecimal calculatePay(int timeWorked);
 }

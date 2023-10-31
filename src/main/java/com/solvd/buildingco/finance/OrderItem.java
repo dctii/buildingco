@@ -1,6 +1,6 @@
-package com.solvd.buildingco.inventory.orders;
+package com.solvd.buildingco.finance;
 
-import com.solvd.buildingco.inventory.items.Item;
+import com.solvd.buildingco.inventory.Item;
 
 import java.math.BigDecimal;
 

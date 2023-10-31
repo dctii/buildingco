@@ -1,15 +1,14 @@
 package com.solvd.buildingco;
 
-import com.solvd.buildingco.enums.PersonnelType;
-import com.solvd.buildingco.finance.payrates.HourlyRate;
-import com.solvd.buildingco.inventory.items.Item;
-import com.solvd.buildingco.inventory.orders.Order;
+import com.solvd.buildingco.finance.HourlyRate;
+import com.solvd.buildingco.inventory.Item;
+import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.scheduling.Availability;
 import com.solvd.buildingco.scheduling.Schedule;
 import com.solvd.buildingco.scheduling.Schedule.ScheduledActivity;
 import com.solvd.buildingco.stakeholders.Personnel;
-import com.solvd.buildingco.utilities.OrderCalculator;
-import com.solvd.buildingco.utilities.WageCalculator;
+import com.solvd.buildingco.utilities.Calculators.OrderCalculator;
+import com.solvd.buildingco.utilities.Calculators.WageCalculator;
 
 import java.math.BigDecimal;
 import java.time.DayOfWeek;
@@ -20,10 +19,26 @@ import java.time.ZonedDateTime;
 import static com.solvd.buildingco.utilities.TimeUtils.getLocalTime;
 import static com.solvd.buildingco.utilities.TimeUtils.getZonedTime;
 
-/*
-* Calculators utilities.OrderCalculator && utilities.WageCalculator:
-* TimingUtility scheduling.Schedule
-    * only applied to Personnel, can be applied to project as a whole
+/* TODO: Assignment 3
+* Create  3 building types. Extends 'Building' class. Basics in 'Building': Labor, Structure
+* (amount of rooms, how many floors),
+   Material, Size, Time to finish.
+*  - House
+*  - Skyscraper
+*  - Industrial Building
+*
+* EXISTING: Use 'Item' for the materials. Use Order and OrderItem to calculating how much it costs
+*  for the
+  materials
+* EXISTING: Use 'Personnel' and their hourly rates to calculate how much it costs for people
+* CREATE: The 'Structure' (Shape, Number of Rooms and Room Types, Sq. Meters, Levels) of the
+   project will:
+   - increase the amount of time it takes to work on it
+   - increase the amount of materials required
+        - each factor of Structure will do this as they increase in amount.
+        - shape
+* CREATE: The 'Rooms'
+* Create a required amount of workers and worker types that will go with them
 * */
 
 public class Main {
@@ -140,7 +155,7 @@ public class Main {
 
 
         // Create PersonnelType object
-        PersonnelType personnelType = PersonnelType.MANAGER;
+        String personnelType = "Manager";
 
         // Create and return the Personnel object
         return new Personnel(nameParts, postNominals, organizationNames, roles, addresses,
@@ -186,7 +201,7 @@ public class Main {
 
 
         // Create PersonnelType object
-        PersonnelType personnelType = PersonnelType.ARCHITECT;
+        String personnelType = "Architect";
 
         // Create and return the Personnel object
         return new Personnel(nameParts, postNominals, organizationNames, roles, addresses,
@@ -231,7 +246,7 @@ public class Main {
 
 
         // Create PersonnelType object
-        PersonnelType personnelType = PersonnelType.WORKER;
+        String personnelType = "Construction Worker";
 
         // Create and return the Personnel object
         return new Personnel(nameParts, postNominals, organizationNames, roles, addresses,

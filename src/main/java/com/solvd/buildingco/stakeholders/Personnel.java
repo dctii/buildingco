@@ -7,8 +7,7 @@ package com.solvd.buildingco.stakeholders;
  * Safety Inspectors
  * */
 
-import com.solvd.buildingco.enums.PersonnelType;
-import com.solvd.buildingco.finance.payrates.PayRate;
+import com.solvd.buildingco.finance.PayRate;
 import com.solvd.buildingco.scheduling.Availability;
 import com.solvd.buildingco.scheduling.Schedule;
 import com.solvd.buildingco.scheduling.Schedule.ScheduledActivity;
@@ -25,12 +24,12 @@ public class Personnel extends Stakeholder {
     private PayRate payRate;
     private Schedule schedule;
     private Availability availability;
-    private PersonnelType personnelType;
+    private String personnelType;
 
     public Personnel(String[] nameParts, String[] postNominals, String[] organizationNames,
                      String[] roles, String[] addresses, String[] phoneNumbers, String[] emails,
                      PayRate payRate, Schedule schedule,
-                     Availability availability, PersonnelType personnelType) {
+                     Availability availability, String personnelType) {
         super(nameParts, postNominals, organizationNames, roles,
                 addresses, phoneNumbers, emails);
 
@@ -66,11 +65,11 @@ public class Personnel extends Stakeholder {
         this.availability = availability;
     }
 
-    public PersonnelType getPersonnelType() {
+    public String getPersonnelType() {
         return personnelType;
     }
 
-    public void setPersonnelType(PersonnelType personnelType) {
+    public void setPersonnelType(String personnelType) {
         this.personnelType = personnelType;
     }
 
