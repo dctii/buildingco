@@ -1,12 +1,5 @@
 package com.solvd.buildingco.stakeholders;
 
-/* PersonnelType:
- * Workers
- * Managers
- * Architects
- * Safety Inspectors
- * */
-
 import com.solvd.buildingco.finance.PayRate;
 import com.solvd.buildingco.scheduling.Availability;
 import com.solvd.buildingco.scheduling.Schedule;
@@ -20,16 +13,16 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
-public class Personnel extends Stakeholder {
+public class Employee extends Stakeholder {
     private PayRate payRate;
     private Schedule schedule;
     private Availability availability;
     private String personnelType;
 
-    public Personnel(String[] nameParts, String[] postNominals, String[] organizationNames,
-                     String[] roles, String[] addresses, String[] phoneNumbers, String[] emails,
-                     PayRate payRate, Schedule schedule,
-                     Availability availability, String personnelType) {
+    public Employee(String[] nameParts, String[] postNominals, String[] organizationNames,
+                    String[] roles, String[] addresses, String[] phoneNumbers, String[] emails,
+                    PayRate payRate, Schedule schedule,
+                    Availability availability, String personnelType) {
         super(nameParts, postNominals, organizationNames, roles,
                 addresses, phoneNumbers, emails);
 
