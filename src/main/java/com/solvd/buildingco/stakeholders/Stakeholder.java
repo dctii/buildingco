@@ -8,7 +8,8 @@ import com.solvd.buildingco.utilities.FieldUtils;
 
 import java.util.Arrays;
 
-public class Stakeholder extends Person {
+public abstract class Stakeholder extends Person {
+
     private String[] organizationNames;
     private String[] roles;
 

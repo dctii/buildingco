@@ -1,6 +1,6 @@
 package com.solvd.buildingco.scheduling;
 
-import com.solvd.buildingco.stakeholders.Personnel;
+import com.solvd.buildingco.stakeholders.employees.Employee;
 
 import java.time.DayOfWeek;
 import java.time.ZonedDateTime;
@@ -34,7 +34,7 @@ public class Schedule {
     }
 
     public static class ScheduledActivity {
-        private List<Personnel> assignedPersonnel;
+        private List<Employee> assignedPersonnel;
         private String description;
         private String location;
         private DayOfWeek day;
@@ -65,11 +65,11 @@ public class Schedule {
             this.location = location;
         }
 
-        public List<Personnel> getAssignedPersonnel() {
+        public List<Employee> getAssignedPersonnel() {
             return assignedPersonnel;
         }
 
-        public void setAssignedPersonnel(List<Personnel> assignedPersonnel) {
+        public void setAssignedPersonnel(List<Employee> assignedPersonnel) {
             this.assignedPersonnel = assignedPersonnel;
         }
 

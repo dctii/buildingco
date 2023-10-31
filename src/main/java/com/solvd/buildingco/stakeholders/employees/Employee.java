@@ -1,9 +1,9 @@
-package com.solvd.buildingco.stakeholders;
+package com.solvd.buildingco.stakeholders.employees;
 
 import com.solvd.buildingco.finance.PayRate;
-import com.solvd.buildingco.scheduling.Availability;
 import com.solvd.buildingco.scheduling.Schedule;
 import com.solvd.buildingco.scheduling.Schedule.ScheduledActivity;
+import com.solvd.buildingco.stakeholders.Stakeholder;
 import com.solvd.buildingco.utilities.FieldUtils;
 
 import java.math.BigDecimal;
@@ -16,13 +16,11 @@ import java.util.Map;
 public class Employee extends Stakeholder {
     private PayRate payRate;
     private Schedule schedule;
-    private Availability availability;
     private String personnelType;
 
     public Employee(String[] nameParts, String[] postNominals, String[] organizationNames,
                     String[] roles, String[] addresses, String[] phoneNumbers, String[] emails,
-                    PayRate payRate, Schedule schedule,
-                    Availability availability, String personnelType) {
+                    PayRate payRate, Schedule schedule, String personnelType) {
         super(nameParts, postNominals, organizationNames, roles,
                 addresses, phoneNumbers, emails);
 
@@ -31,7 +29,6 @@ public class Employee extends Stakeholder {
         this.payRate = payRate;
 
         this.schedule = schedule;
-        this.availability = availability;
     }
 
     public BigDecimal getPayRate() {
@@ -50,13 +47,6 @@ public class Employee extends Stakeholder {
         this.schedule = schedule;
     }
 
-    public Availability getAvailability() {
-        return availability;
-    }
-
-    public void setAvailability(Availability availability) {
-        this.availability = availability;
-    }
 
     public String getPersonnelType() {
         return personnelType;
@@ -100,7 +90,7 @@ public class Employee extends Stakeholder {
     public String toString() {
         String className = "Personnel";
         String stakeholderStr = super.toString();
-        String[] fieldNames = {"payRate", "schedule", "availability",
+        String[] fieldNames = {"payRate", "schedule",
                 "personnelType"};
 
         StringBuilder builder = new StringBuilder(className + "{");

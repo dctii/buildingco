@@ -1,22 +1,18 @@
 package com.solvd.buildingco;
 
 import com.solvd.buildingco.finance.HourlyRate;
-import com.solvd.buildingco.inventory.Item;
 import com.solvd.buildingco.finance.Order;
-import com.solvd.buildingco.scheduling.Availability;
+import com.solvd.buildingco.inventory.Item;
 import com.solvd.buildingco.scheduling.Schedule;
 import com.solvd.buildingco.scheduling.Schedule.ScheduledActivity;
-import com.solvd.buildingco.stakeholders.Personnel;
+import com.solvd.buildingco.stakeholders.employees.Employee;
 import com.solvd.buildingco.utilities.Calculators.OrderCalculator;
 import com.solvd.buildingco.utilities.Calculators.WageCalculator;
 
 import java.math.BigDecimal;
-import java.time.DayOfWeek;
-import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
-import static com.solvd.buildingco.utilities.TimeUtils.getLocalTime;
 import static com.solvd.buildingco.utilities.TimeUtils.getZonedTime;
 
 /* TODO: Assignment 3
@@ -54,10 +50,10 @@ public class Main {
         int numberOfPMs = 4;
         int numberOfArchitects = 2;
         // types of staff
-        Personnel constructionWorker, projectManager, architect;
+        Employee constructionWorker, projectManager, architect;
         // arrays for iteration
         int[] allStaffCounts;
-        Personnel[] allPersonnelTypes;
+        Employee[] allPersonnelTypes;
         // for calculating wages
         WageCalculator wageCalculator;
         BigDecimal combinedTotalWages;
@@ -73,7 +69,9 @@ public class Main {
         projectManager = createProjectManager();
         architect = createArchitect();
 
-        allPersonnelTypes = new Personnel[]{constructionWorker, projectManager, architect};
+        System.out.println(constructionWorker.getFullName());
+
+        allPersonnelTypes = new Employee[]{constructionWorker, projectManager, architect};
         allStaffCounts = new int[]{numberOfWorkers, numberOfPMs, numberOfArchitects};
 
         wageCalculator = new WageCalculator();
@@ -81,7 +79,7 @@ public class Main {
 
         // calculate the wages of all the personnel combined
         for (int i = 0; i < allPersonnelTypes.length; i++) {
-            Personnel personnel = allPersonnelTypes[i];
+            Employee personnel = allPersonnelTypes[i];
             int staffCount = allStaffCounts[i];
 
             // work hours are calculated by scheduled hours per day, the hours of each day in the
@@ -117,7 +115,7 @@ public class Main {
         System.out.println("Total price for the project: $" + totalCosts);
     }
 
-    public static Personnel createProjectManager() {
+    public static Employee createProjectManager() {
         String[] nameParts = {
                 "John", "Jacob", "Schmidt", null
         };
@@ -149,21 +147,19 @@ public class Main {
         HourlyRate hourlyRate = new HourlyRate(ratePerHour);
 
 
-        // Create Schedule and Availability objects
+        // Create Schedule objects
         Schedule newSchedule = createSchedule();
-        Availability newAvailability = createAvailability();
 
 
         // Create PersonnelType object
         String personnelType = "Manager";
 
         // Create and return the Personnel object
-        return new Personnel(nameParts, postNominals, organizationNames, roles, addresses,
-                phoneNumbers, emails, hourlyRate, newSchedule,
-                newAvailability, personnelType);
+        return new Employee(nameParts, postNominals, organizationNames, roles, addresses,
+                phoneNumbers, emails, hourlyRate, newSchedule, personnelType);
     }
 
-    public static Personnel createArchitect() {
+    public static Employee createArchitect() {
         String[] nameParts = {
                 "Alexa", "M", "Doe", null
         };
@@ -195,27 +191,23 @@ public class Main {
         HourlyRate hourlyRate = new HourlyRate(ratePerHour);
 
 
-        // Create Schedule and Availability objects
+        // Create Schedule object
         Schedule newSchedule = createSchedule();
-        Availability newAvailability = createAvailability();
 
 
         // Create PersonnelType object
         String personnelType = "Architect";
 
         // Create and return the Personnel object
-        return new Personnel(nameParts, postNominals, organizationNames, roles, addresses,
-                phoneNumbers, emails, hourlyRate, newSchedule,
-                newAvailability, personnelType);
+        return new Employee(nameParts, postNominals, organizationNames, roles, addresses,
+                phoneNumbers, emails, hourlyRate, newSchedule, personnelType);
     }
 
-    public static Personnel createConstructionWorker() {
+    public static Employee createConstructionWorker() {
         String[] nameParts = {
-                "Bill", "Bo", "Bagginess", null
+                "Bill", "Bo", "Bagginess", "II"
         };
-        String[] postNominals = {
-                null
-        };
+        String[] postNominals = {};
         String[] organizationNames = {
                 "ABC Construction Co."
         };
@@ -240,32 +232,16 @@ public class Main {
         HourlyRate hourlyRate = new HourlyRate(ratePerHour);
 
 
-        // Create Schedule and Availability objects
+        // Create Schedule object
         Schedule newSchedule = createSchedule();
-        Availability newAvailability = createAvailability();
 
 
         // Create PersonnelType object
         String personnelType = "Construction Worker";
 
         // Create and return the Personnel object
-        return new Personnel(nameParts, postNominals, organizationNames, roles, addresses,
-                phoneNumbers, emails, hourlyRate, newSchedule,
-                newAvailability, personnelType);
-    }
-
-    public static Availability createAvailability() {
-        Availability availability = new Availability();
-
-        LocalTime friStartTime = getLocalTime("09:00:00");
-        LocalTime friEndTime = getLocalTime("17:00:00");
-
-        availability.setAvailabilityForDay(
-                DayOfWeek.FRIDAY,
-                new Availability.TimeSlot(friStartTime, friEndTime)
-        );
-
-        return availability;
+        return new Employee(nameParts, postNominals, organizationNames, roles, addresses,
+                phoneNumbers, emails, hourlyRate, newSchedule, personnelType);
     }
 
     public static Schedule createSchedule() {

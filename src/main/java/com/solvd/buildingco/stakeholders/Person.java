@@ -2,15 +2,11 @@ package com.solvd.buildingco.stakeholders;
 
 import com.solvd.buildingco.utilities.FieldUtils;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public abstract class Person {
     private String[] nameParts;
     private String[] postNominals;
-    // TODO: consider creating objects for building addresses
     private String[] addresses;
     private String[] emails;
     private String[] phoneNumbers;
@@ -69,43 +65,27 @@ public abstract class Person {
     }
 
     public String getFullName() {
-        return buildFullName(new String[]{});
-    }
-
-    public String buildFullName(String[] exclusions) {
-        List<String> exclusionList = new ArrayList<>();
-
-        if (exclusions != null) {
-            exclusionList = Arrays.asList(exclusions);
-        }
-
         StringBuilder fullName = new StringBuilder();
 
-        String[] fieldNames = {"forename", "middleName", "surname", "suffix", "postNominals"};
-
-        for (String fieldName : fieldNames) {
-            if (!exclusionList.contains(fieldName)) {
-                try {
-                    Field field = this.getClass().getDeclaredField(fieldName);
-                    field.setAccessible(true);
-                    Object value = field.get(this);
-                    if (value != null) {
-                        if (fullName.length() > 0) {
-                            fullName.append(fieldName.equals("postNominals") ? ", " : " ");
-                        }
-                        if (fieldName.equals("postNominals")) {
-                            fullName.append(String.join(", ", (String[]) value));
-                        } else {
-                            fullName.append(value.toString());
-                        }
+        // Directly use the nameParts array
+        if (nameParts != null) {
+            for (String namePart : nameParts) {
+                if (namePart != null) {
+                    if (fullName.length() > 0) {
+                        fullName.append(" ");
                     }
-                } catch (NoSuchFieldException | IllegalAccessException e) {
-                    e.printStackTrace();
+                    fullName.append(namePart);
                 }
             }
         }
+
+        if (getPostNominals() != null && getPostNominals().length > 0) {
+            fullName.append(", ").append(String.join(", ", getPostNominals()));
+        }
+
         return fullName.toString();
     }
+
 
     public String[] getAddresses() {
         return addresses;
@@ -152,7 +132,7 @@ public abstract class Person {
         }
 
         if (builder.length() > (className + "{").length()) {
-            builder.setLength(builder.length() - 2); // removes the last 2 chars
+            builder.setLength(builder.length() - 2);
         }
 
         builder.append("}");
