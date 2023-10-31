@@ -9,7 +9,7 @@ public class FieldUtils {
         while (current != null) {
             try {
                 Field field = obj.getClass().getDeclaredField(fieldName);
-                field.setAccessible(true);
+                field.setAccessible(true); // override private, protected, etc
                 return field.get(obj);
             } catch (NoSuchFieldException | IllegalAccessException e) {
                 current = current.getSuperclass();

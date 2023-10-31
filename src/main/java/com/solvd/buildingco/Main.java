@@ -95,7 +95,7 @@ public class Main {
         orderCalculator = new OrderCalculator();
         totalOrderPrice = orderCalculator.calculate(projectOrder);
 
-        // print out all of the costs
+        // print out all the costs
         System.out.println("Total Wages for Personnel project: $" + combinedTotalWages);
         System.out.println("Total price for the items order: $" + totalOrderPrice);
         System.out.println("Total price for the project: $" + totalOrderPrice + combinedTotalWages);
@@ -256,7 +256,7 @@ public class Main {
         Schedule schedule = new Schedule();
         ZoneId zoneId = ZoneId.of("America/Los_Angeles");
 
-        // Dates for a 1-week schedule
+        // Dates for a 4-week schedule
         String[] dates = {
                 "03/04/2024",
                 "03/05/2024",
