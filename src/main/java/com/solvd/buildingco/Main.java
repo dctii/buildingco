@@ -98,7 +98,8 @@ public class Main {
         // print out all the costs
         System.out.println("Total Wages for Personnel project: $" + combinedTotalWages);
         System.out.println("Total price for the items order: $" + totalOrderPrice);
-        System.out.println("Total price for the project: $" + totalOrderPrice + combinedTotalWages);
+        BigDecimal totalCosts = totalOrderPrice.add(combinedTotalWages);
+        System.out.println("Total price for the project: $" + totalCosts);
     }
 
     public static Personnel createProjectManager() {
