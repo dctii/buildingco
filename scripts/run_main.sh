@@ -4,6 +4,7 @@
 PROJECT_NAME="buildingco"
 PACKAGE="com.solvd.${PROJECT_NAME}"
 CLASSPATH="src/main/java"
+OUT_DIR="out"
 
 SCRIPT_DIR=$(dirname "$0")
 cd "$SCRIPT_DIR"
@@ -44,8 +45,15 @@ test_status() {
   fi
 }
 
-# Pre-cleaning: remove existing .class files
-find . -name "*.class" -exec rm -f {} +
+cleanup_project() {
+  if [ -d "${OUT_DIR}" ]; then
+    rm -rf ${OUT_DIR}
+  fi
+  find . -name "*.class" -exec rm -f {} +
+}
+
+# Pre-cleaning: remove existing 'out/' directory and '.class' files
+cleanup_project
 test_status pass="Pre-cleaning process successful." fail="Pre-cleaning process failed."
 
 # Compile all .java files under src/main/java
@@ -56,9 +64,9 @@ test_status pass="Compilation successful." fail="Compilation failed."
 java -classpath ${CLASSPATH} ${PACKAGE}.Main
 test_status pass="Program ran successfully." fail="Java program execution failed."
 
-# Post-cleaning: remove existing .class files
-find . -name "*.class" -exec rm -f {} +
+# Post-cleaning: remove existing 'out/' directory and '.class' files
+cleanup_project
 test_status pass="Post-cleaning process successful." fail="Post-cleaning process failed."
 
 # Unset variables
-unset PACKAGE CLASSPATH SCRIPT_DIR
+unset PACKAGE CLASSPATH SCRIPT_DIR OUT_DIR
