@@ -1,6 +1,7 @@
 package com.solvd.buildingco.buildings;
-public class Skyscraper {
+
+public abstract class Skyscraper extends Building {
     public static void main(String[] args) {
-        
+
     }
 }

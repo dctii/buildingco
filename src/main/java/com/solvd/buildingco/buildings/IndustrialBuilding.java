@@ -1,6 +1,7 @@
 package com.solvd.buildingco.buildings;
-public class IndustrialBuilding {
+
+public abstract class IndustrialBuilding extends Building {
     public static void main(String[] args) {
-        
+
     }
 }
