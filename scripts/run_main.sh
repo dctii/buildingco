@@ -4,10 +4,9 @@
 PROJECT_NAME="buildingco"
 PACKAGE="com.solvd.${PROJECT_NAME}"
 CLASSPATH="src/main/java"
-OUT_DIR="out"
 
 SCRIPT_DIR=$(dirname "$0")
-cd "$SCRIPT_DIR" || exit
+cd "$SCRIPT_DIR"
 
 # Find 'PROJECT_NAME' directory and then 'src' directory
 while [ "$(basename "$(pwd)")" != "${PROJECT_NAME}" ]; do
@@ -18,7 +17,7 @@ while [ "$(basename "$(pwd)")" != "${PROJECT_NAME}" ]; do
   fi
 done
 
-echo -e "\033[32mFound root directory. Attempting clean, compile, and run...\033[0m"
+echo -e "\033[32mFound 'src' directory. Attempting clean, compile, and run...\033[0m"
 
 # Function to test the status of the previous command
 test_status() {
@@ -45,42 +44,21 @@ test_status() {
   fi
 }
 
-clean_project() {
-  local pass=""
-  local fail=""
-
-  while [ "$#" -gt 0 ]; do
-    case "$1" in
-      pass=*)
-        pass="${1#pass=}"
-        ;;
-      fail=*)
-        fail="${1#fail=}"
-        ;;
-    esac
-    shift
-  done
-
-  if [ -d "${OUT_DIR}" ]; then
-    rm -rf ${OUT_DIR}
-  fi
-  find . -name "*.class" -exec rm -f {} +
-  test_status pass="${pass}" fail="${fail}"
-}
-
-# Pre-cleaning: remove existing 'out/' directory and '.class' files
-clean_project pass="Pre-cleaning process successful." fail="Pre-cleaning process failed."
+# Pre-cleaning: remove existing .class files
+find . -name "*.class" -exec rm -f {} +
+test_status pass="Pre-cleaning process successful." fail="Pre-cleaning process failed."
 
 # Compile all .java files under src/main/java
-javac "$(find . -name "*.java")"
+javac $(find . -name "*.java")
 test_status pass="Compilation successful." fail="Compilation failed."
 
 # Run
 java -classpath ${CLASSPATH} ${PACKAGE}.Main
 test_status pass="Program ran successfully." fail="Java program execution failed."
 
-# Post-cleaning: remove existing 'out/' directory and '.class' files
-clean_project pass="Post-cleaning process successful." fail="Post-cleaning process failed."
+# Post-cleaning: remove existing .class files
+find . -name "*.class" -exec rm -f {} +
+test_status pass="Post-cleaning process successful." fail="Post-cleaning process failed."
 
 # Unset variables
-unset PACKAGE CLASSPATH SCRIPT_DIR OUT_DIR
+unset PACKAGE CLASSPATH SCRIPT_DIR
