@@ -19,28 +19,6 @@ import java.time.ZonedDateTime;
 import static com.solvd.buildingco.utilities.TimeUtils.getLocalTime;
 import static com.solvd.buildingco.utilities.TimeUtils.getZonedTime;
 
-/* TODO: Assignment 3
-* Create  3 building types. Extends 'Building' class. Basics in 'Building': Labor, Structure
-* (amount of rooms, how many floors),
-   Material, Size, Time to finish.
-*  - House
-*  - Skyscraper
-*  - Industrial Building
-*
-* EXISTING: Use 'Item' for the materials. Use Order and OrderItem to calculating how much it costs
-*  for the
-  materials
-* EXISTING: Use 'Personnel' and their hourly rates to calculate how much it costs for people
-* CREATE: The 'Structure' (Shape, Number of Rooms and Room Types, Sq. Meters, Levels) of the
-   project will:
-   - increase the amount of time it takes to work on it
-   - increase the amount of materials required
-        - each factor of Structure will do this as they increase in amount.
-        - shape
-* CREATE: The 'Rooms'
-* Create a required amount of workers and worker types that will go with them
-* */
-
 public class Main {
     public static void main(String[] args) {
         // variables initiated at the top
