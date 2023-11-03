@@ -4,6 +4,10 @@ import com.solvd.buildingco.utilities.FieldUtils;
 
 import java.util.Arrays;
 
+import static com.solvd.buildingco.utilities.BooleanUtils.isEmptyOrNull;
+
+
+// general Person class with usual title and contact information
 public abstract class Person {
     private String[] nameParts;
     private String[] postNominals;
@@ -20,12 +24,18 @@ public abstract class Person {
         this.phoneNumbers = phoneNumbers;
     }
 
+    // getters and setters
+
     public String[] getNameParts() {
-        return nameParts;
+        return isEmptyOrNull(nameParts) ? null : nameParts;
+    }
+
+    public void setNameParts(String[] nameParts) {
+        this.nameParts = nameParts;
     }
 
     public String getForename() {
-        return nameParts[0];
+        return isEmptyOrNull(nameParts) ? null : nameParts[0];
     }
 
     public void setForename(String forename) {
@@ -33,7 +43,7 @@ public abstract class Person {
     }
 
     public String getMiddleName() {
-        return nameParts[1];
+        return isEmptyOrNull(nameParts) ? null : nameParts[1];
     }
 
     public void setMiddleName(String middleName) {
@@ -41,7 +51,7 @@ public abstract class Person {
     }
 
     public String getSurname() {
-        return nameParts[2];
+        return isEmptyOrNull(nameParts) ? null : nameParts[2];
     }
 
     public void setSurname(String surname) {
@@ -49,7 +59,7 @@ public abstract class Person {
     }
 
     public String getSuffix() {
-        return nameParts[3];
+        return isEmptyOrNull(nameParts) ? null : nameParts[3];
     }
 
     public void setSuffix(String suffix) {
@@ -57,13 +67,14 @@ public abstract class Person {
     }
 
     public String[] getPostNominals() {
-        return postNominals;
+        return isEmptyOrNull(postNominals) ? null : postNominals;
     }
 
     public void setPostNominals(String[] postNominals) {
         this.postNominals = postNominals;
     }
 
+    // returns full name as a string with post-nominals (e.g., PhD, M.Arch, etc)
     public String getFullName() {
         StringBuilder fullName = new StringBuilder();
 
@@ -86,9 +97,10 @@ public abstract class Person {
         return fullName.toString();
     }
 
+    // getters and setters
 
     public String[] getAddresses() {
-        return addresses;
+        return isEmptyOrNull(addresses) ? null : addresses;
     }
 
     public void setAddresses(String[] addresses) {
@@ -96,7 +108,7 @@ public abstract class Person {
     }
 
     public String[] getPhoneNumbers() {
-        return phoneNumbers;
+        return isEmptyOrNull(phoneNumbers) ? null : phoneNumbers;
     }
 
     public void setPhoneNumbers(String[] phoneNumbers) {
@@ -104,7 +116,7 @@ public abstract class Person {
     }
 
     public String[] getEmails() {
-        return emails;
+        return isEmptyOrNull(emails) ? null : emails;
     }
 
     public void setEmails() {

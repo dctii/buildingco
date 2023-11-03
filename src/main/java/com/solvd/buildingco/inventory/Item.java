@@ -1,20 +1,21 @@
 package com.solvd.buildingco.inventory;
 
+import com.solvd.buildingco.utilities.FieldUtils;
+
 import java.math.BigDecimal;
 
 public class Item {
     private String name;
     private BigDecimal pricePerUnit;
     private String unitMeasurement;
-    private String provider;
 
-    public Item(String name, BigDecimal pricePerUnit, String unitMeasurement, String provider) {
+    public Item(String name, BigDecimal pricePerUnit, String unitMeasurement) {
         this.name = name;
-        this.pricePerUnit = pricePerUnit;
-        this.unitMeasurement = unitMeasurement;
-        this.provider = provider;
+        this.pricePerUnit = pricePerUnit; // price per unit
+        this.unitMeasurement = unitMeasurement; // define unit measurement
     }
 
+    // getters and setters
     public String getName() {
         return name;
     }
@@ -39,21 +40,30 @@ public class Item {
         this.unitMeasurement = unitMeasurement;
     }
 
-    public String getProviderId() {
-        return provider;
-    }
-
-    public void setProviderId(String provider) {
-        this.provider = provider;
-    }
-
     @Override
     public String toString() {
-        return "Item{" +
-                "name='" + name + '\'' +
-                ", pricePerUnit=" + pricePerUnit +
-                ", unitMeasurement='" + unitMeasurement + '\'' +
-                ", providerId='" + provider + '\'' +
-                '}';
+        String className = this.getClass().getSimpleName();
+        StringBuilder builder = new StringBuilder(className + "{");
+
+        String[] fieldNames = {"item", "quantity"};
+
+        for (String fieldName : fieldNames) {
+            Object fieldValue = FieldUtils.getField(this, fieldName);
+            if (fieldValue != null) {
+                builder
+                        .append(fieldName)
+                        .append("=")
+                        .append(fieldValue)
+                        .append(", ");
+            }
+        }
+
+        if (builder.length() > className.length() + 1) {
+            builder.setLength(builder.length() - 2);
+        }
+
+        builder.append("}");
+
+        return builder.toString();
     }
 }

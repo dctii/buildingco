@@ -1,5 +1,7 @@
 package com.solvd.buildingco.finance;
 
+import com.solvd.buildingco.utilities.FieldUtils;
+
 import java.math.BigDecimal;
 
 public class HourlyRate extends PayRate{
@@ -10,6 +12,15 @@ public class HourlyRate extends PayRate{
         this.ratePerHour = ratePerHour;
     }
 
+    // calculates wage, hours multiplied by rate
+    @Override
+    public BigDecimal calculatePay(int workedHours) {
+        BigDecimal regularHours = new BigDecimal(workedHours);
+
+        return regularHours.multiply(ratePerHour); // total wage to pay
+    }
+
+    // getters and setters
     public BigDecimal getRatePerHour() {
         return ratePerHour;
     }
@@ -18,11 +29,33 @@ public class HourlyRate extends PayRate{
         this.ratePerHour = ratePerHour;
     }
 
-    public BigDecimal calculatePay(int workedHours) {
-        BigDecimal regularHours = new BigDecimal(Math.min(workedHours, 40));
+    @Override
+    public String toString() {
+        String className = this.getClass().getSimpleName();
+        StringBuilder builder = new StringBuilder(super.toString()); // Start with the PayRate's toString information
 
-        BigDecimal regularPay = regularHours.multiply(ratePerHour);
+        // Append HourlyRate-specific field information
+        String[] fieldNames = {"ratePerHour"};
 
-        return regularPay;
+        for (String fieldName : fieldNames) {
+            Object fieldValue = FieldUtils.getField(this, fieldName);
+            if (fieldValue != null) {
+                builder.append(", ")
+                        .append(fieldName)
+                        .append("=")
+                        .append(fieldValue);
+            }
+        }
+
+        builder.append("}");
+
+        int startIndex = builder.indexOf("PayRate{") + "PayRate".length();
+        builder.replace(startIndex, startIndex + 1, className + "{");
+
+        return builder.toString();
     }
+
+
+
+
 }

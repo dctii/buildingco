@@ -13,7 +13,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
-public class Employee extends Stakeholder {
+import static com.solvd.buildingco.scheduling.ScheduleUtils.getDateFormat;
+
+public abstract class Employee extends Stakeholder {
     private PayRate payRate;
     private Schedule schedule;
     private String personnelType;
@@ -21,15 +23,54 @@ public class Employee extends Stakeholder {
     public Employee(String[] nameParts, String[] postNominals, String[] organizationNames,
                     String[] roles, String[] addresses, String[] phoneNumbers, String[] emails,
                     PayRate payRate, Schedule schedule, String personnelType) {
+
         super(nameParts, postNominals, organizationNames, roles,
                 addresses, phoneNumbers, emails);
 
         this.personnelType = personnelType;
-
         this.payRate = payRate;
-
         this.schedule = schedule;
     }
+
+    // iterates through the employee's schedule to get their work hours
+    public long getWorkHours(String startDateStr, String endDateStr) {
+        DateTimeFormatter dateFormat = getDateFormat();
+
+        // range for work hours
+        LocalDate startDate = LocalDate.parse(startDateStr, dateFormat);
+        LocalDate endDate = LocalDate.parse(endDateStr, dateFormat);
+
+        long totalWorkHours = 0;
+
+        // if there is a schedule, iterate and see how many hours the employee has on their schedule
+        if (schedule != null) {
+            for (Map.Entry<DayOfWeek, List<ScheduledActivity>> entry :
+                    schedule.getWeeklyActivities().entrySet()) {
+                for (ScheduledActivity activity : entry.getValue()) {
+                    LocalDate activityDate = activity.getStartTime().toLocalDate();
+
+                    boolean isWithinDateSpan =
+                            (activityDate.isEqual(startDate) || activityDate.isAfter(startDate)) &&
+                                    (activityDate.isEqual(endDate) || activityDate.isBefore(endDate));
+
+                    // if within date range, then update work hours
+                    if (isWithinDateSpan) {
+                        // calculate duration of activity in seconds;
+                        // EpochSecond = date and time computers use to measure system time
+                        long hours =
+                                activity.getEndTime().toEpochSecond() - activity.getStartTime().toEpochSecond();
+                        long secondsInHour = 3600;
+                        // update amount of totalWorkHours
+                        totalWorkHours += hours / secondsInHour;
+                    }
+                }
+            }
+        }
+
+        return totalWorkHours;
+    }
+
+    // getters and setters
 
     public BigDecimal getPayRate() {
         return payRate.getRate();
@@ -45,8 +86,8 @@ public class Employee extends Stakeholder {
 
     public void setSchedule(Schedule schedule) {
         this.schedule = schedule;
-    }
 
+    }
 
     public String getPersonnelType() {
         return personnelType;
@@ -54,35 +95,6 @@ public class Employee extends Stakeholder {
 
     public void setPersonnelType(String personnelType) {
         this.personnelType = personnelType;
-    }
-
-    public long getWorkHours(String startDateStr, String endDateStr) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
-        LocalDate startDate = LocalDate.parse(startDateStr, formatter);
-        LocalDate endDate = LocalDate.parse(endDateStr, formatter);
-
-        long totalWorkHours = 0;
-
-        if (schedule != null) {
-            for (Map.Entry<DayOfWeek, List<ScheduledActivity>> entry :
-                    schedule.getWeeklyActivities().entrySet()) {
-                for (ScheduledActivity activity : entry.getValue()) {
-                    LocalDate activityDate = activity.getStartTime().toLocalDate();
-                    boolean isWithinDateSpan =
-                            (activityDate.isEqual(startDate) || activityDate.isAfter(startDate)) &&
-                            (activityDate.isEqual(endDate) || activityDate.isBefore(endDate));
-
-                    if (isWithinDateSpan) {
-                        long hours =
-                                activity.getEndTime().toEpochSecond() - activity.getStartTime().toEpochSecond();
-                        long secondsInHour = 3600;
-                        totalWorkHours += hours / secondsInHour;
-                    }
-                }
-            }
-        }
-
-        return totalWorkHours;
     }
 
 

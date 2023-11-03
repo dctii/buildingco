@@ -1,13 +1,12 @@
 package com.solvd.buildingco.stakeholders;
 
-/*TODO: consider creating a PaymentInfo class that can be implemented into Stakeholder
- * fields: billingAddress, bankAccNum, bankRoutingNum, etc.
- * */
-
 import com.solvd.buildingco.utilities.FieldUtils;
 
 import java.util.Arrays;
 
+import static com.solvd.buildingco.utilities.BooleanUtils.isEmptyOrNull;
+
+// Person but adds organizationNames and roles
 public abstract class Stakeholder extends Person {
 
     private String[] organizationNames;
@@ -20,8 +19,9 @@ public abstract class Stakeholder extends Person {
         this.roles = roles;
     }
 
+    // getters and setters
     public String[] getOrganizationNames() {
-        return organizationNames;
+        return isEmptyOrNull(organizationNames) ? null : organizationNames;
     }
 
     public void setOrganizationNames(String[] organizationNames) {
@@ -29,7 +29,7 @@ public abstract class Stakeholder extends Person {
     }
 
     public String[] getRoles() {
-        return roles;
+        return isEmptyOrNull(roles) ? null : roles;
     }
 
     public void setRoles(String[] roles) {
