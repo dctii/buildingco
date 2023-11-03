@@ -41,7 +41,7 @@ public class Order {
 
     // getters and setter
     public OrderItem[] getOrderItems() {
-        // returns array without any
+        // returns array trimmed
         return Arrays.copyOf(orderItems, count);
     }
 
