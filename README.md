@@ -17,6 +17,23 @@ bash scripts/run_main.sh
 
 <hr />
 
+### Assignment 4: Interfaces. Final(class, method, variable). Static. Polymorphism.
+
+<hr />
+
+#### Requirements
+
+##### Comments and Required changes on Assignment 3:
+- <span style="color: pink;"> Pending... </span>
+
+##### Requirements for Assignment 4
+1. Add 3 interfaces to your application (please keep in mind their purpose and use polymorphism with them as explained on the lesson)
+   - 1a. Whoever has menus in main classes, please use interfaces with them
+2. Add 5 `final static` constants.
+
+
+<hr />
+
 ### Assignment 3: Inheratance. Abstraction. Method Overriding. Class Object. Encapsulation(protected)
 
 <hr />
