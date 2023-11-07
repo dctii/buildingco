@@ -3,6 +3,7 @@ package com.solvd.buildingco.buildings;
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.finance.OrderItem;
 import com.solvd.buildingco.inventory.Item;
+import com.solvd.buildingco.inventory.RentableItem;
 import com.solvd.buildingco.scheduling.Schedule;
 import com.solvd.buildingco.stakeholders.employees.*;
 import com.solvd.buildingco.utilities.FieldUtils;
@@ -13,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 
 import static com.solvd.buildingco.scheduling.ScheduleUtils.getDateFormat;
 
-public class Skyscraper extends Building {
+public class Skyscraper extends Building implements IEstimate {
     private int squareFootagePerLevel;
     private int numberOfLevels;
     private int constructionDays;
@@ -51,10 +52,13 @@ public class Skyscraper extends Building {
                         numberOfLevels),
                 new OrderItem(new Item("Plumbing Supplies", new BigDecimal("4000.0"), "unit"),
                         numberOfLevels),
-                new OrderItem(new Item("HVAC Supplies", new BigDecimal("12000.0"), "unit"),
+                new OrderItem(new Item("HVAC Supplies", new BigDecimal("1200.0"), "unit"),
                         numberOfLevels),
                 new OrderItem(new Item("Interior Finishing", new BigDecimal("70.0"), "square foot"),
                         squareFootagePerLevel * numberOfLevels),
+                new OrderItem(
+                        new RentableItem("Tower Crane", new BigDecimal("15000.0")),
+                        2) // rent a tower crane for 2 months
         };
 
         for (OrderItem item : orderItems) {
@@ -71,10 +75,10 @@ public class Skyscraper extends Building {
         int totalConstructionDays = calculateConstructionDays();
         setConstructionDays(totalConstructionDays);
 
-        worker = ConstructionWorker.createConstructionWorker(schedule, new BigDecimal("20.0"));
-        engineer = Engineer.createEngineer(schedule, new BigDecimal("35.0"));
-        architect = Architect.createArchitect(schedule, new BigDecimal("40.0"));
-        manager = ProjectManager.createProjectManager(schedule, new BigDecimal("45.0"));
+        worker = ConstructionWorker.createEmployee(schedule, new BigDecimal("20.0"));
+        engineer = Engineer.createEmployee(schedule, new BigDecimal("35.0"));
+        architect = Architect.createEmployee(schedule, new BigDecimal("40.0"));
+        manager = ProjectManager.createEmployee(schedule, new BigDecimal("45.0"));
 
         ZonedDateTime requiredStartTime = customerEndDate.minusDays(totalConstructionDays);
         ZonedDateTime architectEndTime = requiredStartTime.plusDays(totalConstructionDays / 5);

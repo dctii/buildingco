@@ -16,7 +16,8 @@ public class Architect extends Employee {
     }
 
     // factory method for Architect
-    public static Architect createArchitect(Schedule schedule, BigDecimal ratePerHour) {
+
+    public static Architect createEmployee(Schedule schedule, BigDecimal ratePerHour) {
         String personnelType = "Architect";
         String[] nameParts = {null, null, null, null};
         String[] postNominals = {};

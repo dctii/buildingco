@@ -18,7 +18,7 @@ public class Engineer extends Employee {
     }
 
     // factory method for Engineer
-    public static Engineer createEngineer(Schedule schedule, BigDecimal ratePerHour) {
+    public static Engineer createEmployee(Schedule schedule, BigDecimal ratePerHour) {
         String personnelType = "Engineer";
         String[] nameParts = {"John", "J", "Doe", null};
         String[] postNominals = {"PhD"};

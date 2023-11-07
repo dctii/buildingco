@@ -9,14 +9,14 @@ import java.math.BigDecimal;
 
 public class ProjectManager extends Employee {
     public ProjectManager(String[] nameParts, String[] postNominals, String[] organizationNames,
-                     String[] roles, String[] addresses, String[] phoneNumbers, String[] emails,
-                     PayRate payRate, Schedule schedule, String personnelType) {
+                          String[] roles, String[] addresses, String[] phoneNumbers, String[] emails,
+                          PayRate payRate, Schedule schedule, String personnelType) {
         super(nameParts, postNominals, organizationNames, roles, addresses, phoneNumbers, emails
                 , payRate, schedule, personnelType);
     }
 
     // factory method for ProjectManager
-    public static ProjectManager createProjectManager(Schedule schedule, BigDecimal ratePerHour) {
+    public static ProjectManager createEmployee(Schedule schedule, BigDecimal ratePerHour) {
         String personnelType = "Project Manager";
         String[] nameParts = {"John", "J", "Doe", null};
         String[] postNominals = {"PhD"};

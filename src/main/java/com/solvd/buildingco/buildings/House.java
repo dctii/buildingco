@@ -3,6 +3,7 @@ package com.solvd.buildingco.buildings;
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.finance.OrderItem;
 import com.solvd.buildingco.inventory.Item;
+import com.solvd.buildingco.inventory.RentableItem;
 import com.solvd.buildingco.scheduling.Schedule;
 import com.solvd.buildingco.scheduling.Schedule.ScheduledActivity;
 import com.solvd.buildingco.stakeholders.employees.*;
@@ -14,7 +15,7 @@ import java.time.format.DateTimeFormatter;
 
 import static com.solvd.buildingco.scheduling.ScheduleUtils.getDateFormat;
 
-public class House extends Building {
+public class House extends Building implements IEstimate {
 
     private int squareFootage;
     private int numRooms;
@@ -71,7 +72,10 @@ public class House extends Building {
                         numBathrooms + 1), // includes kitchen
                 new OrderItem(
                         new Item("Electrical Supplies", new BigDecimal("300.0"), "unit"),
-                        numRooms + 1) // includes garage
+                        numRooms + 1), // includes garage
+                new OrderItem(
+                        new RentableItem("Concrete Mixer", new BigDecimal("800.0")),
+                        1) // rent a concrete mixer for 1 months
         };
 
         // loop to populate Order instance
@@ -89,10 +93,12 @@ public class House extends Building {
 
         Schedule schedule = new Schedule();
 
-        this.worker = ConstructionWorker.createConstructionWorker(schedule, new BigDecimal("15.0"));
-        this.engineer = Engineer.createEngineer(schedule, new BigDecimal("30.0"));
-        this.architect = Architect.createArchitect(schedule, new BigDecimal("35.0"));
-        this.manager = ProjectManager.createProjectManager(schedule, new BigDecimal("40.0"));
+
+
+        this.worker = ConstructionWorker.createEmployee(schedule, new BigDecimal("15.0"));
+        this.engineer = Engineer.createEmployee(schedule, new BigDecimal("30.0"));
+        this.architect = Architect.createEmployee(schedule, new BigDecimal("35.0"));
+        this.manager = ProjectManager.createEmployee(schedule, new BigDecimal("40.0"));
 
         ZonedDateTime requiredStartTime = customerEndDate.minusDays(constructionDays);
         ZonedDateTime architectEndTime = requiredStartTime.plusDays(constructionDays / 5);
@@ -160,14 +166,12 @@ public class House extends Building {
     }
 
     // factory method with constants used in BuildingPrompt; values are arbitrary
+    final static int BASE_SQUARE_FOOTAGE = 550; // assumed one room home sq footage
+    final static int BASE_CONSTRUCTION_DAYS = 30;
+    final static int ADDITIONAL_SQUARE_FOOTAGE_PER_ROOM = 200;
+    final static int ADDITIONAL_SQUARE_FOOTAGE_PER_CAR = 100;
+    final static int ADDITIONAL_CONSTRUCTION_DAYS_PER_CAR = 3;
     public static House createHouse(int numRooms, int numBathrooms, int garageCapacity) {
-        // constants to help with scaling
-        final int BASE_SQUARE_FOOTAGE = 550; // assumed one room home sq footage
-        final int BASE_CONSTRUCTION_DAYS = 30;
-        final int ADDITIONAL_SQUARE_FOOTAGE_PER_ROOM = 200;
-        final int ADDITIONAL_SQUARE_FOOTAGE_PER_CAR = 100;
-        final int ADDITIONAL_CONSTRUCTION_DAYS_PER_CAR = 3;
-
         // set scaled amount of square footage for the building
         int extraRoomsSquareFootage = ADDITIONAL_SQUARE_FOOTAGE_PER_ROOM * (numRooms - 1);
         int garageSquareFootage = (ADDITIONAL_SQUARE_FOOTAGE_PER_CAR * garageCapacity);

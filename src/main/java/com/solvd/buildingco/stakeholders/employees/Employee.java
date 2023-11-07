@@ -32,6 +32,7 @@ public abstract class Employee extends Stakeholder {
         this.schedule = schedule;
     }
 
+
     // iterates through the employee's schedule to get their work hours
     public long getWorkHours(String startDateStr, String endDateStr) {
         DateTimeFormatter dateFormat = getDateFormat();

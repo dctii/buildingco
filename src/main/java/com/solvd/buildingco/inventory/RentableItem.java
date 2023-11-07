@@ -1,48 +1,47 @@
-package com.solvd.buildingco.finance;
+package com.solvd.buildingco.inventory;
 
-import com.solvd.buildingco.inventory.Priceable;
 import com.solvd.buildingco.utilities.FieldUtils;
 
 import java.math.BigDecimal;
 
-public class OrderItem {
-    private Priceable item;
-    private int quantity;
+public class RentableItem implements Priceable {
+    private String name;
+    private BigDecimal pricePerMonth;
 
-    public OrderItem(Priceable item, int quantity) {
-        this.item = item;
-        this.quantity = quantity;
-    }
-
-    // get price per unit and multiply by qty
-    public BigDecimal getTotalPrice() {
-        return item.getPrice().multiply(new BigDecimal(quantity));
+    public RentableItem(String name, BigDecimal pricePerMonth) {
+        this.name = name;
+        this.pricePerMonth = pricePerMonth; // rental price per month
     }
 
     // getters and setters
-
-    public Priceable getItem() {
-        return item;
+    public String getName() {
+        return name;
     }
 
-    public void setItem(Priceable item) {
-        this.item = item;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public BigDecimal getPricePerMonth() {
+        return pricePerMonth;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    @Override
+    public BigDecimal getPrice() {
+        return getPricePerMonth();
     }
+
+    public void setPricePerMonth(BigDecimal pricePerMonth) {
+        this.pricePerMonth = pricePerMonth;
+    }
+
 
     @Override
     public String toString() {
         String className = this.getClass().getSimpleName();
         StringBuilder builder = new StringBuilder(className + "{");
 
-        String[] fieldNames = {"item", "quantity"};
+        String[] fieldNames = {"name", "pricePerMonth"};
 
         for (String fieldName : fieldNames) {
             Object fieldValue = FieldUtils.getField(this, fieldName);
@@ -63,5 +62,4 @@ public class OrderItem {
 
         return builder.toString();
     }
-
 }

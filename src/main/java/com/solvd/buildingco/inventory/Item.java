@@ -4,7 +4,7 @@ import com.solvd.buildingco.utilities.FieldUtils;
 
 import java.math.BigDecimal;
 
-public class Item {
+public class Item implements Priceable {
     private String name;
     private BigDecimal pricePerUnit;
     private String unitMeasurement;
@@ -28,9 +28,15 @@ public class Item {
         return pricePerUnit;
     }
 
+    @Override
+    public BigDecimal getPrice() {
+        return getPricePerUnit();
+    }
+
     public void setPricePerUnit(BigDecimal pricePerUnit) {
         this.pricePerUnit = pricePerUnit;
     }
+
 
     public String getUnitMeasurement() {
         return unitMeasurement;
@@ -39,6 +45,7 @@ public class Item {
     public void setUnitMeasurement(String unitMeasurement) {
         this.unitMeasurement = unitMeasurement;
     }
+
 
     @Override
     public String toString() {
