@@ -1,8 +1,10 @@
 package com.solvd.buildingco;
 
-import com.solvd.buildingco.buildings.*;
+import com.solvd.buildingco.buildings.Building;
+import com.solvd.buildingco.interactive.HouseMenu;
+import com.solvd.buildingco.interactive.IndustrialBuildingMenu;
+import com.solvd.buildingco.interactive.SkyscraperMenu;
 import com.solvd.buildingco.utilities.Calculator.BuildingCostCalculator;
-import com.solvd.buildingco.interactive.BuildingPrompt;
 
 import java.time.ZonedDateTime;
 import java.util.Scanner;
@@ -28,27 +30,28 @@ public class Main {
             Building building;
 
             /*
-                BuildingPrompt.create* will activate a prompt sequence for the respective
+                runMenu will activate a prompt sequence for the respective
                 building type. For example, "How many rooms would you like?" for `House`
                 or `Enter the square footage for the ... (up to 100000)`. The user enters
                 a number but should not exceed the ceiling number given.
             */
             switch (choice) {
                 case 1:
-                    building = BuildingPrompt.createHouse(scanner);
+                    building = HouseMenu.runMenu(scanner);
                     break;
                 case 2:
-                    building = BuildingPrompt.createIndustrialBuilding(scanner);
+                    building = IndustrialBuildingMenu.runMenu(scanner);
                     break;
                 case 3:
-                    building = BuildingPrompt.createSkyscraper(scanner);
+                    building = SkyscraperMenu.runMenu(scanner);
                     break;
                 case 0:
                     System.out.println("Goodbye");
                     return;
                 default:
                     System.out.println("You cannot choose that");
-                    continue;
+                    building = null;
+                    break;
             }
 
             // TODO: have customer input a desired completion date, then it will see if the
@@ -74,9 +77,12 @@ public class Main {
                  The last is the sum of the material and labor costs.
             */
 
-            System.out.println("Material Cost: " + building.calculateMaterialCost());
-            System.out.println("Labor Cost: " + building.calculateLaborCost(completionDate));
-            System.out.println("Total Building Cost: " + BuildingCostCalculator.calculate(building, completionDate));
+            if (building != null) {
+                System.out.println("Material Cost: " + building.calculateMaterialCost());
+                System.out.println("Labor Cost: " + building.calculateLaborCost(completionDate));
+                System.out.println("Total Building Cost: " + BuildingCostCalculator.calculateBuildingCost(building, completionDate));
+            }
+
 
             // ask to restart the prompt sequence after finishing a BuildingPrompt sequence
             System.out.println("Do you want to calculate for another building? (y/n)");

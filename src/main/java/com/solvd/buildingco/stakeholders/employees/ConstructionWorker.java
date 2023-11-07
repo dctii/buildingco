@@ -18,8 +18,9 @@ public class ConstructionWorker extends Employee {
     }
 
     // factory method for ConstructionWorker
-    public static ConstructionWorker createConstructionWorker(Schedule schedule,
-                                                              BigDecimal ratePerHour) {
+
+    public static ConstructionWorker createEmployee(Schedule schedule,
+                                                    BigDecimal ratePerHour) {
         String personnelType = "Construction Worker";
         String[] nameParts = {"John", "J", "Doe", null};
         String[] postNominals = {"PhD"};

@@ -3,6 +3,7 @@ package com.solvd.buildingco.buildings;
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.finance.OrderItem;
 import com.solvd.buildingco.inventory.Item;
+import com.solvd.buildingco.inventory.RentableItem;
 import com.solvd.buildingco.scheduling.Schedule;
 import com.solvd.buildingco.stakeholders.employees.*;
 import com.solvd.buildingco.utilities.FieldUtils;
@@ -13,7 +14,7 @@ import java.time.format.DateTimeFormatter;
 
 import static com.solvd.buildingco.scheduling.ScheduleUtils.getDateFormat;
 
-public class IndustrialBuilding extends Building {
+public class IndustrialBuilding extends Building implements IEstimate {
     private int squareFootage;
     private int numberOfFloors;
     private int constructionDays;
@@ -53,7 +54,10 @@ public class IndustrialBuilding extends Building {
                 new OrderItem(new Item("HVAC Supplies", new BigDecimal("10000.0"), "unit"),
                         numberOfFloors),
                 new OrderItem(new Item("Interior Finishing Materials", new BigDecimal("50.0"), "square meter"),
-                        squareFootage)
+                        squareFootage),
+                new OrderItem(
+                        new RentableItem("Front Loader Truck", new BigDecimal("3800.0")),
+                        2) // rent a front loader truck for 2 months
         };
 
         for (OrderItem item : orderItems) {
@@ -72,10 +76,10 @@ public class IndustrialBuilding extends Building {
         setConstructionDays(totalConstructionDays);
 
 
-        this.worker = ConstructionWorker.createConstructionWorker(schedule, new BigDecimal("15.0"));
-        this.engineer = Engineer.createEngineer(schedule, new BigDecimal("30.0"));
-        this.architect = Architect.createArchitect(schedule, new BigDecimal("35.0"));
-        this.manager = ProjectManager.createProjectManager(schedule, new BigDecimal("40.0"));
+        this.worker = ConstructionWorker.createEmployee(schedule, new BigDecimal("15.0"));
+        this.engineer = Engineer.createEmployee(schedule, new BigDecimal("30.0"));
+        this.architect = Architect.createEmployee(schedule, new BigDecimal("35.0"));
+        this.manager = ProjectManager.createEmployee(schedule, new BigDecimal("40.0"));
 
         ZonedDateTime requiredStartTime = customerEndDate.minusDays(totalConstructionDays);
         ZonedDateTime architectEndTime = requiredStartTime.plusDays(totalConstructionDays / 5);
