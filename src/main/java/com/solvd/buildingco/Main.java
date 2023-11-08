@@ -5,12 +5,20 @@ import com.solvd.buildingco.interactive.HouseMenu;
 import com.solvd.buildingco.interactive.IndustrialBuildingMenu;
 import com.solvd.buildingco.interactive.SkyscraperMenu;
 import com.solvd.buildingco.utilities.Calculator.BuildingCostCalculator;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.ZonedDateTime;
 import java.util.Scanner;
 
 public class Main {
+    private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco");
+
+
     public static void main(String[] args) {
+
+
+
 
         // instantiate scanner
         Scanner scanner = new Scanner(System.in);
@@ -18,12 +26,12 @@ public class Main {
         int choice;
 
         do {
-            System.out.println("Choose a building type: ");
-            System.out.println("[1] House");
-            System.out.println("[2] Industrial Building");
-            System.out.println("[3] Skyscraper");
-            System.out.println("[0] Exit");
-            System.out.print("Your choice: ");
+            LOGGER.info("Choose a building type: ");
+            LOGGER.info("[1] House");
+            LOGGER.info("[2] Industrial Building");
+            LOGGER.info("[3] Skyscraper");
+            LOGGER.info("[0] Exit");
+            LOGGER.info("Your choice: ");
             choice = scanner.nextInt();
 
             // Building instance will be used to calculate costs at the end
@@ -46,10 +54,10 @@ public class Main {
                     building = SkyscraperMenu.runMenu(scanner);
                     break;
                 case 0:
-                    System.out.println("Goodbye");
+                    LOGGER.info("Goodbye");
                     return;
                 default:
-                    System.out.println("You cannot choose that");
+                    LOGGER.info("You cannot choose that");
                     building = null;
                     break;
             }
@@ -78,14 +86,14 @@ public class Main {
             */
 
             if (building != null) {
-                System.out.println("Material Cost: " + building.calculateMaterialCost());
-                System.out.println("Labor Cost: " + building.calculateLaborCost(completionDate));
-                System.out.println("Total Building Cost: " + BuildingCostCalculator.calculateBuildingCost(building, completionDate));
+                LOGGER.info("Material Cost: " + building.calculateMaterialCost());
+                LOGGER.info("Labor Cost: " + building.calculateLaborCost(completionDate));
+                LOGGER.info("Total Building Cost: " + BuildingCostCalculator.calculateBuildingCost(building, completionDate));
             }
 
 
             // ask to restart the prompt sequence after finishing a BuildingPrompt sequence
-            System.out.println("Do you want to calculate for another building? (y/n)");
+            LOGGER.info("Do you want to calculate for another building? (y/n)");
         } while (scanner.next().equalsIgnoreCase("y"));
     }
 
