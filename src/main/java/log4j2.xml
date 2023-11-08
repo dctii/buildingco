@@ -1,0 +1,21 @@
+<Configuration>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <Console name="MenuDisplay" target="SYSTEM_OUT">
+            <PatternLayout pattern="%msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.solvd.buildingco" level="info" additivity="false" >
+            <AppenderRef ref="MenuDisplay" />
+        </Logger>
+        <Logger name="com.solvd.buildingco.interactive" level="info" additivity="false" >
+            <AppenderRef ref="MenuDisplay" />
+        </Logger>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+        </Root>
+    </Loggers>
+</Configuration>
