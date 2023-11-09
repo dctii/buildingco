@@ -1,14 +1,23 @@
 package com.solvd.buildingco.finance;
 
-import com.solvd.buildingco.inventory.Item;
+import com.solvd.buildingco.exception.OrderItemTypeException;
+import com.solvd.buildingco.inventory.BuyableItem;
+import com.solvd.buildingco.inventory.Priceable;
+import com.solvd.buildingco.inventory.RentableItem;
 import com.solvd.buildingco.utilities.FieldUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
 
 public class Order {
+    private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.finance");
     private OrderItem[] orderItems;
     private int count;
+
+    final static String NOT_BUYABLE_ITEM_MESSAGE = "Must be a buyable type of item.";
+    final static String NOT_RENTABLE_ITEM_MESSAGE = "Must be a rentable type of item.";
 
     public Order() {
         this.orderItems = new OrderItem[10];
@@ -35,8 +44,20 @@ public class Order {
 
     // overloaded method, allows for Item to be passed and quantity instead of having to pass in
     // an OrderItem
-    public Order addOrderItem(Item item, int quantity) {
+    public Order addOrderItem(Priceable item, int quantity) {
+        if (!(item instanceof BuyableItem)) {
+            LOGGER.warn(NOT_BUYABLE_ITEM_MESSAGE);
+            throw new OrderItemTypeException(NOT_BUYABLE_ITEM_MESSAGE);
+        }
         return addOrderItem(new OrderItem(item, quantity));
+    }
+
+    public Order addOrderItem(Priceable item, int quantity, int monthsToRent) {
+        if (!(item instanceof RentableItem)) {
+            LOGGER.warn(NOT_RENTABLE_ITEM_MESSAGE);
+            throw new OrderItemTypeException(NOT_RENTABLE_ITEM_MESSAGE);
+        }
+        return addOrderItem(new OrderItem(item, quantity, monthsToRent));
     }
 
     // getters and setter

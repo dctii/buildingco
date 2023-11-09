@@ -1,15 +1,27 @@
 package com.solvd.buildingco.inventory;
 
+import com.solvd.buildingco.exception.InvalidPriceException;
 import com.solvd.buildingco.utilities.FieldUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 
-public class Item implements Priceable {
+public class BuyableItem implements Priceable {
+    private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.inventory");
     private String name;
     private BigDecimal pricePerUnit;
     private String unitMeasurement;
 
-    public Item(String name, BigDecimal pricePerUnit, String unitMeasurement) {
+    final static String INVALID_PRICE_MESSAGE =
+            "Price per unit cannot be less than or equal to zero.";
+
+    public BuyableItem(String name, BigDecimal pricePerUnit, String unitMeasurement) {
+        if (pricePerUnit.compareTo(BigDecimal.ZERO) < 0) {
+            LOGGER.warn(INVALID_PRICE_MESSAGE);
+            throw new InvalidPriceException(INVALID_PRICE_MESSAGE);
+        }
+
         this.name = name;
         this.pricePerUnit = pricePerUnit; // price per unit
         this.unitMeasurement = unitMeasurement; // define unit measurement
@@ -34,6 +46,10 @@ public class Item implements Priceable {
     }
 
     public void setPricePerUnit(BigDecimal pricePerUnit) {
+        if (pricePerUnit.compareTo(BigDecimal.ZERO) < 0) {
+            LOGGER.warn(INVALID_PRICE_MESSAGE);
+            throw new InvalidPriceException("Price per unit cannot be less than zero.");
+        }
         this.pricePerUnit = pricePerUnit;
     }
 

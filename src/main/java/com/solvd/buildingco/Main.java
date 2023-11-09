@@ -18,8 +18,6 @@ public class Main {
     public static void main(String[] args) {
 
 
-
-
         // instantiate scanner
         Scanner scanner = new Scanner(System.in);
         // initialize for prompt selection
@@ -66,8 +64,6 @@ public class Main {
             //  building can be completed by that time, if not, prompt for a further date
             // hardcoded future completion date
             ZonedDateTime completionDate = ZonedDateTime.now().plusMonths(32);
-
-
 
 
             /*

@@ -1,14 +1,26 @@
 package com.solvd.buildingco.inventory;
 
+import com.solvd.buildingco.exception.InvalidPriceException;
 import com.solvd.buildingco.utilities.FieldUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 
 public class RentableItem implements Priceable {
+    private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.inventory");
     private String name;
     private BigDecimal pricePerMonth;
 
+    final static String INVALID_PRICE_MESSAGE =
+            "Price per month cannot be less than or equal to zero.";
+
     public RentableItem(String name, BigDecimal pricePerMonth) {
+        if (pricePerMonth.compareTo(BigDecimal.ZERO) <= 0) {
+            LOGGER.warn(INVALID_PRICE_MESSAGE);
+            throw new InvalidPriceException(INVALID_PRICE_MESSAGE);
+        }
+
         this.name = name;
         this.pricePerMonth = pricePerMonth; // rental price per month
     }
@@ -32,6 +44,10 @@ public class RentableItem implements Priceable {
     }
 
     public void setPricePerMonth(BigDecimal pricePerMonth) {
+        if (pricePerMonth.compareTo(BigDecimal.ZERO) < 0) {
+            LOGGER.warn(INVALID_PRICE_MESSAGE);
+            throw new InvalidPriceException(INVALID_PRICE_MESSAGE);
+        }
         this.pricePerMonth = pricePerMonth;
     }
 

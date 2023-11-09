@@ -62,7 +62,7 @@ public class IndustrialBuildingMenu extends Menu {
             LOGGER.info("Enter the square footage for the Industrial Building (up to " + MAX_SQUARE_FOOTAGE + "): ");
             squareFootage = scanner.nextInt();
             if (squareFootage > MAX_SQUARE_FOOTAGE || squareFootage < 1) {
-                LOGGER.info("Sorry, that's the ceiling value for square footage. Please " +
+                LOGGER.info("Sorry, that's above the ceiling value for square footage. Please " +
                         "try again.");
             }
         } while (squareFootage > MAX_SQUARE_FOOTAGE || squareFootage < 1);
