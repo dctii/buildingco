@@ -7,11 +7,6 @@ Uses:
 - OpenJDK Runtime Environment Homebrew (build 11.0.21+0)
 - OpenJDK 64-Bit Server VM Homebrew (build 11.0.21+0, mixed mode)
 
-```shell
-# Run script below to run the project, assuming from project room:
-
-bash scripts/run_main.sh
-```
 
 ## Assignments
 
