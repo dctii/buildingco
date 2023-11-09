@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static com.solvd.buildingco.buildings.BuildingConstants.*;
 import static com.solvd.buildingco.scheduling.ScheduleUtils.getDateFormat;
 
 public class IndustrialBuilding extends Building implements IEstimate {
@@ -24,10 +25,7 @@ public class IndustrialBuilding extends Building implements IEstimate {
     private int numberOfFloors;
     private int constructionDays;
 
-    final static int MIN_SQUARE_FOOTAGE = 5000;
-    final static int MAX_SQUARE_FOOTAGE = 75000;
-    final static int MIN_FLOORS = 1;
-    final static int MAX_FLOORS = 4;
+
 
     final static String INVALID_DIMENSIONS_MESSAGE =
             "Invalid dimensions for IndustrialBuilding.";
@@ -36,11 +34,11 @@ public class IndustrialBuilding extends Building implements IEstimate {
 
     public IndustrialBuilding(int squareFootage, int numberOfFloors) {
         super();
-        if (squareFootage < MIN_SQUARE_FOOTAGE || squareFootage > MAX_SQUARE_FOOTAGE) {
+        if (squareFootage < INDUSTRIAL_MIN_SQUARE_FOOTAGE || squareFootage > INDUSTRIAL_MAX_SQUARE_FOOTAGE) {
             LOGGER.warn(INVALID_DIMENSIONS_MESSAGE);
             throw new InvalidDimensionException(INVALID_DIMENSIONS_MESSAGE);
         }
-        if (numberOfFloors < MIN_FLOORS || numberOfFloors > MAX_FLOORS) {
+        if (numberOfFloors < INDUSTRIAL_MIN_FLOORS || numberOfFloors > INDUSTRIAL_MAX_FLOORS) {
             LOGGER.warn(INVALID_NUM_FLOORS_MESSAGE);
             throw new InvalidFloorNumberException(INVALID_NUM_FLOORS_MESSAGE);
         }
@@ -196,7 +194,7 @@ public class IndustrialBuilding extends Building implements IEstimate {
     }
 
     public void setSquareFootage(int squareFootage) {
-        if (squareFootage < MIN_SQUARE_FOOTAGE || squareFootage > MAX_SQUARE_FOOTAGE) {
+        if (squareFootage < INDUSTRIAL_MIN_SQUARE_FOOTAGE || squareFootage > INDUSTRIAL_MAX_SQUARE_FOOTAGE) {
             LOGGER.warn(INVALID_DIMENSIONS_MESSAGE);
             throw new InvalidDimensionException(INVALID_DIMENSIONS_MESSAGE);
         }
@@ -208,7 +206,7 @@ public class IndustrialBuilding extends Building implements IEstimate {
     }
 
     public void setNumberOfFloors(int numberOfFloors) {
-        if (numberOfFloors < MIN_FLOORS || numberOfFloors > MAX_FLOORS) {
+        if (numberOfFloors < INDUSTRIAL_MIN_FLOORS || numberOfFloors > INDUSTRIAL_MAX_FLOORS) {
             LOGGER.warn(INVALID_NUM_FLOORS_MESSAGE);
             throw new InvalidFloorNumberException(INVALID_NUM_FLOORS_MESSAGE);
         }

@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static com.solvd.buildingco.buildings.BuildingConstants.*;
 import static com.solvd.buildingco.scheduling.ScheduleUtils.getDateFormat;
 
 public class Skyscraper extends Building implements IEstimate {
@@ -27,10 +28,7 @@ public class Skyscraper extends Building implements IEstimate {
     private BigDecimal lobbyCost; // lobby is a unique floor, has an arbitrary fixed cost
     private BigDecimal foundationCost; // foundation cost depends on amount of levels
 
-    final static int MIN_SQUARE_FOOTAGE_PER_LEVEL = 10000;
-    final static int MAX_SQUARE_FOOTAGE_PER_LEVEL = 50000;
-    final static int MIN_LEVELS = 40;
-    final static int MAX_LEVELS = 100;
+
     final static BigDecimal LOBBY_FIXED_COST = new BigDecimal("200000");
     final static BigDecimal FOUNDATION_COST_FACTOR = new BigDecimal("10000");
 
@@ -41,11 +39,11 @@ public class Skyscraper extends Building implements IEstimate {
 
     public Skyscraper(int squareFootagePerLevel, int numberOfLevels) {
         super();
-        if (squareFootagePerLevel < MIN_SQUARE_FOOTAGE_PER_LEVEL || squareFootagePerLevel > MAX_SQUARE_FOOTAGE_PER_LEVEL) {
+        if (squareFootagePerLevel < SKYSCRAPER_MIN_SQUARE_FOOTAGE_PER_LEVEL || squareFootagePerLevel > SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL) {
             LOGGER.warn(INVALID_DIMENSIONS_MESSAGE);
             throw new InvalidDimensionException(INVALID_DIMENSIONS_MESSAGE);
         }
-        if (numberOfLevels < MIN_LEVELS || numberOfLevels > MAX_LEVELS) {
+        if (numberOfLevels < SKYSCRAPER_MIN_LEVELS || numberOfLevels > SKYSCRAPER_MAX_LEVELS) {
             LOGGER.warn(INVALID_NUM_LEVELS_MESSAGE);
             throw new InvalidFloorNumberException(INVALID_NUM_LEVELS_MESSAGE);
         }
@@ -181,7 +179,7 @@ public class Skyscraper extends Building implements IEstimate {
     }
 
     public void setSquareFootagePerLevel(int squareFootagePerLevel) {
-        if (squareFootagePerLevel < MIN_SQUARE_FOOTAGE_PER_LEVEL || squareFootagePerLevel > MAX_SQUARE_FOOTAGE_PER_LEVEL) {
+        if (squareFootagePerLevel < SKYSCRAPER_MIN_SQUARE_FOOTAGE_PER_LEVEL || squareFootagePerLevel > SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL) {
             LOGGER.warn(INVALID_DIMENSIONS_MESSAGE);
             throw new InvalidDimensionException(INVALID_DIMENSIONS_MESSAGE);
         }
@@ -193,7 +191,7 @@ public class Skyscraper extends Building implements IEstimate {
     }
 
     public void setNumberOfLevels(int numberOfLevels) {
-        if (numberOfLevels < MIN_LEVELS || numberOfLevels > MAX_LEVELS) {
+        if (numberOfLevels < SKYSCRAPER_MIN_LEVELS || numberOfLevels > SKYSCRAPER_MAX_LEVELS) {
             LOGGER.warn(INVALID_NUM_LEVELS_MESSAGE);
             throw new InvalidFloorNumberException(INVALID_NUM_LEVELS_MESSAGE);
         }

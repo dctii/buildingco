@@ -6,11 +6,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Scanner;
 
+import static com.solvd.buildingco.buildings.BuildingConstants.*;
+
 public class SkyscraperMenu extends Menu {
     private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.interactive");
     // ceiling values
-    final static int MAX_SQUARE_FOOTAGE_PER_LEVEL = 35000;
-    final static int MAX_LEVELS = 100;
 
     @Override
     public void display() {
@@ -55,27 +55,25 @@ public class SkyscraperMenu extends Menu {
     }
 
     private static Skyscraper createSkyscraper(Scanner scanner) {
-
-
         int squareFootagePerLevel = 0;
         do {
-            LOGGER.info("Enter the square footage per level for the Skyscraper (up to " + MAX_SQUARE_FOOTAGE_PER_LEVEL + "): ");
+            LOGGER.info("Enter the square footage per level for the Skyscraper ({}-{}): ", SKYSCRAPER_MIN_SQUARE_FOOTAGE_PER_LEVEL, SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL);
             squareFootagePerLevel = scanner.nextInt();
-            if (squareFootagePerLevel > MAX_SQUARE_FOOTAGE_PER_LEVEL || squareFootagePerLevel < 1) {
-                LOGGER.info("Sorry, that's above the ceiling value for square footage. " +
-                        "Please try again.");
+            if (squareFootagePerLevel > SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL || squareFootagePerLevel < SKYSCRAPER_MIN_SQUARE_FOOTAGE_PER_LEVEL) {
+                LOGGER.warn("Square footage per level must be between {} and {}. Please try again.", SKYSCRAPER_MIN_SQUARE_FOOTAGE_PER_LEVEL, SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL);
             }
-        } while (squareFootagePerLevel > MAX_SQUARE_FOOTAGE_PER_LEVEL || squareFootagePerLevel < 1);
+        } while (squareFootagePerLevel > SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL || squareFootagePerLevel < SKYSCRAPER_MIN_SQUARE_FOOTAGE_PER_LEVEL);
 
         int levels = 0;
         do {
-            LOGGER.info("Enter the number of levels for the Skyscraper (up to " + MAX_LEVELS + "): ");
+            LOGGER.info("Enter the number of levels for the Skyscraper ({}-{}): ", SKYSCRAPER_MIN_LEVELS, SKYSCRAPER_MAX_LEVELS);
             levels = scanner.nextInt();
-            if (levels > MAX_LEVELS || levels < 1) {
-                LOGGER.info("Sorry, that's above the ceiling value for levels.Please try again.");
+            if (levels > SKYSCRAPER_MAX_LEVELS || levels < SKYSCRAPER_MIN_LEVELS) {
+                LOGGER.warn("The number of levels must be between {} and {}. Please try again.", SKYSCRAPER_MIN_LEVELS, SKYSCRAPER_MAX_LEVELS);
             }
-        } while (levels > MAX_LEVELS || levels < 1);
+        } while (levels > SKYSCRAPER_MAX_LEVELS || levels < SKYSCRAPER_MIN_LEVELS);
 
         return new Skyscraper(squareFootagePerLevel, levels);
     }
+
 }

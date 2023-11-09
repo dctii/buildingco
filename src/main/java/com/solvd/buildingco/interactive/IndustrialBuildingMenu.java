@@ -6,11 +6,12 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Scanner;
 
+import static com.solvd.buildingco.buildings.BuildingConstants.*;
+
 public class IndustrialBuildingMenu extends Menu {
     private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.interactive");
     // ceiling values
-    final static int MAX_SQUARE_FOOTAGE = 75000;
-    final static int MAX_FLOORS = 4;
+
 
     @Override
     public void display() {
@@ -55,27 +56,23 @@ public class IndustrialBuildingMenu extends Menu {
     }
 
     private static IndustrialBuilding createIndustrialBuilding(Scanner scanner) {
-
-
         int squareFootage = 0;
         do {
-            LOGGER.info("Enter the square footage for the Industrial Building (up to " + MAX_SQUARE_FOOTAGE + "): ");
+            LOGGER.info("Enter the square footage for the Industrial Building ({}-{}): ", INDUSTRIAL_MIN_SQUARE_FOOTAGE, INDUSTRIAL_MAX_SQUARE_FOOTAGE);
             squareFootage = scanner.nextInt();
-            if (squareFootage > MAX_SQUARE_FOOTAGE || squareFootage < 1) {
-                LOGGER.info("Sorry, that's above the ceiling value for square footage. Please " +
-                        "try again.");
+            if (squareFootage > INDUSTRIAL_MAX_SQUARE_FOOTAGE || squareFootage < INDUSTRIAL_MIN_SQUARE_FOOTAGE) {
+                LOGGER.warn("Square footage must be between {} and {}. Please try again.", INDUSTRIAL_MIN_SQUARE_FOOTAGE, INDUSTRIAL_MAX_SQUARE_FOOTAGE);
             }
-        } while (squareFootage > MAX_SQUARE_FOOTAGE || squareFootage < 1);
+        } while (squareFootage > INDUSTRIAL_MAX_SQUARE_FOOTAGE || squareFootage < INDUSTRIAL_MIN_SQUARE_FOOTAGE);
 
         int numberOfFloors = 0;
         do {
-            LOGGER.info("Enter the number of floors for the Industrial Building (up to " + MAX_FLOORS + "): ");
+            LOGGER.info("Enter the number of floors for the Industrial Building ({}-{}): ", INDUSTRIAL_MIN_FLOORS, INDUSTRIAL_MAX_FLOORS);
             numberOfFloors = scanner.nextInt();
-            if (numberOfFloors > MAX_FLOORS || numberOfFloors < 1) {
-                LOGGER.info("Sorry, that's above the ceiling value for number of floors. " +
-                        "Please try again.");
+            if (numberOfFloors > INDUSTRIAL_MAX_FLOORS || numberOfFloors < INDUSTRIAL_MIN_FLOORS) {
+                LOGGER.warn("Number of floors must be between {} and {}. Please try again.", INDUSTRIAL_MIN_FLOORS, INDUSTRIAL_MAX_FLOORS);
             }
-        } while (numberOfFloors > MAX_FLOORS || numberOfFloors < 1);
+        } while (numberOfFloors > INDUSTRIAL_MAX_FLOORS || numberOfFloors < INDUSTRIAL_MIN_FLOORS);
 
         return new IndustrialBuilding(squareFootage, numberOfFloors);
     }

@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static com.solvd.buildingco.buildings.BuildingConstants.*;
 import static com.solvd.buildingco.scheduling.ScheduleUtils.getDateFormat;
 
 public class House extends Building implements IEstimate {
@@ -28,12 +29,7 @@ public class House extends Building implements IEstimate {
     private int constructionDays; // how many business days to build
 
 
-    final static int MIN_NUM_ROOMS = 1;
-    final static int MAX_NUM_ROOMS = 8;
-    final static int MIN_NUM_BATHROOMS = 1;
-    final static int MAX_NUM_BATHROOMS = 7;
-    final static int MIN_NUM_GARAGE_CAP = 0;
-    final static int MAX_NUM_GARAGE_CAP = 4;
+
 
     final static String INVALID_NUM_ROOMS_MESSAGE = "Invalid number of rooms";
     final static String INVALID_NUM_BATHROOMS_MESSAGE = "Invalid number of bathrooms";
@@ -43,17 +39,17 @@ public class House extends Building implements IEstimate {
     public House(int squareFootage, int numRooms, int numBathrooms, int constructionDays, int garageCapacity) {
         super();
 
-        if (numRooms > MAX_NUM_ROOMS || numRooms < MIN_NUM_ROOMS) {
+        if (numRooms > HOUSE_MAX_NUM_ROOMS || numRooms < HOUSE_MIN_NUM_ROOMS) {
             LOGGER.warn(INVALID_NUM_ROOMS_MESSAGE);
             throw new InvalidNumRoomsException(INVALID_NUM_ROOMS_MESSAGE);
         }
 
-        if (numBathrooms < MIN_NUM_BATHROOMS || numBathrooms > MAX_NUM_BATHROOMS || numBathrooms >= numRooms) {
+        if (numBathrooms < HOUSE_MIN_NUM_BATHROOMS || numBathrooms > HOUSE_MAX_NUM_BATHROOMS || numBathrooms > numRooms) {
             LOGGER.warn(INVALID_NUM_BATHROOMS_MESSAGE);
             throw new InvalidNumRoomsException(INVALID_NUM_BATHROOMS_MESSAGE);
         }
 
-        if (garageCapacity < MIN_NUM_GARAGE_CAP || garageCapacity > MAX_NUM_GARAGE_CAP || garageCapacity > numRooms) {
+        if (garageCapacity < HOUSE_MIN_NUM_GARAGE_CAP || garageCapacity > HOUSE_MAX_NUM_GARAGE_CAP || garageCapacity > numRooms) {
             LOGGER.warn(INVALID_NUM_GARAGE_CAP_MESSAGE);
             throw new InvalidNumRoomsException(INVALID_NUM_GARAGE_CAP_MESSAGE);
         }
@@ -107,7 +103,7 @@ public class House extends Building implements IEstimate {
                         numRooms + 1), // includes garage
                 new OrderItem(
                         new RentableItem("Concrete Mixer", new BigDecimal("800.0")),
-                        1) // rent a concrete mixer for 1 months
+                        1, 1) // rent a concrete mixer for 1 months
         };
 
         // loop to populate Order instance
@@ -241,7 +237,7 @@ public class House extends Building implements IEstimate {
     }
 
     public void setNumRooms(int numRooms) {
-        if (numRooms > MAX_NUM_ROOMS || numRooms < MIN_NUM_ROOMS) {
+        if (numRooms > HOUSE_MAX_NUM_ROOMS || numRooms < HOUSE_MIN_NUM_ROOMS) {
             LOGGER.warn(INVALID_NUM_ROOMS_MESSAGE);
             throw new InvalidNumRoomsException(INVALID_NUM_ROOMS_MESSAGE);
         }
@@ -254,7 +250,7 @@ public class House extends Building implements IEstimate {
     }
 
     public void setNumBathrooms(int numBathrooms) {
-        if (numBathrooms < MIN_NUM_BATHROOMS || numBathrooms > MAX_NUM_BATHROOMS || numBathrooms >= this.numRooms) {
+        if (numBathrooms < HOUSE_MIN_NUM_BATHROOMS || numBathrooms > HOUSE_MAX_NUM_BATHROOMS || numBathrooms >= this.numRooms) {
             LOGGER.warn(INVALID_NUM_BATHROOMS_MESSAGE);
             throw new InvalidNumRoomsException(INVALID_NUM_BATHROOMS_MESSAGE);
         }
@@ -268,7 +264,7 @@ public class House extends Building implements IEstimate {
     }
 
     public void setGarageCapacity(int garageCapacity) {
-        if (garageCapacity < MIN_NUM_GARAGE_CAP || garageCapacity > MAX_NUM_GARAGE_CAP || garageCapacity > this.numRooms) {
+        if (garageCapacity < HOUSE_MIN_NUM_GARAGE_CAP || garageCapacity > HOUSE_MAX_NUM_GARAGE_CAP || garageCapacity > this.numRooms) {
             LOGGER.warn(INVALID_NUM_GARAGE_CAP_MESSAGE);
             throw new InvalidNumRoomsException(INVALID_NUM_GARAGE_CAP_MESSAGE);
         }
