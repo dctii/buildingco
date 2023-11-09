@@ -1,26 +1,47 @@
 package com.solvd.buildingco.buildings;
 
+import com.solvd.buildingco.exception.InvalidDimensionException;
+import com.solvd.buildingco.exception.InvalidFloorNumberException;
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.finance.OrderItem;
-import com.solvd.buildingco.inventory.Item;
+import com.solvd.buildingco.inventory.BuyableItem;
 import com.solvd.buildingco.inventory.RentableItem;
 import com.solvd.buildingco.scheduling.Schedule;
 import com.solvd.buildingco.stakeholders.employees.*;
 import com.solvd.buildingco.utilities.FieldUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static com.solvd.buildingco.buildings.BuildingConstants.*;
 import static com.solvd.buildingco.scheduling.ScheduleUtils.getDateFormat;
 
 public class IndustrialBuilding extends Building implements IEstimate {
+    private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.buildings");
     private int squareFootage;
     private int numberOfFloors;
     private int constructionDays;
 
+
+
+    final static String INVALID_DIMENSIONS_MESSAGE =
+            "Invalid dimensions for IndustrialBuilding.";
+    final static String INVALID_NUM_FLOORS_MESSAGE =
+            "Invalid number of floors for Industrial Building.";
+
     public IndustrialBuilding(int squareFootage, int numberOfFloors) {
         super();
+        if (squareFootage < INDUSTRIAL_MIN_SQUARE_FOOTAGE || squareFootage > INDUSTRIAL_MAX_SQUARE_FOOTAGE) {
+            LOGGER.warn(INVALID_DIMENSIONS_MESSAGE);
+            throw new InvalidDimensionException(INVALID_DIMENSIONS_MESSAGE);
+        }
+        if (numberOfFloors < INDUSTRIAL_MIN_FLOORS || numberOfFloors > INDUSTRIAL_MAX_FLOORS) {
+            LOGGER.warn(INVALID_NUM_FLOORS_MESSAGE);
+            throw new InvalidFloorNumberException(INVALID_NUM_FLOORS_MESSAGE);
+        }
         this.squareFootage = squareFootage;
         this.numberOfFloors = numberOfFloors;
     }
@@ -33,34 +54,39 @@ public class IndustrialBuilding extends Building implements IEstimate {
         Order order = new Order();
 
         OrderItem[] orderItems = {
-                new OrderItem(new Item("Steel Beams", new BigDecimal("15.0"), "ton"),
+                new OrderItem(new BuyableItem("Steel Beams", new BigDecimal("15.0"), "ton"),
                         squareFootage / 1000),
-                new OrderItem(new Item("Steel Columns", new BigDecimal("20.0"), "ton"),
+                new OrderItem(new BuyableItem("Steel Columns", new BigDecimal("20.0"), "ton"),
                         squareFootage / 1000),
-                new OrderItem(new Item("Concrete", new BigDecimal("70.0"), "cubic meter"),
+                new OrderItem(new BuyableItem("Concrete", new BigDecimal("70.0"), "cubic meter"),
                         squareFootage / 20),
-                new OrderItem(new Item("Industrial Glass", new BigDecimal("200.0"), "square meter"),
+                new OrderItem(new BuyableItem("Industrial Glass", new BigDecimal("200.0"), "square meter"),
                         squareFootage / 50),
-                new OrderItem(new Item("Insulation Material", new BigDecimal("5.0"), "square meter"),
+                new OrderItem(new BuyableItem("Insulation Material", new BigDecimal("5.0"), "square meter"),
                         squareFootage * 2),
-                new OrderItem(new Item("Roofing", new BigDecimal("10.0"), "square meter"),
+                new OrderItem(new BuyableItem("Roofing", new BigDecimal("10.0"), "square meter"),
                         squareFootage),
-                new OrderItem(new Item("Cladding Material", new BigDecimal("25.0"), "square meter"),
+                new OrderItem(new BuyableItem("Cladding Material", new BigDecimal("25.0"), "square meter"),
                         squareFootage / 2),
-                new OrderItem(new Item("Electrical Supplies", new BigDecimal("5000.0"), "unit"),
+                new OrderItem(new BuyableItem("Electrical Supplies", new BigDecimal("5000.0"), "unit"),
                         1),
-                new OrderItem(new Item("Plumbing Supplies", new BigDecimal("3000.0"), "unit"),
+                new OrderItem(new BuyableItem("Plumbing Supplies", new BigDecimal("3000.0"), "unit"),
                         1),
-                new OrderItem(new Item("HVAC Supplies", new BigDecimal("10000.0"), "unit"),
+                new OrderItem(new BuyableItem("HVAC Supplies", new BigDecimal("10000.0"), "unit"),
                         numberOfFloors),
-                new OrderItem(new Item("Interior Finishing Materials", new BigDecimal("50.0"), "square meter"),
+                new OrderItem(new BuyableItem("Interior Finishing Materials", new BigDecimal("50.0"), "square meter"),
                         squareFootage),
                 new OrderItem(
                         new RentableItem("Front Loader Truck", new BigDecimal("3800.0")),
-                        2) // rent a front loader truck for 2 months
+                        1, 1) // rent a front loader truck for 2 months
         };
 
         for (OrderItem item : orderItems) {
+            final int MIN_QUANTITY = 1;
+            final int MAX_QUANTITY = 10000;
+            if (item.getQuantity() < MIN_QUANTITY || item.getQuantity() > MAX_QUANTITY) {
+
+            }
             order.addOrderItem(item);
         }
 
@@ -168,6 +194,10 @@ public class IndustrialBuilding extends Building implements IEstimate {
     }
 
     public void setSquareFootage(int squareFootage) {
+        if (squareFootage < INDUSTRIAL_MIN_SQUARE_FOOTAGE || squareFootage > INDUSTRIAL_MAX_SQUARE_FOOTAGE) {
+            LOGGER.warn(INVALID_DIMENSIONS_MESSAGE);
+            throw new InvalidDimensionException(INVALID_DIMENSIONS_MESSAGE);
+        }
         this.squareFootage = squareFootage;
     }
 
@@ -176,6 +206,10 @@ public class IndustrialBuilding extends Building implements IEstimate {
     }
 
     public void setNumberOfFloors(int numberOfFloors) {
+        if (numberOfFloors < INDUSTRIAL_MIN_FLOORS || numberOfFloors > INDUSTRIAL_MAX_FLOORS) {
+            LOGGER.warn(INVALID_NUM_FLOORS_MESSAGE);
+            throw new InvalidFloorNumberException(INVALID_NUM_FLOORS_MESSAGE);
+        }
         this.numberOfFloors = numberOfFloors;
     }
 

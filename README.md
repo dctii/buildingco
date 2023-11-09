@@ -17,6 +17,27 @@ bash scripts/run_main.sh
 
 <hr />
 
+### Assignment 5: Exceptions. Try-catch-finally block. Try-catch with resources. Throw. Throws. Logger.
+
+<hr />
+
+#### Requirements
+
+##### Comments and Required changes to consider from Assignment 4:
+- Find values that can be stored as constant and put them at the beginning of its class.
+- Pay attention to fields that are initialized only once and make them final
+
+##### Requirements for Assignment 5
+1. Add 5 custom exceptions for your application. Store them in a dir called `exception`.
+2. Configure logger and replace all `System.out.print` with the logger
+   - Put the `.jar` files in a dir called `lib`.
+   - LOGGER.info(); for general info
+   - LOGGER.debug(); self-explanatory
+   - LOGGER.error(); for unexpected behavior
+
+
+<hr />
+
 ### Assignment 4: Interfaces. Final(class, method, variable). Static. Polymorphism.
 
 <hr />

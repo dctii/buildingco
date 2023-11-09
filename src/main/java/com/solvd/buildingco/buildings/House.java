@@ -1,21 +1,26 @@
 package com.solvd.buildingco.buildings;
 
+import com.solvd.buildingco.exception.InvalidNumRoomsException;
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.finance.OrderItem;
-import com.solvd.buildingco.inventory.Item;
+import com.solvd.buildingco.inventory.BuyableItem;
 import com.solvd.buildingco.inventory.RentableItem;
 import com.solvd.buildingco.scheduling.Schedule;
 import com.solvd.buildingco.scheduling.Schedule.ScheduledActivity;
 import com.solvd.buildingco.stakeholders.employees.*;
 import com.solvd.buildingco.utilities.FieldUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static com.solvd.buildingco.buildings.BuildingConstants.*;
 import static com.solvd.buildingco.scheduling.ScheduleUtils.getDateFormat;
 
 public class House extends Building implements IEstimate {
+    private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.buildings");
 
     private int squareFootage;
     private int numRooms;
@@ -23,14 +28,37 @@ public class House extends Building implements IEstimate {
     private int garageCapacity; // amount of cars that can fit in garage
     private int constructionDays; // how many business days to build
 
+
+
+
+    final static String INVALID_NUM_ROOMS_MESSAGE = "Invalid number of rooms";
+    final static String INVALID_NUM_BATHROOMS_MESSAGE = "Invalid number of bathrooms";
+    final static String INVALID_NUM_GARAGE_CAP_MESSAGE = "Invalid number for garage capacity";
+
     // constructor
     public House(int squareFootage, int numRooms, int numBathrooms, int constructionDays, int garageCapacity) {
         super();
+
+        if (numRooms > HOUSE_MAX_NUM_ROOMS || numRooms < HOUSE_MIN_NUM_ROOMS) {
+            LOGGER.warn(INVALID_NUM_ROOMS_MESSAGE);
+            throw new InvalidNumRoomsException(INVALID_NUM_ROOMS_MESSAGE);
+        }
+
+        if (numBathrooms < HOUSE_MIN_NUM_BATHROOMS || numBathrooms > HOUSE_MAX_NUM_BATHROOMS || numBathrooms > numRooms) {
+            LOGGER.warn(INVALID_NUM_BATHROOMS_MESSAGE);
+            throw new InvalidNumRoomsException(INVALID_NUM_BATHROOMS_MESSAGE);
+        }
+
+        if (garageCapacity < HOUSE_MIN_NUM_GARAGE_CAP || garageCapacity > HOUSE_MAX_NUM_GARAGE_CAP || garageCapacity > numRooms) {
+            LOGGER.warn(INVALID_NUM_GARAGE_CAP_MESSAGE);
+            throw new InvalidNumRoomsException(INVALID_NUM_GARAGE_CAP_MESSAGE);
+        }
+
         this.squareFootage = squareFootage;
         this.numRooms = numRooms;
         this.numBathrooms = numBathrooms;
-        this.constructionDays = constructionDays;
         this.garageCapacity = garageCapacity;
+        this.constructionDays = constructionDays;
     }
 
     // create order for materials, contributes to material cost calculation
@@ -47,35 +75,35 @@ public class House extends Building implements IEstimate {
         // OrderItem (Item, quantity); calculation of qty is arbitrary
         OrderItem[] orderItems = {
                 new OrderItem(
-                        new Item("Concrete", new BigDecimal("15.0"), "square foot"),
+                        new BuyableItem("Concrete", new BigDecimal("15.0"), "square foot"),
                         squareFootage),
                 new OrderItem(
-                        new Item("Structural Wood", new BigDecimal("5.0"), "square foot"),
+                        new BuyableItem("Structural Wood", new BigDecimal("5.0"), "square foot"),
                         numRooms * 2),
                 new OrderItem(
-                        new Item("Roofing Material", new BigDecimal("10.0"), "square foot"),
+                        new BuyableItem("Roofing Material", new BigDecimal("10.0"), "square foot"),
                         squareFootage),
                 new OrderItem(
-                        new Item("Drywall", new BigDecimal("2.0"), "square foot"),
+                        new BuyableItem("Drywall", new BigDecimal("2.0"), "square foot"),
                         (numRooms + (garageCapacity / 2)) * 4),
                 new OrderItem(
-                        new Item("Insulation", new BigDecimal("3.0"), "square foot"),
+                        new BuyableItem("Insulation", new BigDecimal("3.0"), "square foot"),
                         (numRooms + 1) * 2), // includes rooms and living spaces
                 new OrderItem(
-                        new Item("Flooring", new BigDecimal("20.0"), "square foot"),
+                        new BuyableItem("Flooring", new BigDecimal("20.0"), "square foot"),
                         squareFootage - garageSquareFootage),
                 new OrderItem(
-                        new Item("Paint", new BigDecimal("25.0"), "gallon"),
+                        new BuyableItem("Paint", new BigDecimal("25.0"), "gallon"),
                         numRooms + 2), // includes garage, living room, etc.
                 new OrderItem(
-                        new Item("Plumbing Materials", new BigDecimal("500.0"), "unit"),
+                        new BuyableItem("Plumbing Materials", new BigDecimal("500.0"), "unit"),
                         numBathrooms + 1), // includes kitchen
                 new OrderItem(
-                        new Item("Electrical Supplies", new BigDecimal("300.0"), "unit"),
+                        new BuyableItem("Electrical Supplies", new BigDecimal("300.0"), "unit"),
                         numRooms + 1), // includes garage
                 new OrderItem(
                         new RentableItem("Concrete Mixer", new BigDecimal("800.0")),
-                        1) // rent a concrete mixer for 1 months
+                        1, 1) // rent a concrete mixer for 1 months
         };
 
         // loop to populate Order instance
@@ -92,7 +120,6 @@ public class House extends Building implements IEstimate {
     public Schedule generateEmployeeSchedule(ZonedDateTime customerEndDate) {
 
         Schedule schedule = new Schedule();
-
 
 
         this.worker = ConstructionWorker.createEmployee(schedule, new BigDecimal("15.0"));
@@ -171,6 +198,7 @@ public class House extends Building implements IEstimate {
     final static int ADDITIONAL_SQUARE_FOOTAGE_PER_ROOM = 200;
     final static int ADDITIONAL_SQUARE_FOOTAGE_PER_CAR = 100;
     final static int ADDITIONAL_CONSTRUCTION_DAYS_PER_CAR = 3;
+
     public static House createHouse(int numRooms, int numBathrooms, int garageCapacity) {
         // set scaled amount of square footage for the building
         int extraRoomsSquareFootage = ADDITIONAL_SQUARE_FOOTAGE_PER_ROOM * (numRooms - 1);
@@ -209,6 +237,11 @@ public class House extends Building implements IEstimate {
     }
 
     public void setNumRooms(int numRooms) {
+        if (numRooms > HOUSE_MAX_NUM_ROOMS || numRooms < HOUSE_MIN_NUM_ROOMS) {
+            LOGGER.warn(INVALID_NUM_ROOMS_MESSAGE);
+            throw new InvalidNumRoomsException(INVALID_NUM_ROOMS_MESSAGE);
+        }
+
         this.numRooms = numRooms;
     }
 
@@ -217,6 +250,11 @@ public class House extends Building implements IEstimate {
     }
 
     public void setNumBathrooms(int numBathrooms) {
+        if (numBathrooms < HOUSE_MIN_NUM_BATHROOMS || numBathrooms > HOUSE_MAX_NUM_BATHROOMS || numBathrooms >= this.numRooms) {
+            LOGGER.warn(INVALID_NUM_BATHROOMS_MESSAGE);
+            throw new InvalidNumRoomsException(INVALID_NUM_BATHROOMS_MESSAGE);
+        }
+
         this.numBathrooms = numBathrooms;
     }
 
@@ -226,6 +264,11 @@ public class House extends Building implements IEstimate {
     }
 
     public void setGarageCapacity(int garageCapacity) {
+        if (garageCapacity < HOUSE_MIN_NUM_GARAGE_CAP || garageCapacity > HOUSE_MAX_NUM_GARAGE_CAP || garageCapacity > this.numRooms) {
+            LOGGER.warn(INVALID_NUM_GARAGE_CAP_MESSAGE);
+            throw new InvalidNumRoomsException(INVALID_NUM_GARAGE_CAP_MESSAGE);
+        }
+
         this.garageCapacity = garageCapacity;
     }
 

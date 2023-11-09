@@ -1,20 +1,24 @@
 package com.solvd.buildingco.interactive;
 
 import com.solvd.buildingco.buildings.IndustrialBuilding;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Scanner;
 
+import static com.solvd.buildingco.buildings.BuildingConstants.*;
+
 public class IndustrialBuildingMenu extends Menu {
+    private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.interactive");
     // ceiling values
-    final static int MAX_SQUARE_FOOTAGE = 75000;
-    final static int MAX_FLOORS = 4;
+
 
     @Override
     public void display() {
-        System.out.println("Industrial Building Menu: ");
-        System.out.println("[1] Create Industrial Building");
-        System.out.println("[0] Back");
-        System.out.print("Your choice: ");
+        LOGGER.info("Industrial Building Menu: ");
+        LOGGER.info("[1] Create Industrial Building");
+        LOGGER.info("[0] Back");
+        LOGGER.info("Your choice: ");
     }
 
 
@@ -26,12 +30,13 @@ public class IndustrialBuildingMenu extends Menu {
             case 0:
                 return null;
             default:
-                System.out.println("You cannot choose that");
+                LOGGER.info("You cannot choose that");
                 return null;
         }
     }
 
-
+    // TODO: Store in a separate file, can prob pass in the Menu menu since HouseMenu and others
+    //  are children of them
     public static IndustrialBuilding runMenu(Scanner scanner) {
         IndustrialBuildingMenu menu = new IndustrialBuildingMenu();
         IndustrialBuilding industrialBuilding = null;
@@ -42,7 +47,7 @@ public class IndustrialBuildingMenu extends Menu {
             choice = menu.getChoice(scanner);
             industrialBuilding = menu.handleChoice(choice, scanner);
             if (industrialBuilding == null && choice != 0) {
-                System.out.println("Invalid choice. Please try again or choose [0] to go back.");
+                LOGGER.info("Invalid choice. Please try again or choose [0] to go back.");
             }
 
         } while (industrialBuilding == null && choice != 0);
@@ -51,27 +56,23 @@ public class IndustrialBuildingMenu extends Menu {
     }
 
     private static IndustrialBuilding createIndustrialBuilding(Scanner scanner) {
-
-
         int squareFootage = 0;
         do {
-            System.out.print("Enter the square footage for the Industrial Building (up to " + MAX_SQUARE_FOOTAGE + "): ");
+            LOGGER.info("Enter the square footage for the Industrial Building ({}-{}): ", INDUSTRIAL_MIN_SQUARE_FOOTAGE, INDUSTRIAL_MAX_SQUARE_FOOTAGE);
             squareFootage = scanner.nextInt();
-            if (squareFootage > MAX_SQUARE_FOOTAGE || squareFootage < 1) {
-                System.out.println("Sorry, that's the ceiling value for square footage. Please " +
-                        "try again.");
+            if (squareFootage > INDUSTRIAL_MAX_SQUARE_FOOTAGE || squareFootage < INDUSTRIAL_MIN_SQUARE_FOOTAGE) {
+                LOGGER.warn("Square footage must be between {} and {}. Please try again.", INDUSTRIAL_MIN_SQUARE_FOOTAGE, INDUSTRIAL_MAX_SQUARE_FOOTAGE);
             }
-        } while (squareFootage > MAX_SQUARE_FOOTAGE || squareFootage < 1);
+        } while (squareFootage > INDUSTRIAL_MAX_SQUARE_FOOTAGE || squareFootage < INDUSTRIAL_MIN_SQUARE_FOOTAGE);
 
         int numberOfFloors = 0;
         do {
-            System.out.print("Enter the number of floors for the Industrial Building (up to " + MAX_FLOORS + "): ");
+            LOGGER.info("Enter the number of floors for the Industrial Building ({}-{}): ", INDUSTRIAL_MIN_FLOORS, INDUSTRIAL_MAX_FLOORS);
             numberOfFloors = scanner.nextInt();
-            if (numberOfFloors > MAX_FLOORS || numberOfFloors < 1) {
-                System.out.println("Sorry, that's above the ceiling value for number of floors. " +
-                        "Please try again.");
+            if (numberOfFloors > INDUSTRIAL_MAX_FLOORS || numberOfFloors < INDUSTRIAL_MIN_FLOORS) {
+                LOGGER.warn("Number of floors must be between {} and {}. Please try again.", INDUSTRIAL_MIN_FLOORS, INDUSTRIAL_MAX_FLOORS);
             }
-        } while (numberOfFloors > MAX_FLOORS || numberOfFloors < 1);
+        } while (numberOfFloors > INDUSTRIAL_MAX_FLOORS || numberOfFloors < INDUSTRIAL_MIN_FLOORS);
 
         return new IndustrialBuilding(squareFootage, numberOfFloors);
     }
