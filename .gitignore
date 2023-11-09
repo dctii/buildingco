@@ -31,6 +31,7 @@ bin/
 .DS_Store
 
 ### Logs ###
+*.log
 logs/
 
 ### MISC ###
