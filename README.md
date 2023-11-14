@@ -18,7 +18,7 @@ Uses:
 
 #### Requirements
 
-##### Comments and Required changes to consider from Assignment 7:
+##### Comments and Required changes to consider from Assignment 6:
 - For `log4j`, put the class name as the argument. For example, in `private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco");`, swap out `"com.solvd.buildingco"` with `Main.class` in `Main.java`.
 - Make sure `@Override` of `toString` in each class exists, understand why and how `HashSet` and `HashMap` works.
 - Close the `Scanner` out with `in.close()`.
