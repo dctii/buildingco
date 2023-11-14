@@ -11,22 +11,22 @@ import java.math.BigDecimal;
 
 public class Engineer extends Employee {
     public Engineer(String[] nameParts, String[] postNominals, String[] organizationNames,
-                     String[] roles, String[] addresses, String[] phoneNumbers, String[] emails,
-                     PayRate payRate, Schedule schedule, String personnelType) {
+                    String[] roles, String[] addresses, String[] phoneNumbers, String[] emails,
+                    PayRate payRate, Schedule schedule, String personnelType) {
         super(nameParts, postNominals, organizationNames, roles, addresses, phoneNumbers, emails
                 , payRate, schedule, personnelType);
     }
 
     // factory method for Engineer
     public static Engineer createEmployee(Schedule schedule, BigDecimal ratePerHour) {
-        String personnelType = "Engineer";
-        String[] nameParts = {"John", "J", "Doe", null};
-        String[] postNominals = {"PhD"};
-        String[] organizationNames = {"Building Co."};
+        String personnelType = BuildingCoConstants.PERSONNEL_TYPE_ENGINEER;
+        String[] nameParts = {null, null, null, null};
+        String[] postNominals = {};
+        String[] organizationNames = {BuildingCoConstants.ORGANIZATION_NAME};
         String[] roles = {personnelType};
-        String[] addresses = {"123456 Builder Lane, Los Angeles, CA 90210"};
-        String[] phoneNumbers = {"+13105551234"};
-        String[] emails = {"engineers@buildingco123.com"};
+        String[] addresses = {BuildingCoConstants.ADDRESS_HQ};
+        String[] phoneNumbers = {BuildingCoConstants.PHONE_NUMBER_HQ};
+        String[] emails = {BuildingCoConstants.EMAIL_HANDLE_ENGINEERS + BuildingCoConstants.DOMAIN_NAME};
 
         // hourly rate passed in upon instantiation
         HourlyRate hourlyRate = new HourlyRate(ratePerHour);

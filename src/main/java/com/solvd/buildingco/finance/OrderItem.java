@@ -1,6 +1,6 @@
 package com.solvd.buildingco.finance;
 
-import com.solvd.buildingco.exception.OrderItemTypeException;
+import com.solvd.buildingco.exception.InventoryItemNotFoundException;
 import com.solvd.buildingco.inventory.BuyableItem;
 import com.solvd.buildingco.inventory.Priceable;
 import com.solvd.buildingco.inventory.RentableItem;
@@ -19,19 +19,19 @@ public class OrderItem {
     final static String NOT_BUYABLE_ITEM_MESSAGE = "Must be a buyable type of item.";
     final static String NOT_RENTABLE_ITEM_MESSAGE = "Must be a rentable type of item.";
 
-    public OrderItem(Priceable item, int quantity) {
+    public OrderItem(Priceable<BigDecimal> item, int quantity) {
         if (!(item instanceof BuyableItem)) {
             LOGGER.warn(NOT_BUYABLE_ITEM_MESSAGE);
-            throw new OrderItemTypeException(NOT_BUYABLE_ITEM_MESSAGE);
+            throw new InventoryItemNotFoundException(NOT_BUYABLE_ITEM_MESSAGE);
         }
         this.item = item;
         this.quantity = quantity;
     }
 
-    public OrderItem(Priceable item, int quantity, int monthsToRent) {
+    public OrderItem(Priceable<BigDecimal> item, int quantity, int monthsToRent) {
         if (!(item instanceof RentableItem)) {
             LOGGER.warn(NOT_RENTABLE_ITEM_MESSAGE);
-            throw new OrderItemTypeException(NOT_RENTABLE_ITEM_MESSAGE);
+            throw new InventoryItemNotFoundException(NOT_RENTABLE_ITEM_MESSAGE);
         }
         this.item = item;
         this.quantity = quantity;
@@ -41,7 +41,7 @@ public class OrderItem {
 
     // get price per unit and multiply by qty
     public BigDecimal getTotalPrice() {
-        BigDecimal price = item.getPrice().multiply(new BigDecimal(quantity));
+        BigDecimal price = ((BigDecimal) item.getPrice()).multiply(new BigDecimal(quantity));
 
         if ((item instanceof RentableItem) && monthsToRent > 0) {
             price = price.multiply(new BigDecimal(monthsToRent));

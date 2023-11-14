@@ -7,16 +7,16 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 
-public class RentableItem implements Priceable {
+public class RentableItem<T extends Number> implements Priceable<T> {
     private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.inventory");
     private String name;
-    private BigDecimal pricePerMonth;
+    private T pricePerMonth;
 
     final static String INVALID_PRICE_MESSAGE =
             "Price per month cannot be less than or equal to zero.";
 
-    public RentableItem(String name, BigDecimal pricePerMonth) {
-        if (pricePerMonth.compareTo(BigDecimal.ZERO) <= 0) {
+    public RentableItem(String name, T pricePerMonth) {
+        if (pricePerMonth instanceof BigDecimal && ((BigDecimal) pricePerMonth).compareTo(BigDecimal.ZERO) <= 0) {
             LOGGER.warn(INVALID_PRICE_MESSAGE);
             throw new InvalidPriceException(INVALID_PRICE_MESSAGE);
         }
@@ -34,20 +34,21 @@ public class RentableItem implements Priceable {
         this.name = name;
     }
 
-    public BigDecimal getPricePerMonth() {
+    public T getPricePerMonth() {
         return pricePerMonth;
     }
 
     @Override
-    public BigDecimal getPrice() {
+    public T getPrice() {
         return getPricePerMonth();
     }
 
-    public void setPricePerMonth(BigDecimal pricePerMonth) {
-        if (pricePerMonth.compareTo(BigDecimal.ZERO) < 0) {
+    public void setPricePerMonth(T pricePerMonth) {
+        if (pricePerMonth instanceof BigDecimal && ((BigDecimal) pricePerMonth).compareTo(BigDecimal.ZERO) <= 0) {
             LOGGER.warn(INVALID_PRICE_MESSAGE);
             throw new InvalidPriceException(INVALID_PRICE_MESSAGE);
         }
+
         this.pricePerMonth = pricePerMonth;
     }
 

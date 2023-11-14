@@ -1,29 +1,26 @@
 package com.solvd.buildingco.finance;
 
-import java.math.BigDecimal;
-
 // TODO: add category for annual rate
 // TODO: add overtime rate consideration
 
-public abstract class PayRate {
-    protected BigDecimal rate;
+public abstract class PayRate<T> {
+    protected T rate;
 
-    public PayRate(BigDecimal baseRate) {
+    public PayRate(T baseRate) {
         this.rate = baseRate;
     }
 
     // abstract class for calculating the pay
-    public abstract BigDecimal calculatePay(int timeWorked);
+    public abstract T calculatePay(int timeWorked);
 
     // getters and setters
-    public BigDecimal getRate() {
+    public T getRate() {
         return rate;
     }
 
-    public void setRate(BigDecimal baseRate) {
+    public void setRate(T baseRate) {
         this.rate = baseRate;
     }
-
 
 
     @Override

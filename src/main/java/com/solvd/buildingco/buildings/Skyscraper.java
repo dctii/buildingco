@@ -4,9 +4,10 @@ import com.solvd.buildingco.exception.InvalidDimensionException;
 import com.solvd.buildingco.exception.InvalidFloorNumberException;
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.finance.OrderItem;
-import com.solvd.buildingco.inventory.BuyableItem;
-import com.solvd.buildingco.inventory.RentableItem;
+import com.solvd.buildingco.inventory.ItemNames;
+import com.solvd.buildingco.inventory.ItemRepository;
 import com.solvd.buildingco.scheduling.Schedule;
+import com.solvd.buildingco.scheduling.ScheduledActivity;
 import com.solvd.buildingco.stakeholders.employees.*;
 import com.solvd.buildingco.utilities.FieldUtils;
 import org.apache.logging.log4j.LogManager;
@@ -15,11 +16,12 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import static com.solvd.buildingco.buildings.BuildingConstants.*;
 import static com.solvd.buildingco.scheduling.ScheduleUtils.getDateFormat;
 
-public class Skyscraper extends Building implements IEstimate {
+public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.buildings");
 
     private int squareFootagePerLevel;
@@ -60,30 +62,72 @@ public class Skyscraper extends Building implements IEstimate {
     @Override
     public Order generateMaterialOrder() {
         Order order = new Order();
+        ArrayList<OrderItem> orderItems = new ArrayList<>(); // Use ArrayList instead of array
 
-        OrderItem[] orderItems = {
-                new OrderItem(new BuyableItem("Steel Beams", new BigDecimal("1800.0"), "ton"),
-                        squareFootagePerLevel * numberOfLevels / 40),
-                new OrderItem(new BuyableItem("Concrete", new BigDecimal("100.0"), "square foot"),
-                        squareFootagePerLevel * numberOfLevels / 15),
-                new OrderItem(new BuyableItem("Industrial Glass", new BigDecimal("600.0"), "square foot"),
-                        squareFootagePerLevel * numberOfLevels / 8),
-                new OrderItem(new BuyableItem("Insulation Material", new BigDecimal("8.0"), "square foot"),
-                        squareFootagePerLevel * numberOfLevels),
-                new OrderItem(new BuyableItem("Cladding Material", new BigDecimal("30.0"), "square foot"),
-                        squareFootagePerLevel * numberOfLevels / 2),
-                new OrderItem(new BuyableItem("Electrical Supplies", new BigDecimal("6000.0"), "unit"),
-                        numberOfLevels),
-                new OrderItem(new BuyableItem("Plumbing Supplies", new BigDecimal("4000.0"), "unit"),
-                        numberOfLevels),
-                new OrderItem(new BuyableItem("HVAC Supplies", new BigDecimal("1200.0"), "unit"),
-                        numberOfLevels),
-                new OrderItem(new BuyableItem("Interior Finishing", new BigDecimal("70.0"), "square foot"),
-                        squareFootagePerLevel * numberOfLevels),
+        // Add items to the list
+
+        orderItems.add(
                 new OrderItem(
-                        new RentableItem("Tower Crane", new BigDecimal("15000.0")),
-                        1, 2) // rent a tower crane for 2 months
-        };
+                        ItemRepository.getItem(ItemNames.STEEL_BEAMS_HIGH_GRADE),
+                        squareFootagePerLevel * numberOfLevels / 40
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.CONCRETE_HIGH_GRADE),
+                        squareFootagePerLevel * numberOfLevels / 15
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.GLASS_HIGH_GRADE_INDUSTRIAL),
+                        squareFootagePerLevel * numberOfLevels / 8
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.INSULATION_MATERIALS),
+                        squareFootagePerLevel * numberOfLevels
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.CLADDING_MATERIAL),
+                        squareFootagePerLevel * numberOfLevels / 2
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.ELECTRICAL_SUPPLIES_INDUSTRIAL),
+                        numberOfLevels
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.PLUMBING_SUPPLIES),
+                        numberOfLevels
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.HVAC_SUPPLIES),
+                        numberOfLevels
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.INTERIOR_FINISHING_MATERIALS),
+                        squareFootagePerLevel * numberOfLevels
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.TOWER_CRANE),
+                        1,
+                        2
+                )
+        );
+
 
         for (OrderItem item : orderItems) {
             order.addOrderItem(item);
@@ -107,10 +151,10 @@ public class Skyscraper extends Building implements IEstimate {
         ZonedDateTime requiredStartTime = customerEndDate.minusDays(totalConstructionDays);
         ZonedDateTime architectEndTime = requiredStartTime.plusDays(totalConstructionDays / 5);
 
-        schedule.addActivity(new Schedule.ScheduledActivity("Architectural Design", requiredStartTime, architectEndTime));
-        schedule.addActivity(new Schedule.ScheduledActivity("Construction Work", requiredStartTime, customerEndDate));
-        schedule.addActivity(new Schedule.ScheduledActivity("Engineering Work", requiredStartTime, customerEndDate));
-        schedule.addActivity(new Schedule.ScheduledActivity("Project Management", requiredStartTime, customerEndDate));
+        schedule.addActivity(new ScheduledActivity("Architectural Design", requiredStartTime, architectEndTime));
+        schedule.addActivity(new ScheduledActivity("Construction Work", requiredStartTime, customerEndDate));
+        schedule.addActivity(new ScheduledActivity("Engineering Work", requiredStartTime, customerEndDate));
+        schedule.addActivity(new ScheduledActivity("Project Management", requiredStartTime, customerEndDate));
 
         return schedule;
     }

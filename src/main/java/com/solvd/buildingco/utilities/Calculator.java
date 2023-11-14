@@ -9,7 +9,8 @@ import java.time.ZonedDateTime;
 public class Calculator {
 
     public static class BuildingCostCalculator {
-        public static BigDecimal calculateBuildingCost(Building building, ZonedDateTime customerEndDate) {
+        public static BigDecimal calculateBuildingCost(Building<BigDecimal> building,
+                                                       ZonedDateTime customerEndDate) {
             // get Order for materials
             Order materialOrder = building.generateMaterialOrder();
             // get total cost of Order

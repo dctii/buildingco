@@ -12,6 +12,23 @@ Uses:
 
 <hr />
 
+### Assignment 6: Collections. Generics.
+
+<hr />
+
+#### Requirements
+
+##### Comments and Required changes to consider from Assignment 6:
+- <span style="color: pink;"> Pending... </span>
+
+##### Requirements for Assignment 6
+1. Add usage of any type of `Map`, `List` and `Set` collections.
+2. Create 1 generic and include their usage in the project.
+
+
+
+<hr />
+
 ### Assignment 5: Exceptions. Try-catch-finally block. Try-catch with resources. Throw. Throws. Logger.
 
 <hr />

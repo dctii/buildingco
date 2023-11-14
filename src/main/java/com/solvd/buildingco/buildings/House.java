@@ -3,10 +3,10 @@ package com.solvd.buildingco.buildings;
 import com.solvd.buildingco.exception.InvalidNumRoomsException;
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.finance.OrderItem;
-import com.solvd.buildingco.inventory.BuyableItem;
-import com.solvd.buildingco.inventory.RentableItem;
+import com.solvd.buildingco.inventory.ItemNames;
+import com.solvd.buildingco.inventory.ItemRepository;
 import com.solvd.buildingco.scheduling.Schedule;
-import com.solvd.buildingco.scheduling.Schedule.ScheduledActivity;
+import com.solvd.buildingco.scheduling.ScheduledActivity;
 import com.solvd.buildingco.stakeholders.employees.*;
 import com.solvd.buildingco.utilities.FieldUtils;
 import org.apache.logging.log4j.LogManager;
@@ -15,11 +15,13 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.solvd.buildingco.buildings.BuildingConstants.*;
 import static com.solvd.buildingco.scheduling.ScheduleUtils.getDateFormat;
 
-public class House extends Building implements IEstimate {
+public class House extends Building<BigDecimal> implements IEstimate {
     private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.buildings");
 
     private int squareFootage;
@@ -27,8 +29,6 @@ public class House extends Building implements IEstimate {
     private int numBathrooms;
     private int garageCapacity; // amount of cars that can fit in garage
     private int constructionDays; // how many business days to build
-
-
 
 
     final static String INVALID_NUM_ROOMS_MESSAGE = "Invalid number of rooms";
@@ -66,47 +66,78 @@ public class House extends Building implements IEstimate {
     public Order generateMaterialOrder() {
         Order order = new Order();
 
-        // used to try and calculate a dynamic value since assumed concrete and not "Flooring"
-        // item to be used in garage
         int ADDITIONAL_SQUARE_FOOTAGE_PER_CAR = 100;
         int garageSquareFootage = ADDITIONAL_SQUARE_FOOTAGE_PER_CAR * garageCapacity;
 
-        // List of items on order and their quantities
-        // OrderItem (Item, quantity); calculation of qty is arbitrary
-        OrderItem[] orderItems = {
-                new OrderItem(
-                        new BuyableItem("Concrete", new BigDecimal("15.0"), "square foot"),
-                        squareFootage),
-                new OrderItem(
-                        new BuyableItem("Structural Wood", new BigDecimal("5.0"), "square foot"),
-                        numRooms * 2),
-                new OrderItem(
-                        new BuyableItem("Roofing Material", new BigDecimal("10.0"), "square foot"),
-                        squareFootage),
-                new OrderItem(
-                        new BuyableItem("Drywall", new BigDecimal("2.0"), "square foot"),
-                        (numRooms + (garageCapacity / 2)) * 4),
-                new OrderItem(
-                        new BuyableItem("Insulation", new BigDecimal("3.0"), "square foot"),
-                        (numRooms + 1) * 2), // includes rooms and living spaces
-                new OrderItem(
-                        new BuyableItem("Flooring", new BigDecimal("20.0"), "square foot"),
-                        squareFootage - garageSquareFootage),
-                new OrderItem(
-                        new BuyableItem("Paint", new BigDecimal("25.0"), "gallon"),
-                        numRooms + 2), // includes garage, living room, etc.
-                new OrderItem(
-                        new BuyableItem("Plumbing Materials", new BigDecimal("500.0"), "unit"),
-                        numBathrooms + 1), // includes kitchen
-                new OrderItem(
-                        new BuyableItem("Electrical Supplies", new BigDecimal("300.0"), "unit"),
-                        numRooms + 1), // includes garage
-                new OrderItem(
-                        new RentableItem("Concrete Mixer", new BigDecimal("800.0")),
-                        1, 1) // rent a concrete mixer for 1 months
-        };
+        // Initialize the ArrayList
+        List<OrderItem> orderItems = new ArrayList<>();
 
-        // loop to populate Order instance
+
+        // Add items to the list
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.CONCRETE),
+                        squareFootage
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.STRUCTURAL_WOOD),
+                        numRooms * 2
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.ROOFING_HOUSE),
+                        squareFootage
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.DRYWALL),
+                        (numRooms + (garageCapacity / 2)) * 4
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.INSULATION_MATERIALS),
+                        (numRooms + 1) * 2
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.FLOORING),
+                        squareFootage - garageSquareFootage
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.PAINT),
+                        numRooms + 2
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.PLUMBING_SUPPLIES),
+                        numBathrooms + 1
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.ELECTRICAL_SUPPLIES_HOUSE),
+                        numRooms + 1
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.CONCRETE_MIXER),
+                        1,
+                        1
+                )
+        );
+
+
+        // Loop to populate Order instance
         for (OrderItem item : orderItems) {
             order.addOrderItem(item);
         }

@@ -5,10 +5,9 @@ import com.solvd.buildingco.scheduling.Schedule;
 import com.solvd.buildingco.stakeholders.employees.Employee;
 import com.solvd.buildingco.utilities.FieldUtils;
 
-import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
-public abstract class Building {
+public abstract class Building<T extends Number> {
 
     // different employee types required for any (custom) construction project
     protected Employee worker;
@@ -25,11 +24,13 @@ public abstract class Building {
 
     // for building materials
     public abstract Order generateMaterialOrder();
-    public abstract BigDecimal calculateMaterialCost();
+
+    public abstract T calculateMaterialCost();
 
     // for calculating labor costs
     public abstract Schedule generateEmployeeSchedule(ZonedDateTime customerEndDate);
-    public abstract BigDecimal calculateLaborCost(ZonedDateTime customerEndDate);
+
+    public abstract T calculateLaborCost(ZonedDateTime customerEndDate);
 
     @Override
     public String toString() {

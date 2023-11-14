@@ -2,7 +2,7 @@ package com.solvd.buildingco.stakeholders.employees;
 
 import com.solvd.buildingco.finance.PayRate;
 import com.solvd.buildingco.scheduling.Schedule;
-import com.solvd.buildingco.scheduling.Schedule.ScheduledActivity;
+import com.solvd.buildingco.scheduling.ScheduledActivity;
 import com.solvd.buildingco.stakeholders.Stakeholder;
 import com.solvd.buildingco.utilities.FieldUtils;
 
@@ -16,7 +16,7 @@ import java.util.Map;
 import static com.solvd.buildingco.scheduling.ScheduleUtils.getDateFormat;
 
 public abstract class Employee extends Stakeholder {
-    private PayRate payRate;
+    private PayRate<BigDecimal> payRate;
     private Schedule schedule;
     private String personnelType;
 

@@ -7,17 +7,17 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 
-public class BuyableItem implements Priceable {
+public class BuyableItem<T extends Number> implements Priceable<T> {
     private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.inventory");
     private String name;
-    private BigDecimal pricePerUnit;
+    private T pricePerUnit;
     private String unitMeasurement;
 
     final static String INVALID_PRICE_MESSAGE =
             "Price per unit cannot be less than or equal to zero.";
 
-    public BuyableItem(String name, BigDecimal pricePerUnit, String unitMeasurement) {
-        if (pricePerUnit.compareTo(BigDecimal.ZERO) < 0) {
+    public BuyableItem(String name, T pricePerUnit, String unitMeasurement) {
+        if (pricePerUnit instanceof BigDecimal && ((BigDecimal) pricePerUnit).compareTo(BigDecimal.ZERO) <= 0) {
             LOGGER.warn(INVALID_PRICE_MESSAGE);
             throw new InvalidPriceException(INVALID_PRICE_MESSAGE);
         }
@@ -36,20 +36,21 @@ public class BuyableItem implements Priceable {
         this.name = name;
     }
 
-    public BigDecimal getPricePerUnit() {
+    public T getPricePerUnit() {
         return pricePerUnit;
     }
 
     @Override
-    public BigDecimal getPrice() {
+    public T getPrice() {
         return getPricePerUnit();
     }
 
-    public void setPricePerUnit(BigDecimal pricePerUnit) {
-        if (pricePerUnit.compareTo(BigDecimal.ZERO) < 0) {
+    public void setPricePerUnit(T pricePerUnit) {
+        if (pricePerUnit instanceof BigDecimal && ((BigDecimal) pricePerUnit).compareTo(BigDecimal.ZERO) <= 0) {
             LOGGER.warn(INVALID_PRICE_MESSAGE);
-            throw new InvalidPriceException("Price per unit cannot be less than zero.");
+            throw new InvalidPriceException(INVALID_PRICE_MESSAGE);
         }
+
         this.pricePerUnit = pricePerUnit;
     }
 
