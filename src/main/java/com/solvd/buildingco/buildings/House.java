@@ -31,9 +31,10 @@ public class House extends Building<BigDecimal> implements IEstimate {
     private int constructionDays; // how many business days to build
 
 
-    final static String INVALID_NUM_ROOMS_MESSAGE = "Invalid number of rooms";
-    final static String INVALID_NUM_BATHROOMS_MESSAGE = "Invalid number of bathrooms";
-    final static String INVALID_NUM_GARAGE_CAP_MESSAGE = "Invalid number for garage capacity";
+    private final static String INVALID_NUM_ROOMS_MESSAGE = "Invalid number of rooms";
+    private final static String INVALID_NUM_BATHROOMS_MESSAGE = "Invalid number of bathrooms";
+    private final static String INVALID_NUM_GARAGE_CAP_MESSAGE = "Invalid number for garage " +
+            "capacity";
 
     // constructor
     public House(int squareFootage, int numRooms, int numBathrooms, int constructionDays, int garageCapacity) {
