@@ -12,7 +12,6 @@ public class HouseMenu extends Menu {
     private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.interactive");
 
 
-
     @Override
     public void display() {
         LOGGER.info("House Menu: ");

@@ -1,9 +1,8 @@
 package com.solvd.buildingco.scheduling;
 
 import java.time.DayOfWeek;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +13,6 @@ public class Schedule {
         this.weeklyActivities = new HashMap<>();
         initializeDefaultSchedule();
     }
-
 
 
     /*
@@ -29,7 +27,7 @@ public class Schedule {
     */
     private void initializeDefaultSchedule() {
         for (DayOfWeek day : DayOfWeek.values()) {
-            weeklyActivities.put(day, new ArrayList<>());
+            weeklyActivities.put(day, new LinkedList<>());
         }
     }
 
@@ -46,62 +44,6 @@ public class Schedule {
     }
 
     // specific activity of a Schedule instance.
-    public static class ScheduledActivity {
-        private String description;
-        private String location;
-        private DayOfWeek day;
-        private ZonedDateTime startTime;
-        private ZonedDateTime endTime;
-
-        public ScheduledActivity(String description, ZonedDateTime startTime, ZonedDateTime endTime) {
-            this.description = description; // description/name/type of activity
-            this.startTime = startTime;
-            this.endTime = endTime;
-            this.day = startTime.getDayOfWeek(); // get DOTW that belongs to startTime ZonedDate
-        }
-
-        // getters and setters for ScheduledActivity
-
-        public String getDescription() {
-            return description;
-        }
-
-        public void setDescription(String description) {
-            this.description = description;
-        }
-
-        public String getLocation() {
-            return location;
-        }
-
-        public void setLocation(String location) {
-            this.location = location;
-        }
-
-        public ZonedDateTime getStartTime() {
-            return startTime;
-        }
-
-        public void setStartTime(ZonedDateTime startTime) {
-            this.startTime = startTime;
-        }
-
-        public ZonedDateTime getEndTime() {
-            return endTime;
-        }
-
-        public void setEndTime(ZonedDateTime endTime) {
-            this.endTime = endTime;
-        }
-
-        public DayOfWeek getDay() {
-            return day;
-        }
-
-        public void setDay(DayOfWeek day) {
-            this.day = day;
-        }
-    }
 
 
     @Override

@@ -1,8 +1,7 @@
 package com.solvd.buildingco.inventory;
 
-import java.math.BigDecimal;
+public interface Priceable<T extends Number> {
+    T getPrice();
 
-public interface Priceable {
-    BigDecimal getPrice();
     String getName();
 }

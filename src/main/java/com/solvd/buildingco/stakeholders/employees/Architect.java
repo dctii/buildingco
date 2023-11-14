@@ -18,14 +18,14 @@ public class Architect extends Employee {
     // factory method for Architect
 
     public static Architect createEmployee(Schedule schedule, BigDecimal ratePerHour) {
-        String personnelType = "Architect";
+        String personnelType = BuildingCoConstants.PERSONNEL_TYPE_ARCHITECT;
         String[] nameParts = {null, null, null, null};
         String[] postNominals = {};
-        String[] organizationNames = {"Building Co."};
+        String[] organizationNames = {BuildingCoConstants.ORGANIZATION_NAME};
         String[] roles = {personnelType};
-        String[] addresses = {"123456 Builder Lane, Los Angeles, CA 90210"};
-        String[] phoneNumbers = {"+13105551234"};
-        String[] emails = {"architects@buildingco123.com"};
+        String[] addresses = {BuildingCoConstants.ADDRESS_HQ};
+        String[] phoneNumbers = {BuildingCoConstants.PHONE_NUMBER_HQ};
+        String[] emails = {BuildingCoConstants.EMAIL_HANDLE_ARCHITECTS + BuildingCoConstants.DOMAIN_NAME};
 
         // hourly rate passed in upon instantiation
         HourlyRate hourlyRate = new HourlyRate(ratePerHour);

@@ -6,7 +6,9 @@ import java.util.Scanner;
 
 public interface IChoose {
     void display();
+
     int getChoice(Scanner scanner);
+
     Building handleChoice(int choice, Scanner scanner);
 
 

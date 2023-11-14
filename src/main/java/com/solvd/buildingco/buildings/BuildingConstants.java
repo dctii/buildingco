@@ -23,5 +23,6 @@ public final class BuildingConstants {
     public final static int SKYSCRAPER_MAX_LEVELS = 100;
 
 
-    private BuildingConstants() {}
+    private BuildingConstants() {
+    }
 }

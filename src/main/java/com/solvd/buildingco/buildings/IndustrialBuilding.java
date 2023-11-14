@@ -4,9 +4,10 @@ import com.solvd.buildingco.exception.InvalidDimensionException;
 import com.solvd.buildingco.exception.InvalidFloorNumberException;
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.finance.OrderItem;
-import com.solvd.buildingco.inventory.BuyableItem;
-import com.solvd.buildingco.inventory.RentableItem;
+import com.solvd.buildingco.inventory.ItemNames;
+import com.solvd.buildingco.inventory.ItemRepository;
 import com.solvd.buildingco.scheduling.Schedule;
+import com.solvd.buildingco.scheduling.ScheduledActivity;
 import com.solvd.buildingco.stakeholders.employees.*;
 import com.solvd.buildingco.utilities.FieldUtils;
 import org.apache.logging.log4j.LogManager;
@@ -15,16 +16,16 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 import static com.solvd.buildingco.buildings.BuildingConstants.*;
 import static com.solvd.buildingco.scheduling.ScheduleUtils.getDateFormat;
 
-public class IndustrialBuilding extends Building implements IEstimate {
+public class IndustrialBuilding extends Building<BigDecimal> implements IEstimate {
     private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.buildings");
     private int squareFootage;
     private int numberOfFloors;
     private int constructionDays;
-
 
 
     final static String INVALID_DIMENSIONS_MESSAGE =
@@ -52,40 +53,89 @@ public class IndustrialBuilding extends Building implements IEstimate {
     public Order generateMaterialOrder() {
 
         Order order = new Order();
+        ArrayList<OrderItem> orderItems = new ArrayList<>(); // Use ArrayList instead of array
 
-        OrderItem[] orderItems = {
-                new OrderItem(new BuyableItem("Steel Beams", new BigDecimal("15.0"), "ton"),
-                        squareFootage / 1000),
-                new OrderItem(new BuyableItem("Steel Columns", new BigDecimal("20.0"), "ton"),
-                        squareFootage / 1000),
-                new OrderItem(new BuyableItem("Concrete", new BigDecimal("70.0"), "cubic meter"),
-                        squareFootage / 20),
-                new OrderItem(new BuyableItem("Industrial Glass", new BigDecimal("200.0"), "square meter"),
-                        squareFootage / 50),
-                new OrderItem(new BuyableItem("Insulation Material", new BigDecimal("5.0"), "square meter"),
-                        squareFootage * 2),
-                new OrderItem(new BuyableItem("Roofing", new BigDecimal("10.0"), "square meter"),
-                        squareFootage),
-                new OrderItem(new BuyableItem("Cladding Material", new BigDecimal("25.0"), "square meter"),
-                        squareFootage / 2),
-                new OrderItem(new BuyableItem("Electrical Supplies", new BigDecimal("5000.0"), "unit"),
-                        1),
-                new OrderItem(new BuyableItem("Plumbing Supplies", new BigDecimal("3000.0"), "unit"),
-                        1),
-                new OrderItem(new BuyableItem("HVAC Supplies", new BigDecimal("10000.0"), "unit"),
-                        numberOfFloors),
-                new OrderItem(new BuyableItem("Interior Finishing Materials", new BigDecimal("50.0"), "square meter"),
-                        squareFootage),
+
+        // Add items to the list
+        orderItems.add(
                 new OrderItem(
-                        new RentableItem("Front Loader Truck", new BigDecimal("3800.0")),
-                        1, 1) // rent a front loader truck for 2 months
-        };
+                        ItemRepository.getItem(ItemNames.STEEL_BEAMS),
+                        squareFootage / 1000
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.STEEL_COLUMNS),
+                        squareFootage / 1000
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.CONCRETE_INDUSTRIAL),
+                        squareFootage / 20
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.GLASS_INDUSTRIAL),
+                        squareFootage / 50
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.INSULATION_MATERIALS),
+                        squareFootage * 2
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.ROOFING_HOUSE),
+                        squareFootage
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.CLADDING_MATERIAL),
+                        squareFootage / 2
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.ELECTRICAL_SUPPLIES_INDUSTRIAL),
+                        1
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.PLUMBING_SUPPLIES),
+                        1
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.HVAC_SUPPLIES),
+                        numberOfFloors
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.INTERIOR_FINISHING_MATERIALS),
+                        squareFootage
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.FRONT_LOADER_TRUCK),
+                        1,
+                        1
+                )
+        );
 
         for (OrderItem item : orderItems) {
             final int MIN_QUANTITY = 1;
             final int MAX_QUANTITY = 10000;
             if (item.getQuantity() < MIN_QUANTITY || item.getQuantity() > MAX_QUANTITY) {
-
+                // Handle quantity check
             }
             order.addOrderItem(item);
         }
@@ -111,11 +161,11 @@ public class IndustrialBuilding extends Building implements IEstimate {
         ZonedDateTime architectEndTime = requiredStartTime.plusDays(totalConstructionDays / 5);
 
 
-        schedule.addActivity(new Schedule.ScheduledActivity("Architectural Design",
+        schedule.addActivity(new ScheduledActivity("Architectural Design",
                 requiredStartTime, architectEndTime));
-        schedule.addActivity(new Schedule.ScheduledActivity("Construction Work", requiredStartTime, customerEndDate));
-        schedule.addActivity(new Schedule.ScheduledActivity("Engineering Work", requiredStartTime, customerEndDate));
-        schedule.addActivity(new Schedule.ScheduledActivity("Project Management", requiredStartTime, customerEndDate));
+        schedule.addActivity(new ScheduledActivity("Construction Work", requiredStartTime, customerEndDate));
+        schedule.addActivity(new ScheduledActivity("Engineering Work", requiredStartTime, customerEndDate));
+        schedule.addActivity(new ScheduledActivity("Project Management", requiredStartTime, customerEndDate));
 
         return schedule;
     }
