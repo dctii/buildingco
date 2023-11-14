@@ -7,10 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 public class Schedule {
-    private Map<DayOfWeek, List<ScheduledActivity>> weeklyActivities;
+    private final Map<DayOfWeek, List<ScheduledActivity>> weeklyActivities = new HashMap<>();
 
     public Schedule() {
-        this.weeklyActivities = new HashMap<>();
         initializeDefaultSchedule();
     }
 
