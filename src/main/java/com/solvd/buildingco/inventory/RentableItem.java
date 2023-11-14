@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 
 public class RentableItem<T extends Number> implements Priceable<T> {
-    private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.inventory");
+    private static final Logger LOGGER = LogManager.getLogger(RentableItem.class);
     private String name;
     private T pricePerMonth;
 

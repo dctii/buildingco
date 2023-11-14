@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.LinkedList;
 
 public class Order {
-    private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.finance");
+    private static final Logger LOGGER = LogManager.getLogger(Order.class);
     private List<OrderItem> orderItems;
     private int count;
 

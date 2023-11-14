@@ -22,7 +22,7 @@ import static com.solvd.buildingco.buildings.BuildingConstants.*;
 import static com.solvd.buildingco.scheduling.ScheduleUtils.getDateFormat;
 
 public class Skyscraper extends Building<BigDecimal> implements IEstimate {
-    private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.buildings");
+    private static final Logger LOGGER = LogManager.getLogger(Skyscraper.class);
 
     private int squareFootagePerLevel;
     private int numberOfLevels;

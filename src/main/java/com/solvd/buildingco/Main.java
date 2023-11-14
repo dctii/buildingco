@@ -12,7 +12,7 @@ import java.time.ZonedDateTime;
 import java.util.Scanner;
 
 public class Main {
-    private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco");
+    private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
 
     public static void main(String[] args) {
