@@ -4,7 +4,7 @@ import com.solvd.buildingco.utilities.FieldUtils;
 
 import java.math.BigDecimal;
 
-public class HourlyRate<T> extends PayRate<BigDecimal> {
+public class HourlyRate extends PayRate<BigDecimal> {
     private BigDecimal ratePerHour;
 
     public HourlyRate(BigDecimal ratePerHour) {
