@@ -12,6 +12,41 @@ Uses:
 
 <hr />
 
+### Assignment 7: Maven
+
+<hr />
+
+#### Requirements
+
+##### Comments and Required changes to consider from Assignment 7:
+- For `log4j`, put the class name as the argument. For example, in `private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco");`, swap out `"com.solvd.buildingco"` with `Main.class` in `Main.java`.
+- Make sure `@Override` of `toString` in each class exists, understand why and how `HashSet` and `HashMap` works.
+- Close the `Scanner` out with `in.close()`.
+- For any use of exceptions, for now use `RuntimeException`.
+- For data generators or class instantiation methods, make sure a class does not generate itself. Only exception of something like this is when it requires fields that are in the class itself. For example, the `Order generateMaterialOrder()` method in `House`, `IndustrialBuilding`, and `Skyscraper`.
+  - Store generators in a folder called `utils` or `utilities`
+  - Some methods to move or consider moving:
+    - `generateEmployee()`
+    - `calculateMaterialCost()`
+    - `calculateConstructionDays()`
+    
+- Move fields to the top of the class.
+- Remove unused generic in `HourlyRate`
+- set `weeklyActivities` to `final` and assign it to a `new HashMap<>();`, then remove `this.weeklyActivities` from `Schedule` constructor
+- Do not nest `BuildingCostCalculator` class within `Calculator`. Just call it `BuildingCostCalculator`. Avoid nesting classes.
+- Consider how to abstract things as much as possible
+
+##### Requirements for Assignment 7
+1. Install Maven to your local env
+2. Create `pom.xml` file in project (https://maven.apache.org/guides/introduction/introduction-to-the-pom.html)
+3. Add Log4j as a dependency and remove `lib/` directory.
+4. You should be able to run `maven` commands without _IntelliJ IDEA CE_
+5. Add plugins (https://maven.apache.org/guides/mini/guide-configuring-plugins.html)
+
+
+
+<hr />
+
 ### Assignment 6: Collections. Generics.
 
 <hr />
