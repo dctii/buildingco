@@ -9,7 +9,7 @@ import java.util.Scanner;
 import static com.solvd.buildingco.buildings.BuildingConstants.*;
 
 public class HouseMenu extends Menu {
-    private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.interactive");
+    private static final Logger LOGGER = LogManager.getLogger(HouseMenu.class);
 
 
     @Override

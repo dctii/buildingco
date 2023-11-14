@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 
 public class OrderItem {
-    private static final Logger LOGGER = LogManager.getLogger("com.solvd.buildingco.finance");
+    private static final Logger LOGGER = LogManager.getLogger(OrderItem.class);
     private Priceable item;
     private int quantity;
     private int monthsToRent;
