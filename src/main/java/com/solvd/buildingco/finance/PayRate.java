@@ -3,7 +3,7 @@ package com.solvd.buildingco.finance;
 // TODO: add category for annual rate
 // TODO: add overtime rate consideration
 
-public abstract class PayRate<T> {
+public abstract class PayRate<T extends Number> {
     protected T rate;
 
     public PayRate(T baseRate) {
