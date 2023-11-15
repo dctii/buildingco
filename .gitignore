@@ -32,7 +32,10 @@ bin/
 
 ### Logs ###
 *.log
-logs/
+/logs/
+
+### Maven ###
+/target/
 
 ### MISC ###
 playground/
