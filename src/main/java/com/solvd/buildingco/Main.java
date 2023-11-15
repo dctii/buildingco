@@ -8,6 +8,7 @@ import com.solvd.buildingco.utilities.BuildingCostCalculator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Scanner;
 
@@ -33,7 +34,7 @@ public class Main {
             choice = scanner.nextInt();
 
             // Building instance will be used to calculate costs at the end
-            Building building;
+            Building<BigDecimal> building;
 
             /*
                 runMenu will activate a prompt sequence for the respective
