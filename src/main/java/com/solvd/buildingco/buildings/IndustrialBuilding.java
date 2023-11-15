@@ -6,20 +6,16 @@ import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.finance.OrderItem;
 import com.solvd.buildingco.inventory.ItemNames;
 import com.solvd.buildingco.inventory.ItemRepository;
-import com.solvd.buildingco.scheduling.Schedule;
-import com.solvd.buildingco.scheduling.ScheduledActivity;
-import com.solvd.buildingco.stakeholders.employees.*;
+import com.solvd.buildingco.utilities.BuildingCostCalculator;
 import com.solvd.buildingco.utilities.FieldUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import static com.solvd.buildingco.buildings.BuildingConstants.*;
-import static com.solvd.buildingco.scheduling.ScheduleUtils.getDateFormat;
 
 public class IndustrialBuilding extends Building<BigDecimal> implements IEstimate {
     private static final Logger LOGGER = LogManager.getLogger(IndustrialBuilding.class);
@@ -28,9 +24,9 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
     private int constructionDays;
 
 
-    final static String INVALID_DIMENSIONS_MESSAGE =
+    private final static String INVALID_DIMENSIONS_MESSAGE =
             "Invalid dimensions for IndustrialBuilding.";
-    final static String INVALID_NUM_FLOORS_MESSAGE =
+    private final static String INVALID_NUM_FLOORS_MESSAGE =
             "Invalid number of floors for Industrial Building.";
 
     public IndustrialBuilding(int squareFootage, int numberOfFloors) {
@@ -143,93 +139,38 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
         return order;
     }
 
-    // Same as `House`
+    // same as `House`
     @Override
-    public Schedule generateEmployeeSchedule(ZonedDateTime customerEndDate) {
-        Schedule schedule = new Schedule();
+    public BigDecimal calculateMaterialCost() {
+        Order industrialBuildingOrder = this.generateMaterialOrder();
 
-        int totalConstructionDays = calculateConstructionDays();
-        setConstructionDays(totalConstructionDays);
-
-
-        this.worker = ConstructionWorker.createEmployee(schedule, new BigDecimal("15.0"));
-        this.engineer = Engineer.createEmployee(schedule, new BigDecimal("30.0"));
-        this.architect = Architect.createEmployee(schedule, new BigDecimal("35.0"));
-        this.manager = ProjectManager.createEmployee(schedule, new BigDecimal("40.0"));
-
-        ZonedDateTime requiredStartTime = customerEndDate.minusDays(totalConstructionDays);
-        ZonedDateTime architectEndTime = requiredStartTime.plusDays(totalConstructionDays / 5);
-
-
-        schedule.addActivity(new ScheduledActivity("Architectural Design",
-                requiredStartTime, architectEndTime));
-        schedule.addActivity(new ScheduledActivity("Construction Work", requiredStartTime, customerEndDate));
-        schedule.addActivity(new ScheduledActivity("Engineering Work", requiredStartTime, customerEndDate));
-        schedule.addActivity(new ScheduledActivity("Project Management", requiredStartTime, customerEndDate));
-
-        return schedule;
+        return BuildingCostCalculator
+                .calculateMaterialCost(
+                        industrialBuildingOrder
+                );
     }
 
     // Similar to `House`, but values respective of IndustrialBuilding. Values are arbitrary, but
     // again, emulate scaling.
     @Override
     public BigDecimal calculateLaborCost(ZonedDateTime customerEndDate) {
-        int baseConstructionDays = squareFootage / 100;
-        int additionalTimePerFloor = (int) Math.ceil(baseConstructionDays * (numberOfFloors - 1));
-        int totalConstructionDays = baseConstructionDays + additionalTimePerFloor;
 
-        Schedule schedule = generateEmployeeSchedule(customerEndDate);
+        int calculatedConstructionDays =
+                BuildingCostCalculator.calculateConstructionDays(
+                        INDUSTRIAL_BUILDING_TYPE,
+                        squareFootage,
+                        numberOfFloors
+                );
 
-        if (schedule == null) {
-            return BigDecimal.ZERO;
-        }
-
-        DateTimeFormatter dateFormat = getDateFormat();
-        String startDateStr =
-                customerEndDate.minusDays(totalConstructionDays).toLocalDate().format(dateFormat);
-        String endDateStr =
-                customerEndDate.toLocalDate().format(dateFormat);
-
-        // consider Architect only in the planning phase
-        int architectDays = (int) Math.ceil(constructionDays / 5.0);
-        String architectEndDateStr =
-                customerEndDate.minusDays(architectDays).toLocalDate().format(dateFormat);
-
-        // loop over Employees and calculate their pay
-        Employee[] employees = {worker, engineer, architect, manager};
-        BigDecimal totalCost = BigDecimal.ZERO;
-        for (Employee employee : employees) {
-            String employeeEndDateStr = (employee instanceof Architect) ? architectEndDateStr : endDateStr;
-            BigDecimal employeeHours = new BigDecimal(employee.getWorkHours(startDateStr, employeeEndDateStr));
-            BigDecimal employeeCost = employee.getPayRate().multiply(employeeHours);
-
-            totalCost = totalCost.add(employeeCost);
-        }
-
-        return totalCost;
+        return BuildingCostCalculator
+                .calculateLaborCost(
+                        customerEndDate,
+                        calculatedConstructionDays
+                );
     }
 
-    // same as `House`
-    @Override
-    public BigDecimal calculateMaterialCost() {
-        Order order = generateMaterialOrder();
-        return order.getTotalCost();
-    }
-
-    // calculate construction days with respect to IndustrialBuilding, used for generating
-    // employee schedule
-    public int calculateConstructionDays() {
-        // uses arbitrary divisor to calculate construction days
-        int baseConstructionDays = squareFootage / 100;
-
-        // if additional levels are added, will scale amount of days up
-        int additionalTimePerFloor = (int) Math.ceil(baseConstructionDays * (numberOfFloors - 1));
-
-        return baseConstructionDays + additionalTimePerFloor;
-    }
 
     // getters and setters
-
     public int getConstructionDays() {
         return constructionDays;
     }

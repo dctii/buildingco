@@ -6,20 +6,16 @@ import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.finance.OrderItem;
 import com.solvd.buildingco.inventory.ItemNames;
 import com.solvd.buildingco.inventory.ItemRepository;
-import com.solvd.buildingco.scheduling.Schedule;
-import com.solvd.buildingco.scheduling.ScheduledActivity;
-import com.solvd.buildingco.stakeholders.employees.*;
+import com.solvd.buildingco.utilities.BuildingCostCalculator;
 import com.solvd.buildingco.utilities.FieldUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import static com.solvd.buildingco.buildings.BuildingConstants.*;
-import static com.solvd.buildingco.scheduling.ScheduleUtils.getDateFormat;
 
 public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     private static final Logger LOGGER = LogManager.getLogger(Skyscraper.class);
@@ -31,12 +27,9 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     private BigDecimal foundationCost; // foundation cost depends on amount of levels
 
 
-    final static BigDecimal LOBBY_FIXED_COST = new BigDecimal("200000");
-    final static BigDecimal FOUNDATION_COST_FACTOR = new BigDecimal("10000");
-
-    final static String INVALID_DIMENSIONS_MESSAGE =
+    private final static String INVALID_DIMENSIONS_MESSAGE =
             "Invalid dimensions for Skyscraper.";
-    final static String INVALID_NUM_LEVELS_MESSAGE =
+    private final static String INVALID_NUM_LEVELS_MESSAGE =
             "Invalid number of levels for Skyscraper.";
 
     public Skyscraper(int squareFootagePerLevel, int numberOfLevels) {
@@ -53,9 +46,9 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
         this.squareFootagePerLevel = squareFootagePerLevel;
         this.numberOfLevels = numberOfLevels;
         // base cost for the lobby
-        this.lobbyCost = LOBBY_FIXED_COST;
+        this.lobbyCost = SKYSCRAPER_LOBBY_FIXED_COST;
         // base foundation cost multiplied by the number of levels
-        this.foundationCost = new BigDecimal(numberOfLevels).multiply(FOUNDATION_COST_FACTOR);
+        this.foundationCost = new BigDecimal(numberOfLevels).multiply(SKYSCRAPER_FOUNDATION_COST_FACTOR);
     }
 
     // like siblings, but higher priced than IndustrialBuilding due to premium needs of Skyscraper
@@ -137,77 +130,40 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     }
 
     @Override
-    public Schedule generateEmployeeSchedule(ZonedDateTime customerEndDate) {
-        Schedule schedule = new Schedule();
+    public BigDecimal calculateMaterialCost() {
+        BigDecimal[] additionalCosts = {
+                lobbyCost,
+                foundationCost
+        };
 
-        int totalConstructionDays = calculateConstructionDays();
-        setConstructionDays(totalConstructionDays);
+        Order skyScraperMaterialOrder = this.generateMaterialOrder();
 
-        worker = ConstructionWorker.createEmployee(schedule, new BigDecimal("20.0"));
-        engineer = Engineer.createEmployee(schedule, new BigDecimal("35.0"));
-        architect = Architect.createEmployee(schedule, new BigDecimal("40.0"));
-        manager = ProjectManager.createEmployee(schedule, new BigDecimal("45.0"));
-
-        ZonedDateTime requiredStartTime = customerEndDate.minusDays(totalConstructionDays);
-        ZonedDateTime architectEndTime = requiredStartTime.plusDays(totalConstructionDays / 5);
-
-        schedule.addActivity(new ScheduledActivity("Architectural Design", requiredStartTime, architectEndTime));
-        schedule.addActivity(new ScheduledActivity("Construction Work", requiredStartTime, customerEndDate));
-        schedule.addActivity(new ScheduledActivity("Engineering Work", requiredStartTime, customerEndDate));
-        schedule.addActivity(new ScheduledActivity("Project Management", requiredStartTime, customerEndDate));
-
-        return schedule;
+        return BuildingCostCalculator
+                .calculateMaterialCost(
+                        skyScraperMaterialOrder,
+                        additionalCosts
+                );
     }
 
     // similar to IndustrialBuilding for emulating scaling up of time based on size
     @Override
     public BigDecimal calculateLaborCost(ZonedDateTime customerEndDate) {
-        Schedule schedule = generateEmployeeSchedule(customerEndDate);
 
-        if (schedule == null) {
-            return BigDecimal.ZERO;
-        }
+        int calculatedConstructionDays =
+                BuildingCostCalculator.calculateConstructionDays(
+                        SKYSCRAPER_BUILDING_TYPE,
+                        squareFootagePerLevel,
+                        numberOfLevels
+                );
 
-        int baseConstructionDays = squareFootagePerLevel / 50;
-        int additionalTimePerLevel = baseConstructionDays * numberOfLevels;
-        int totalConstructionDays = baseConstructionDays + additionalTimePerLevel;
-
-        DateTimeFormatter dateFormat = getDateFormat();
-
-        ZonedDateTime requiredStartDate = customerEndDate.minusDays(totalConstructionDays);
-        String startDateStr = requiredStartDate.toLocalDate().format(dateFormat);
-        String endDateStr = customerEndDate.toLocalDate().format(dateFormat);
-
-        int architectDays = (int) Math.ceil(constructionDays / 5.0);
-        String architectEndDateStr =
-                customerEndDate.minusDays(architectDays).toLocalDate().format(dateFormat);
-
-        Employee[] employees = {worker, engineer, architect, manager};
-        BigDecimal totalCost = BigDecimal.ZERO;
-        for (Employee employee : employees) {
-            String employeeEndDateStr = (employee instanceof Architect) ? architectEndDateStr : endDateStr;
-            BigDecimal employeeHours
-                    = new BigDecimal(employee.getWorkHours(startDateStr, employeeEndDateStr));
-            BigDecimal employeeCost
-                    = employee.getPayRate().multiply(employeeHours);
-            totalCost = totalCost.add(employeeCost);
-        }
-        return totalCost;
+        return BuildingCostCalculator.calculateLaborCost(
+                customerEndDate,
+                calculatedConstructionDays
+        );
     }
 
     // like siblings, except factors in fixed cost of lobby and calculated foundation cost
-    @Override
-    public BigDecimal calculateMaterialCost() {
-        Order order = generateMaterialOrder();
-        return order.getTotalCost().add(lobbyCost).add(foundationCost);
-    }
 
-    // like IndustrialBuilding
-    public int calculateConstructionDays() {
-        int baseConstructionDays = squareFootagePerLevel / 50;
-        int additionalTimePerLevel = (int) Math.ceil(baseConstructionDays * numberOfLevels);
-        return baseConstructionDays + additionalTimePerLevel;
-    }
 
     // getters and setters
     public int getConstructionDays() {

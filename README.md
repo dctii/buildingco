@@ -23,7 +23,7 @@ Uses:
 - Make sure `@Override` of `toString` in each class exists, understand why and how `HashSet` and `HashMap` works.
 - Close the `Scanner` out with `in.close()`.
 - For any use of exceptions, for now use `RuntimeException`.
-- For data generators or class instantiation methods, make sure a class does not generate itself. Only exception of something like this is when it requires fields that are in the class itself. For example, the `Order generateMaterialOrder()` method in `House`, `IndustrialBuilding`, and `Skyscraper`.
+- For data generators or class instantiation methods, make sure a class does not generate itself. The only exception for something like this is when it requires fields that are in the class itself. For example, the `Order generateMaterialOrder()` method in `House`, `IndustrialBuilding`, and `Skyscraper`.
   - Store generators in a folder called `utils` or `utilities`
   - Some methods to move or consider moving:
     - `generateEmployee()`
