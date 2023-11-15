@@ -15,8 +15,7 @@ public abstract class Person {
     private String[] emails;
     private String[] phoneNumbers;
 
-    public Person(String[] nameParts, String[] postNominals, String[] addresses,
-                  String[] emails, String[] phoneNumbers) {
+    public Person(String[] nameParts, String[] postNominals, String[] addresses, String[] emails, String[] phoneNumbers) {
         this.nameParts = nameParts;
         this.postNominals = postNominals;
         this.addresses = addresses;
@@ -97,7 +96,6 @@ public abstract class Person {
         return fullName.toString();
     }
 
-    // getters and setters
 
     public String[] getAddresses() {
         return isEmptyOrNull(addresses) ? null : addresses;
@@ -133,13 +131,7 @@ public abstract class Person {
             Object fieldValue = FieldUtils.getField(this, fieldName);
 
             if (fieldValue != null) {
-                builder
-                        .append(fieldName)
-                        .append("=")
-                        .append(Arrays.toString(
-                                (Object[]) fieldValue
-                        ))
-                        .append(", ");
+                builder.append(fieldName).append("=").append(Arrays.toString((Object[]) fieldValue)).append(", ");
             }
         }
 

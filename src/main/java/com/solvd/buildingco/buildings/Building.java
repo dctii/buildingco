@@ -1,7 +1,6 @@
 package com.solvd.buildingco.buildings;
 
 import com.solvd.buildingco.finance.Order;
-import com.solvd.buildingco.scheduling.Schedule;
 import com.solvd.buildingco.stakeholders.employees.Employee;
 import com.solvd.buildingco.utilities.FieldUtils;
 
@@ -27,8 +26,6 @@ public abstract class Building<T extends Number> {
 
     public abstract T calculateMaterialCost();
 
-    // for calculating labor costs
-    public abstract Schedule generateEmployeeSchedule(ZonedDateTime customerEndDate);
 
     public abstract T calculateLaborCost(ZonedDateTime customerEndDate);
 

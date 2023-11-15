@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
-import static com.solvd.buildingco.scheduling.ScheduleUtils.getDateFormat;
+import static com.solvd.buildingco.utilities.ScheduleUtils.getDateFormat;
 
 public abstract class Employee extends Stakeholder {
     private PayRate<BigDecimal> payRate;
@@ -35,7 +35,8 @@ public abstract class Employee extends Stakeholder {
 
     // iterates through the employee's schedule to get their work hours
     public long getWorkHours(String startDateStr, String endDateStr) {
-        DateTimeFormatter dateFormat = getDateFormat();
+        final DateTimeFormatter dateFormat = getDateFormat();
+        final long SECONDS_IN_HOUR = 3600;
 
         // range for work hours
         LocalDate startDate = LocalDate.parse(startDateStr, dateFormat);
@@ -43,10 +44,12 @@ public abstract class Employee extends Stakeholder {
 
         long totalWorkHours = 0;
 
+
         // if there is a schedule, iterate and see how many hours the employee has on their schedule
         if (schedule != null) {
             for (Map.Entry<DayOfWeek, List<ScheduledActivity>> entry :
                     schedule.getWeeklyActivities().entrySet()) {
+
                 for (ScheduledActivity activity : entry.getValue()) {
                     LocalDate activityDate = activity.getStartTime().toLocalDate();
 
@@ -60,9 +63,9 @@ public abstract class Employee extends Stakeholder {
                         // EpochSecond = date and time computers use to measure system time
                         long hours =
                                 activity.getEndTime().toEpochSecond() - activity.getStartTime().toEpochSecond();
-                        long secondsInHour = 3600;
+
                         // update amount of totalWorkHours
-                        totalWorkHours += hours / secondsInHour;
+                        totalWorkHours += hours / SECONDS_IN_HOUR;
                     }
                 }
             }

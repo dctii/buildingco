@@ -42,8 +42,6 @@ public class Schedule {
         return weeklyActivities;
     }
 
-    // specific activity of a Schedule instance.
-
 
     @Override
     public String toString() {

@@ -4,7 +4,7 @@ import com.solvd.buildingco.buildings.Building;
 import com.solvd.buildingco.interactive.HouseMenu;
 import com.solvd.buildingco.interactive.IndustrialBuildingMenu;
 import com.solvd.buildingco.interactive.SkyscraperMenu;
-import com.solvd.buildingco.utilities.Calculator.BuildingCostCalculator;
+import com.solvd.buildingco.utilities.BuildingCostCalculator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -84,13 +84,16 @@ public class Main {
             if (building != null) {
                 LOGGER.info("Material Cost: " + building.calculateMaterialCost());
                 LOGGER.info("Labor Cost: " + building.calculateLaborCost(completionDate));
-                LOGGER.info("Total Building Cost: " + BuildingCostCalculator.calculateBuildingCost(building, completionDate));
+                LOGGER.info("Total Building Cost: " + BuildingCostCalculator.calculateBuildingCost(building,
+                        completionDate));
             }
 
 
             // ask to restart the prompt sequence after finishing a BuildingPrompt sequence
             LOGGER.info("Do you want to calculate for another building? (y/n)");
         } while (scanner.next().equalsIgnoreCase("y"));
+
+        scanner.close();
     }
 
 }
