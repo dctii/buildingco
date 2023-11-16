@@ -8,6 +8,7 @@ import com.solvd.buildingco.inventory.ItemNames;
 import com.solvd.buildingco.inventory.ItemRepository;
 import com.solvd.buildingco.utilities.BuildingCostCalculator;
 import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.OrderUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -24,10 +25,8 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
     private int constructionDays;
 
 
-    private final static String INVALID_DIMENSIONS_MESSAGE =
-            "Invalid dimensions for IndustrialBuilding.";
-    private final static String INVALID_NUM_FLOORS_MESSAGE =
-            "Invalid number of floors for Industrial Building.";
+    private final static String INVALID_DIMENSIONS_MESSAGE = "Invalid dimensions for IndustrialBuilding.";
+    private final static String INVALID_NUM_FLOORS_MESSAGE = "Invalid number of floors for Industrial Building.";
 
     public IndustrialBuilding(int squareFootage, int numberOfFloors) {
         super();
@@ -43,130 +42,130 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
         this.numberOfFloors = numberOfFloors;
     }
 
-    // same as House, but with IndustrialBuilding specific OrderItems. Values are arbitrary but
-    // try to emulate an appearance of scaling.
+    // create order for materials, contributes to material cost calculation
     @Override
     public Order generateMaterialOrder() {
 
-        Order order = new Order();
-        ArrayList<OrderItem> orderItems = new ArrayList<>(); // Use ArrayList instead of array
+        // general calculations for building
+        double sideLength = Math.sqrt(squareFootage);
+        double buildingPerimeter = 4 * sideLength;
+        double wallArea = buildingPerimeter * (INDUSTRIAL_BUILDING_HEIGHT_PER_FLOOR * numberOfFloors);
 
+        // final quantities for each item
+        int insulationQuantity = (int) (wallArea * INDUSTRIAL_BUILDING_INSULATION_THICKNESS_IN_FEET);
+        int steelBeamsQuantity = squareFootage / INDUSTRIAL_BUILDING_SQUARE_FEET_PER_STEEL_BEAM;
+        int steelColumnsQuantity = squareFootage / INDUSTRIAL_BUILDING_SQUARE_FEET_PER_STEEL_COLUMN;
+        int concreteQuantity = squareFootage * numberOfFloors;
+        int glassQuantity = squareFootage / INDUSTRIAL_BUILDING_SQUARE_FEET_PER_UNIT_OF_GLASS;
+        int roofingQuantity, interiorFinishingQuantity;
+        roofingQuantity = interiorFinishingQuantity = squareFootage;
+        int claddingMaterialsQuantity = squareFootage / INDUSTRIAL_BUILDING_SQUARE_FEET_PER_UNIT_OF_CLADDING;
+        int electricalSuppliesQuantity, plumbingSuppliesQuantity, hvacSuppliesQuantity;
+        electricalSuppliesQuantity = plumbingSuppliesQuantity = hvacSuppliesQuantity = numberOfFloors;
 
-        // Add items to the list
+        // initialize the ArrayList of OrderItems
+        ArrayList<OrderItem> orderItems = new ArrayList<>();
+
+        // add items to the list
         orderItems.add(
                 new OrderItem(
                         ItemRepository.getItem(ItemNames.STEEL_BEAMS),
-                        squareFootage / 1000
+                        steelBeamsQuantity
                 )
         );
         orderItems.add(
                 new OrderItem(
                         ItemRepository.getItem(ItemNames.STEEL_COLUMNS),
-                        squareFootage / 1000
+                        steelColumnsQuantity
                 )
         );
         orderItems.add(
                 new OrderItem(
                         ItemRepository.getItem(ItemNames.CONCRETE_INDUSTRIAL),
-                        squareFootage / 20
+                        concreteQuantity
                 )
         );
         orderItems.add(
                 new OrderItem(
                         ItemRepository.getItem(ItemNames.GLASS_INDUSTRIAL),
-                        squareFootage / 50
+                        glassQuantity
                 )
         );
         orderItems.add(
                 new OrderItem(
                         ItemRepository.getItem(ItemNames.INSULATION_MATERIALS),
-                        squareFootage * 2
+                        insulationQuantity
                 )
         );
         orderItems.add(
                 new OrderItem(
                         ItemRepository.getItem(ItemNames.ROOFING_HOUSE),
-                        squareFootage
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.CLADDING_MATERIAL),
-                        squareFootage / 2
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.ELECTRICAL_SUPPLIES_INDUSTRIAL),
-                        1
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.PLUMBING_SUPPLIES),
-                        1
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.HVAC_SUPPLIES),
-                        numberOfFloors
+                        roofingQuantity
                 )
         );
         orderItems.add(
                 new OrderItem(
                         ItemRepository.getItem(ItemNames.INTERIOR_FINISHING_MATERIALS),
-                        squareFootage
+                        interiorFinishingQuantity
                 )
         );
         orderItems.add(
                 new OrderItem(
-                        ItemRepository.getItem(ItemNames.FRONT_LOADER_TRUCK),
+                        ItemRepository.getItem(ItemNames.CLADDING_MATERIAL),
+                        claddingMaterialsQuantity
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.ELECTRICAL_SUPPLIES_INDUSTRIAL),
+                        electricalSuppliesQuantity
+                )
+        );
+        orderItems.add(
+                new OrderItem(ItemRepository.getItem(ItemNames.PLUMBING_SUPPLIES),
+                        plumbingSuppliesQuantity
+                )
+        );
+        orderItems.add(
+                new OrderItem(ItemRepository.getItem(ItemNames.HVAC_SUPPLIES),
+                        hvacSuppliesQuantity
+                )
+        );
+        orderItems.add(
+                new OrderItem(ItemRepository.getItem(ItemNames.FRONT_LOADER_TRUCK),
                         1,
                         1
                 )
         );
 
-        for (OrderItem item : orderItems) {
-            final int MIN_QUANTITY = 1;
-            final int MAX_QUANTITY = 10000;
-            if (item.getQuantity() < MIN_QUANTITY || item.getQuantity() > MAX_QUANTITY) {
-                // Handle quantity check
-            }
-            order.addOrderItem(item);
-        }
+        // populate order with items
+        Order loadedOrder = OrderUtils.loadOrder(orderItems);
 
-        return order;
+        return loadedOrder;
     }
 
-    // same as `House`
     @Override
     public BigDecimal calculateMaterialCost() {
         Order industrialBuildingOrder = this.generateMaterialOrder();
 
-        return BuildingCostCalculator
-                .calculateMaterialCost(
-                        industrialBuildingOrder
-                );
+        return BuildingCostCalculator.calculateMaterialCost(
+                industrialBuildingOrder
+        );
     }
 
-    // Similar to `House`, but values respective of IndustrialBuilding. Values are arbitrary, but
-    // again, emulate scaling.
     @Override
     public BigDecimal calculateLaborCost(ZonedDateTime customerEndDate) {
-
         int calculatedConstructionDays =
                 BuildingCostCalculator.calculateConstructionDays(
                         INDUSTRIAL_BUILDING_TYPE,
-                        squareFootage,
+                        squareFootage, // square footage and number of floors passed in by user
                         numberOfFloors
                 );
 
-        return BuildingCostCalculator
-                .calculateLaborCost(
-                        customerEndDate,
-                        calculatedConstructionDays
-                );
+        return BuildingCostCalculator.calculateLaborCost(
+                customerEndDate,
+                calculatedConstructionDays
+        );
     }
 
 
@@ -213,11 +212,7 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
         for (String fieldName : fieldNames) {
             Object fieldValue = FieldUtils.getField(this, fieldName);
             if (fieldValue != null) {
-                builder
-                        .append(", ")
-                        .append(fieldName)
-                        .append("=")
-                        .append(fieldValue);
+                builder.append(", ").append(fieldName).append("=").append(fieldValue);
             }
         }
 

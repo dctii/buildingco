@@ -8,6 +8,7 @@ import com.solvd.buildingco.inventory.ItemNames;
 import com.solvd.buildingco.inventory.ItemRepository;
 import com.solvd.buildingco.utilities.BuildingCostCalculator;
 import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.OrderUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -27,10 +28,8 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     private BigDecimal foundationCost; // foundation cost depends on amount of levels
 
 
-    private final static String INVALID_DIMENSIONS_MESSAGE =
-            "Invalid dimensions for Skyscraper.";
-    private final static String INVALID_NUM_LEVELS_MESSAGE =
-            "Invalid number of levels for Skyscraper.";
+    private final static String INVALID_DIMENSIONS_MESSAGE = "Invalid dimensions for Skyscraper.";
+    private final static String INVALID_NUM_LEVELS_MESSAGE = "Invalid number of levels for Skyscraper.";
 
     public Skyscraper(int squareFootagePerLevel, int numberOfLevels) {
         super();
@@ -51,66 +50,79 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
         this.foundationCost = new BigDecimal(numberOfLevels).multiply(SKYSCRAPER_FOUNDATION_COST_FACTOR);
     }
 
-    // like siblings, but higher priced than IndustrialBuilding due to premium needs of Skyscraper
+    // create order for materials, contributes to material cost calculation
     @Override
     public Order generateMaterialOrder() {
-        Order order = new Order();
-        ArrayList<OrderItem> orderItems = new ArrayList<>(); // Use ArrayList instead of array
+        // general calculations for building
+        double levelSideLength = Math.sqrt(squareFootagePerLevel);
+        double perimeter = 4 * levelSideLength;
+        double wallArea = (perimeter * SKYSCRAPER_HEIGHT_PER_LEVEL) * numberOfLevels;
 
-        // Add items to the list
+        // final quantities for each item
+        int allSquareFootage, concreteQuantity, interiorFinishingQuantity;
+        allSquareFootage = concreteQuantity = interiorFinishingQuantity = (squareFootagePerLevel * numberOfLevels);
+        int steelBeamsQuantity = allSquareFootage / SKYSCRAPER_SQUARE_FEET_PER_STEEL_BEAM;
+        int glassQuantity = (int) (perimeter * SKYSCRAPER_HEIGHT_PER_LEVEL * numberOfLevels);
+        int insulationQuantity = (int) (wallArea * SKYSCRAPER_INSULATION_THICKNESS_IN_FEET);
+        int claddingMaterialsQuantity = (squareFootagePerLevel * numberOfLevels) / 2;
+        int electricalSuppliesQuantity, plumbingSuppliesQuantity, hvacSuppliesQuantity;
+        electricalSuppliesQuantity = plumbingSuppliesQuantity = hvacSuppliesQuantity = numberOfLevels;
 
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.STEEL_BEAMS_HIGH_GRADE),
-                        squareFootagePerLevel * numberOfLevels / 40
-                )
-        );
+        ArrayList<OrderItem> orderItems = new ArrayList<>();
+
+        // add items to the list
         orderItems.add(
                 new OrderItem(
                         ItemRepository.getItem(ItemNames.CONCRETE_HIGH_GRADE),
-                        squareFootagePerLevel * numberOfLevels / 15
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.GLASS_HIGH_GRADE_INDUSTRIAL),
-                        squareFootagePerLevel * numberOfLevels / 8
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.INSULATION_MATERIALS),
-                        squareFootagePerLevel * numberOfLevels
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.CLADDING_MATERIAL),
-                        squareFootagePerLevel * numberOfLevels / 2
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.ELECTRICAL_SUPPLIES_INDUSTRIAL),
-                        numberOfLevels
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.PLUMBING_SUPPLIES),
-                        numberOfLevels
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.HVAC_SUPPLIES),
-                        numberOfLevels
+                        concreteQuantity
                 )
         );
         orderItems.add(
                 new OrderItem(
                         ItemRepository.getItem(ItemNames.INTERIOR_FINISHING_MATERIALS),
-                        squareFootagePerLevel * numberOfLevels
+                        interiorFinishingQuantity
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.STEEL_BEAMS_HIGH_GRADE),
+                        steelBeamsQuantity
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.GLASS_HIGH_GRADE_INDUSTRIAL),
+                        glassQuantity
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.INSULATION_MATERIALS),
+                        insulationQuantity
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.CLADDING_MATERIAL),
+                        claddingMaterialsQuantity
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.ELECTRICAL_SUPPLIES_INDUSTRIAL),
+                        electricalSuppliesQuantity
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.PLUMBING_SUPPLIES),
+                        plumbingSuppliesQuantity
+                )
+        );
+        orderItems.add(
+                new OrderItem(
+                        ItemRepository.getItem(ItemNames.HVAC_SUPPLIES),
+                        hvacSuppliesQuantity
                 )
         );
         orderItems.add(
@@ -121,38 +133,31 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
                 )
         );
 
+        // populate order with items
+        Order loadedOrder = OrderUtils.loadOrder(orderItems);
 
-        for (OrderItem item : orderItems) {
-            order.addOrderItem(item);
-        }
-
-        return order;
+        return loadedOrder;
     }
 
     @Override
     public BigDecimal calculateMaterialCost() {
-        BigDecimal[] additionalCosts = {
-                lobbyCost,
-                foundationCost
-        };
+        BigDecimal[] additionalCosts = {lobbyCost, foundationCost};
 
         Order skyScraperMaterialOrder = this.generateMaterialOrder();
 
-        return BuildingCostCalculator
-                .calculateMaterialCost(
-                        skyScraperMaterialOrder,
-                        additionalCosts
-                );
+        return BuildingCostCalculator.calculateMaterialCost(
+                skyScraperMaterialOrder,
+                additionalCosts
+        );
     }
 
-    // similar to IndustrialBuilding for emulating scaling up of time based on size
     @Override
     public BigDecimal calculateLaborCost(ZonedDateTime customerEndDate) {
 
         int calculatedConstructionDays =
                 BuildingCostCalculator.calculateConstructionDays(
                         SKYSCRAPER_BUILDING_TYPE,
-                        squareFootagePerLevel,
+                        squareFootagePerLevel, // square footage and number of floors passed in by user
                         numberOfLevels
                 );
 
@@ -161,8 +166,6 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
                 calculatedConstructionDays
         );
     }
-
-    // like siblings, except factors in fixed cost of lobby and calculated foundation cost
 
 
     // getters and setters
@@ -219,19 +222,12 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     public String toString() {
         StringBuilder builder = new StringBuilder(super.toString());
 
-        String[] fieldNames = {
-                "squareFootagePerLevel", "numberOfLevels", "constructionDays",
-                "lobbyCost", "foundationCost"
-        };
+        String[] fieldNames = {"squareFootagePerLevel", "numberOfLevels", "constructionDays", "lobbyCost", "foundationCost"};
 
         for (String fieldName : fieldNames) {
             Object fieldValue = FieldUtils.getField(this, fieldName);
             if (fieldValue != null) {
-                builder
-                        .append(", ")
-                        .append(fieldName)
-                        .append("=")
-                        .append(fieldValue);
+                builder.append(", ").append(fieldName).append("=").append(fieldValue);
             }
         }
 
