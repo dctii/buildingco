@@ -64,7 +64,7 @@ public class Main {
             // TODO: have customer input a desired completion date, then it will see if the
             //  building can be completed by that time, if not, prompt for a further date
             // hardcoded future completion date
-            ZonedDateTime completionDate = ZonedDateTime.now().plusMonths(32);
+            ZonedDateTime completionDate = ZonedDateTime.now().plusMonths(64);
 
 
             /*
@@ -83,10 +83,19 @@ public class Main {
             */
 
             if (building != null) {
-                LOGGER.info("Material Cost: " + building.calculateMaterialCost());
-                LOGGER.info("Labor Cost: " + building.calculateLaborCost(completionDate));
-                LOGGER.info("Total Building Cost: " + BuildingCostCalculator.calculateBuildingCost(building,
-                        completionDate));
+                BigDecimal calculatedMaterialCost
+                        = building.calculateMaterialCost();
+                BigDecimal calculatedLaborCost =
+                        building.calculateLaborCost(completionDate);
+                BigDecimal calculatedBuildingCost =
+                        BuildingCostCalculator.calculateBuildingCost(
+                                building,
+                                completionDate
+                        );
+
+                LOGGER.info("Material Cost: " + calculatedMaterialCost);
+                LOGGER.info("Labor Cost: " + calculatedLaborCost);
+                LOGGER.info("Total Building Cost: " + calculatedBuildingCost);
             }
 
 
