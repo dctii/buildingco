@@ -27,7 +27,8 @@ Plugins:
 #### Requirements
 
 ##### Comments and Required changes to consider from Assignment 7:
-- <span style="color: pink;"> Pending... </span>
+- Rewrite the method `generateMaterialOrder()`
+  - make the method in another class and giving the `Building` type reference to method which will generate and set MaterialOrder to some class field from outside so the class will store data without this generating logic. 
 
 ##### Requirements for Assignment 8
 1. Push your code to GitHub
