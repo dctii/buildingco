@@ -10,6 +10,26 @@ Uses:
 
 <hr />
 
+### Assignment 8: Git
+
+<hr />
+
+#### Requirements
+
+##### Comments and Required changes to consider from Assignment 7:
+- <span style="color: pink;"> Pending... </span>
+
+##### Requirements for Assignment 8
+1. Push your code to GitHub
+2. In the GitHub repository, the evaluator should see:
+   - `src/` folder
+   - `pom.xml` file
+   - `.gitignore` file
+
+
+
+<hr />
+
 ### Assignment 7: Maven
 
 <hr />
