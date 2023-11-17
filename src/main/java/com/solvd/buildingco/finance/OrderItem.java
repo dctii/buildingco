@@ -12,10 +12,11 @@ import java.math.BigDecimal;
 
 public class OrderItem {
     private static final Logger LOGGER = LogManager.getLogger(OrderItem.class);
-    private Priceable item;
-    private int quantity;
-    private int monthsToRent;
+    private Priceable item; // item
+    private int quantity; // amount of items to buy or rent
+    private int monthsToRent; // amount of months to rent RentableItem
 
+    // exception messages
     final static String NOT_BUYABLE_ITEM_MESSAGE = "Must be a buyable type of item.";
     final static String NOT_RENTABLE_ITEM_MESSAGE = "Must be a rentable type of item.";
 

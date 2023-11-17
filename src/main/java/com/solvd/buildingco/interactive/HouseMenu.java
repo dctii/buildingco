@@ -33,8 +33,7 @@ public class HouseMenu extends Menu {
         }
     }
 
-    // TODO: Store in a separate file, can prob pass in the Menu menu since HouseMenu and others
-    //  are children of them
+    // executes menu for House
     public static House runMenu(Scanner scanner) {
         HouseMenu menu = new HouseMenu();
         House house = null;
@@ -52,6 +51,7 @@ public class HouseMenu extends Menu {
         return house;
     }
 
+    // create House object with user input
     private static House createHouse(Scanner scanner) {
         int numRooms = 0;
         do {

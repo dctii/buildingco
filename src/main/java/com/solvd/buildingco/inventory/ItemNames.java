@@ -1,6 +1,7 @@
 package com.solvd.buildingco.inventory;
 
 public final class ItemNames {
+    // String names for Items in ItemRepository
     public static final String CONCRETE = "Concrete";
     public static final String STRUCTURAL_WOOD = "Structural Wood";
     public static final String ROOFING_HOUSE = "House Roofing";

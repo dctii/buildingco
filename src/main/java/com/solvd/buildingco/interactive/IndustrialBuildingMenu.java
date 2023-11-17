@@ -35,8 +35,7 @@ public class IndustrialBuildingMenu extends Menu {
         }
     }
 
-    // TODO: Store in a separate file, can prob pass in the Menu menu since HouseMenu and others
-    //  are children of them
+    // executes menu for IndustrialBuilding
     public static IndustrialBuilding runMenu(Scanner scanner) {
         IndustrialBuildingMenu menu = new IndustrialBuildingMenu();
         IndustrialBuilding industrialBuilding = null;
@@ -54,6 +53,8 @@ public class IndustrialBuildingMenu extends Menu {
 
         return industrialBuilding;
     }
+
+    // create IndustrialBuilding object with user input
 
     private static IndustrialBuilding createIndustrialBuilding(Scanner scanner) {
         int squareFootage = 0;

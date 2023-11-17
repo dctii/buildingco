@@ -18,6 +18,7 @@ public class Order {
     private List<OrderItem> orderItems;
     private int count;
 
+    // exception messages
     final static String NOT_BUYABLE_ITEM_MESSAGE = "Must be a buyable type of item.";
     final static String NOT_RENTABLE_ITEM_MESSAGE = "Must be a rentable type of item.";
 

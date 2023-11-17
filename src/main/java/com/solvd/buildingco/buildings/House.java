@@ -19,14 +19,14 @@ import static com.solvd.buildingco.buildings.BuildingConstants.*;
 
 public class House extends Building<BigDecimal> implements IEstimate {
     private static final Logger LOGGER = LogManager.getLogger(House.class);
-
+    //
     private int squareFootage;
-    private int numRooms;
-    private int numBathrooms;
-    private int garageCapacity; // amount of cars that can fit in garage
+    private int numRooms; // number of rooms user chooses in house
+    private int numBathrooms; // number of bathrooms user chooses in house
+    private int garageCapacity; // number of user wants to fit in garage
     private int constructionDays; // how many business days to build
 
-
+    // exception messages
     private final static String INVALID_NUM_ROOMS_MESSAGE = "Invalid number of rooms";
     private final static String INVALID_NUM_BATHROOMS_MESSAGE = "Invalid number of bathrooms";
     private final static String INVALID_NUM_GARAGE_CAP_MESSAGE = "Invalid number for garage " +

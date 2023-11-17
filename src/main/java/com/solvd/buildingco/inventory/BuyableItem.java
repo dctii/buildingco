@@ -10,9 +10,10 @@ import java.math.BigDecimal;
 public class BuyableItem<T extends Number> implements Priceable<T> {
     private static final Logger LOGGER = LogManager.getLogger(BuyableItem.class);
     private String name;
-    private T pricePerUnit;
-    private String unitMeasurement;
+    private T pricePerUnit; // price per unit
+    private String unitMeasurement; // defined unit measurement
 
+    // exception message
     final static String INVALID_PRICE_MESSAGE =
             "Price per unit cannot be less than or equal to zero.";
 
@@ -23,8 +24,8 @@ public class BuyableItem<T extends Number> implements Priceable<T> {
         }
 
         this.name = name;
-        this.pricePerUnit = pricePerUnit; // price per unit
-        this.unitMeasurement = unitMeasurement; // define unit measurement
+        this.pricePerUnit = pricePerUnit;
+        this.unitMeasurement = unitMeasurement;
     }
 
     // getters and setters

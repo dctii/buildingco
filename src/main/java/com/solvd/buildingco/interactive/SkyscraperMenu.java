@@ -34,8 +34,7 @@ public class SkyscraperMenu extends Menu {
         }
     }
 
-    // TODO: Store in a separate file, can prob pass in the Menu menu since HouseMenu and others
-    //  are children of them
+    // executes menu for Skyscraper
     public static Skyscraper runMenu(Scanner scanner) {
         SkyscraperMenu menu = new SkyscraperMenu();
         Skyscraper skyscraper = null;
@@ -54,6 +53,7 @@ public class SkyscraperMenu extends Menu {
         return skyscraper;
     }
 
+    // create Skyscraper object with user input
     private static Skyscraper createSkyscraper(Scanner scanner) {
         int squareFootagePerLevel = 0;
         do {

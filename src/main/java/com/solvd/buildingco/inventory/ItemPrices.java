@@ -1,6 +1,7 @@
 package com.solvd.buildingco.inventory;
 
 public final class ItemPrices {
+    // BigDecimal Price strings names for Items in ItemRepository
     public static final String CONCRETE = "3.00";
     public static final String STRUCTURAL_WOOD = "5.00";
     public static final String ROOFING_HOUSE = "10.00";

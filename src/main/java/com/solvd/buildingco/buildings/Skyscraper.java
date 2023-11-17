@@ -27,7 +27,7 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     private BigDecimal lobbyCost; // lobby is a unique floor, has an arbitrary fixed cost
     private BigDecimal foundationCost; // foundation cost depends on amount of levels
 
-
+    // exception messages
     private final static String INVALID_DIMENSIONS_MESSAGE = "Invalid dimensions for Skyscraper.";
     private final static String INVALID_NUM_LEVELS_MESSAGE = "Invalid number of levels for Skyscraper.";
 

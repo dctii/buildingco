@@ -20,11 +20,11 @@ import static com.solvd.buildingco.buildings.BuildingConstants.*;
 
 public class IndustrialBuilding extends Building<BigDecimal> implements IEstimate {
     private static final Logger LOGGER = LogManager.getLogger(IndustrialBuilding.class);
-    private int squareFootage;
-    private int numberOfFloors;
-    private int constructionDays;
+    private int squareFootage; // square footage user chooses building to be
+    private int numberOfFloors; // number of floors user chooses building to be
+    private int constructionDays; // number of business days to construct building
 
-
+    // exception messages
     private final static String INVALID_DIMENSIONS_MESSAGE = "Invalid dimensions for IndustrialBuilding.";
     private final static String INVALID_NUM_FLOORS_MESSAGE = "Invalid number of floors for Industrial Building.";
 

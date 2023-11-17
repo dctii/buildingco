@@ -7,10 +7,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ItemRepository {
+    // static data for items available for order in inventory
+
+    // initialize HashMap of the item name and its price
     private static final Map<String, Priceable<BigDecimal>> items = new HashMap<>();
 
     static {
-        // Buyable Items
+        // Buyable Items to load into repository
         loadItem(ItemNames.CONCRETE, ItemPrices.CONCRETE, UnitMeasurement.SQUARE_FOOT);
         loadItem(ItemNames.STRUCTURAL_WOOD, ItemPrices.STRUCTURAL_WOOD, UnitMeasurement.SQUARE_FOOT);
         loadItem(ItemNames.ROOFING_HOUSE, ItemPrices.ROOFING_HOUSE, UnitMeasurement.SQUARE_FOOT);
@@ -36,7 +39,7 @@ public class ItemRepository {
         loadItem(ItemNames.GLASS_HIGH_GRADE_INDUSTRIAL, ItemPrices.GLASS_HIGH_GRADE_INDUSTRIAL, UnitMeasurement.SQUARE_FOOT);
 
 
-        // Rentable Items
+        // Rentable Items to load into repository
         loadItem(ItemNames.CONCRETE_MIXER, ItemPrices.CONCRETE_MIXER, UnitMeasurement.UNIT,
                 Priceable.RENTABLE_TYPE);
         loadItem(ItemNames.FRONT_LOADER_TRUCK, ItemPrices.FRONT_LOADER_TRUCK, UnitMeasurement.UNIT,
@@ -46,18 +49,42 @@ public class ItemRepository {
 
     }
 
+    // loadItem functions that load items into repository
     private static void loadItem(String name, String pricePer, String unitMeasurement) {
-        loadItem(name, pricePer, unitMeasurement, Priceable.BUYABLE_TYPE);
+        // if no itemType is passed in, then just assume we want to load a BuyableItem
+        loadItem(
+                name,
+                pricePer,
+                unitMeasurement,
+                Priceable.BUYABLE_TYPE
+        );
     }
 
     private static void loadItem(String name, String pricePer, String unitMeasurement, String itemType) {
         if (Priceable.RENTABLE_TYPE.equalsIgnoreCase(itemType)) {
-            items.put(name, new RentableItem<>(name, new BigDecimal(pricePer)));
+            // if denoted as "rentable", then load a RentableItem into the repository
+            items.put(
+                    name,
+                    new RentableItem<>(
+                            name,
+
+                            new BigDecimal(pricePer)
+                    )
+            );
         } else {
-            items.put(name, new BuyableItem<>(name, new BigDecimal(pricePer), unitMeasurement));
+            // if not denoted as "rentable", then load a BuyableItem into the repository
+            items.put(
+                    name,
+                    new BuyableItem<>(
+                            name,
+                            new BigDecimal(pricePer),
+                            unitMeasurement
+                    )
+            );
         }
     }
 
+    // retrieves item from ItemRepository by String name
     public static Priceable<BigDecimal> getItem(String name) {
         Priceable<BigDecimal> item = items.get(name);
         if (item == null) {

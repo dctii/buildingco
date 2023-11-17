@@ -21,12 +21,13 @@ public abstract class Building<T extends Number> {
         this.manager = null;
     }
 
-    // for building materials
+    // generate quantity of materials and units to order for construction
     public abstract Order generateMaterialOrder();
 
+    // calculate cost of material order
     public abstract T calculateMaterialCost();
 
-
+    // calculate the cost of labor for construction
     public abstract T calculateLaborCost(ZonedDateTime customerEndDate);
 
     @Override
