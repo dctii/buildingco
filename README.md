@@ -4,8 +4,6 @@ Uses:
 
 - IntelliJ IDEA 2023.2.3 (Community Edition)
 - openjdk 11.0.21 2023-10-17
-- OpenJDK Runtime Environment Homebrew (build 11.0.21+0)
-- OpenJDK 64-Bit Server VM Homebrew (build 11.0.21+0, mixed mode)
 
 
 ## Assignments
