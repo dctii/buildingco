@@ -4,9 +4,39 @@ Uses:
 
 - IntelliJ IDEA 2023.2.3 (Community Edition)
 - openjdk 11.0.21 2023-10-17
+- mac os x aarch64
+- Apache Maven 3.9.5
+
+Dependencies:
+- org.apache.logging.log4j:log4j-api v2.21.1
+- org.apache.logging.log4j:log4j-core v2.21.1
+
+Plugins:
+- org.apache.maven.plugins:maven-compiler-plugin v3.11.0
+- org.codehaus.mojo:exec-maven-plugin v3.1.0
 
 
 ## Assignments
+
+<hr />
+
+### Assignment 8: Git
+
+<hr />
+
+#### Requirements
+
+##### Comments and Required changes to consider from Assignment 7:
+- <span style="color: pink;"> Pending... </span>
+
+##### Requirements for Assignment 8
+1. Push your code to GitHub
+2. In the GitHub repository, the evaluator should see:
+   - `src/` folder
+   - `pom.xml` file
+   - `.gitignore` file
+
+
 
 <hr />
 
