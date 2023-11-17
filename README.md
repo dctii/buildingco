@@ -4,6 +4,16 @@ Uses:
 
 - IntelliJ IDEA 2023.2.3 (Community Edition)
 - openjdk 11.0.21 2023-10-17
+- mac os x aarch64
+- Apache Maven 3.9.5
+
+Dependencies:
+- org.apache.logging.log4j:log4j-api v2.21.1
+- org.apache.logging.log4j:log4j-core v2.21.1
+
+Plugins:
+- org.apache.maven.plugins:maven-compiler-plugin v3.11.0
+- org.codehaus.mojo:exec-maven-plugin v3.1.0
 
 
 ## Assignments
