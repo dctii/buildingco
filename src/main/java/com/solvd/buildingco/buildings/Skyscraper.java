@@ -3,18 +3,14 @@ package com.solvd.buildingco.buildings;
 import com.solvd.buildingco.exception.InvalidDimensionException;
 import com.solvd.buildingco.exception.InvalidFloorNumberException;
 import com.solvd.buildingco.finance.Order;
-import com.solvd.buildingco.finance.OrderItem;
-import com.solvd.buildingco.inventory.ItemNames;
-import com.solvd.buildingco.inventory.ItemRepository;
 import com.solvd.buildingco.utilities.BuildingCostCalculator;
 import com.solvd.buildingco.utilities.FieldUtils;
-import com.solvd.buildingco.utilities.OrderUtils;
+import com.solvd.buildingco.utilities.MaterialOrderGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 
 import static com.solvd.buildingco.buildings.BuildingConstants.*;
 
@@ -53,90 +49,7 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     // create order for materials, contributes to material cost calculation
     @Override
     public Order generateMaterialOrder() {
-        // general calculations for building
-        double levelSideLength = Math.sqrt(squareFootagePerLevel);
-        double perimeter = 4 * levelSideLength;
-        double wallArea = (perimeter * SKYSCRAPER_HEIGHT_PER_LEVEL) * numberOfLevels;
-
-        // final quantities for each item
-        int allSquareFootage, concreteQuantity, interiorFinishingQuantity;
-        allSquareFootage = concreteQuantity = interiorFinishingQuantity = (squareFootagePerLevel * numberOfLevels);
-        int steelBeamsQuantity = allSquareFootage / SKYSCRAPER_SQUARE_FEET_PER_STEEL_BEAM;
-        int glassQuantity = (int) (perimeter * SKYSCRAPER_HEIGHT_PER_LEVEL * numberOfLevels);
-        int insulationQuantity = (int) (wallArea * SKYSCRAPER_INSULATION_THICKNESS_IN_FEET);
-        int claddingMaterialsQuantity = (squareFootagePerLevel * numberOfLevels) / 2;
-        int electricalSuppliesQuantity, plumbingSuppliesQuantity, hvacSuppliesQuantity;
-        electricalSuppliesQuantity = plumbingSuppliesQuantity = hvacSuppliesQuantity = numberOfLevels;
-
-        ArrayList<OrderItem> orderItems = new ArrayList<>();
-
-        // add items to the list
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.CONCRETE_HIGH_GRADE),
-                        concreteQuantity
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.INTERIOR_FINISHING_MATERIALS),
-                        interiorFinishingQuantity
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.STEEL_BEAMS_HIGH_GRADE),
-                        steelBeamsQuantity
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.GLASS_HIGH_GRADE_INDUSTRIAL),
-                        glassQuantity
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.INSULATION_MATERIALS),
-                        insulationQuantity
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.CLADDING_MATERIAL),
-                        claddingMaterialsQuantity
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.ELECTRICAL_SUPPLIES_INDUSTRIAL),
-                        electricalSuppliesQuantity
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.PLUMBING_SUPPLIES),
-                        plumbingSuppliesQuantity
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.HVAC_SUPPLIES),
-                        hvacSuppliesQuantity
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.TOWER_CRANE),
-                        1,
-                        2
-                )
-        );
-
-        // populate order with items
-        Order loadedOrder = OrderUtils.loadOrder(orderItems);
-
-        return loadedOrder;
+        return MaterialOrderGenerator.generateMaterialOrder(this);
     }
 
     @Override
