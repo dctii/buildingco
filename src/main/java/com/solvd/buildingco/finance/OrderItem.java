@@ -5,6 +5,7 @@ import com.solvd.buildingco.inventory.BuyableItem;
 import com.solvd.buildingco.inventory.Priceable;
 import com.solvd.buildingco.inventory.RentableItem;
 import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.BigDecimalUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -20,22 +21,22 @@ public class OrderItem {
     final static String NOT_BUYABLE_ITEM_MESSAGE = "Must be a buyable type of item.";
     final static String NOT_RENTABLE_ITEM_MESSAGE = "Must be a rentable type of item.";
 
-    public OrderItem(Priceable<BigDecimal> item, int quantity) {
+    public OrderItem(Priceable<BigDecimal> item, Number quantity) {
         if (!(item instanceof BuyableItem)) {
             LOGGER.warn(NOT_BUYABLE_ITEM_MESSAGE);
             throw new InventoryItemNotFoundException(NOT_BUYABLE_ITEM_MESSAGE);
         }
         this.item = item;
-        this.quantity = quantity;
+        this.quantity = BigDecimalUtils.roundToInt(quantity);
     }
 
-    public OrderItem(Priceable<BigDecimal> item, int quantity, int monthsToRent) {
+    public OrderItem(Priceable<BigDecimal> item, Number quantity, int monthsToRent) {
         if (!(item instanceof RentableItem)) {
             LOGGER.warn(NOT_RENTABLE_ITEM_MESSAGE);
             throw new InventoryItemNotFoundException(NOT_RENTABLE_ITEM_MESSAGE);
         }
         this.item = item;
-        this.quantity = quantity;
+        this.quantity = BigDecimalUtils.roundToInt(quantity);
         this.monthsToRent = monthsToRent;
     }
 
@@ -65,8 +66,8 @@ public class OrderItem {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
+    public void setQuantity(Number quantity) {
+        this.quantity = BigDecimalUtils.roundToInt(quantity);
     }
 
     @Override
