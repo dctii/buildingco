@@ -34,6 +34,7 @@ public class BigDecimalUtils {
     public static int roundToInt(Number number) {
         return NumberUtils.roundToInt(number);
     }
+
     public static BigDecimal divide(Number... values) {
         if (values.length != 2) {
             final String ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE =
