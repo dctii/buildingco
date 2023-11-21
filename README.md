@@ -52,7 +52,6 @@ Plugins
          ```
       &ast; _The words above are just examples, but it can be for any word_.
 
-
 #### Assignment 9.1: [IntelliJ IDEA's top keyboard shortcuts](https://www.jetbrains.com/help/idea/reference-keymap-mac-default.html#top_shortcuts)
 
 | #  | shortcut               | keys                      |
@@ -70,26 +69,25 @@ Plugins
 
 ##### More useful shortcuts
 
-| #  | shortcut                    | keys                             |
-|----|-----------------------------|----------------------------------|
-| 11 | Toggle Line Breakpoint      | `⌘ CMD` + (`fn` +) `F8`          |
+| #  | shortcut                    | keys                                |
+|----|-----------------------------|-------------------------------------|
+| 11 | Toggle Line Breakpoint      | `⌘ CMD` + (`fn` +) `F8`             |
 | 12 | View Breakpoints            | `⌘ CMD` + `⇧ SHIFT` + (`fn` +) `F8` |
 | 13 | Edit Breakpoint             | `⌘ CMD` + `⇧ SHIFT` + (`fn` +) `F8` |
-| 14 | Evaluate Expression         | `⌥ OPT` + (`fn` +) `F8`          |
-| 14 | Show Debug window           | `⌘ CMD` + `5`                    | 
-| 15 | Show Run window             | `⌘ CMD` + `4`                    |
-| 16 | Show Terminal window        | `⌘ CMD` + `2`                    |
-| 17 | Rename                      | `⇧ SHIFT` + (`fn` +) `F6`        |
-| 18 | Change Signature            | `⌘ CMD` + (`fn` +) `F6`          |
-| 19 | Inline refactor             | `⌘ CMD` + `⌥ OPT` + `N`          |
-| 20 | Extract Method              | `⌘ CMD` + `⌥ OPT` + `M`          |
-| 21 | Safe Delete                 | `⌘ CMD` + `⌦ DELETE`             |
-| 22 | Introduce Variable          | `⌘ CMD` + `⌥ OPT` + `V`          |
-| 23 | Introduce Field             | `⌘ CMD` + `⌥ OPT` + `F`          |
-| 24 | Introduce Parameter         | `⌘ CMD` + `⌥ OPT` + `P`          |
-| 25 | Move                        | (`fn` +) `F6`                    |
-| 26 | Duplicate Selection or Line | ⌘ CMD` + `D`          |
-
+| 14 | Evaluate Expression         | `⌥ OPT` + (`fn` +) `F8`             |
+| 14 | Show Debug window           | `⌘ CMD` + `5`                       | 
+| 15 | Show Run window             | `⌘ CMD` + `4`                       |
+| 16 | Show Terminal window        | `⌘ CMD` + `2`                       |
+| 17 | Rename                      | `⇧ SHIFT` + (`fn` +) `F6`           |
+| 18 | Change Signature            | `⌘ CMD` + (`fn` +) `F6`             |
+| 19 | Inline refactor             | `⌘ CMD` + `⌥ OPT` + `N`             |
+| 20 | Extract Method              | `⌘ CMD` + `⌥ OPT` + `M`             |
+| 21 | Safe Delete                 | `⌘ CMD` + `⌦ DELETE`                |
+| 22 | Introduce Variable          | `⌘ CMD` + `⌥ OPT` + `V`             |
+| 23 | Introduce Field             | `⌘ CMD` + `⌥ OPT` + `F`             |
+| 24 | Introduce Parameter         | `⌘ CMD` + `⌥ OPT` + `P`             |
+| 25 | Move                        | (`fn` +) `F6`                       |
+| 26 | Duplicate Selection or Line | ⌘ CMD` + `D`                        |
 
 <hr />
 
