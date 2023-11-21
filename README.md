@@ -30,9 +30,20 @@ Plugins:
 - <span style="color: pink;"> Pending... </span>
 
 ##### Requirements for Assignment 9
-- <span style="color: pink;"> Pending... </span>
+1. Make top 10 of hotkeys for IntelliJ IDEA and learn them
+   2. Word counting algorithm on `.txt` file
+      - In the `resources/` folder, create one `.txt` file which can contain any article, but do not use any short articles, and copy some text from a website.
+      - Create one `.java` file with `main method` that should not be related to the application near your existing `Main` or `App` class.
+      - In this file, implement an algorithm which counts the amount of given words in the article. 
+      - Use `StringUtils` and `FileUtils` for that purpose.
+      - As output, you should have another `.txt` file in the resources which contains the following information:
 
-
+           ```text
+           I = 25
+           day = 45
+           give = 99
+           ```
+        &ast; _The words above are just examples, but it can be for any word_.
 
 <hr />
 
