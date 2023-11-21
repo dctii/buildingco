@@ -20,6 +20,22 @@ Plugins:
 
 <hr />
 
+### Assignment 9: <span style="color: pink;"> Title Pending... </span>
+
+<hr />
+
+#### Requirements
+
+##### Comments and Required changes to consider from Assignment 8:
+- <span style="color: pink;"> Pending... </span>
+
+##### Requirements for Assignment 9
+- <span style="color: pink;"> Pending... </span>
+
+
+
+<hr />
+
 ### Assignment 8: Git
 
 <hr />
