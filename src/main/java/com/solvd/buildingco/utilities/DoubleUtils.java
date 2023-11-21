@@ -1,6 +1,7 @@
 package com.solvd.buildingco.utilities;
+
 public class DoubleUtils {
-    public static void main(String[] args) {
-        
+    public static int roundToInt(double number) {
+        return (int) Math.round(number);
     }
 }
