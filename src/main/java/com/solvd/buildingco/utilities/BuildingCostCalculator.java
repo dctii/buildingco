@@ -74,7 +74,7 @@ public class BuildingCostCalculator {
                         .toLocalDate()
                         .format(dateFormat);
 
-        int architectDays = (int) Math.ceil(constructionDays / 5.0);
+        int architectDays = DoubleUtils.roundToInt(Math.ceil(constructionDays / 5.0));
         String architectEndDateStr =
                 customerEndDate
                         .minusDays(architectDays)
@@ -127,12 +127,14 @@ public class BuildingCostCalculator {
         if (type.equalsIgnoreCase(BuildingConstants.SKYSCRAPER_BUILDING_TYPE)) {
 
             baseConstructionDays = squareFootage / 50;
-            additionalTimePerLevel = (int) Math.ceil(baseConstructionDays * numberOfLevels);
+            additionalTimePerLevel =
+                    DoubleUtils.roundToInt(Math.ceil(baseConstructionDays * numberOfLevels));
 
         } else if (type.equalsIgnoreCase(BuildingConstants.INDUSTRIAL_BUILDING_TYPE)) {
 
             baseConstructionDays = squareFootage / 100;
-            additionalTimePerLevel = (int) Math.ceil(baseConstructionDays * (numberOfLevels - 1));
+            additionalTimePerLevel =
+                    DoubleUtils.roundToInt(Math.ceil(baseConstructionDays * (numberOfLevels - 1)));
 
         } else {
             throw new BuildingTypeException(BUILDING_TYPE_EXCEPTION_MESSAGE);
