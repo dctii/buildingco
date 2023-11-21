@@ -1,5 +1,9 @@
 package com.solvd.buildingco.utilities;
 
+import com.solvd.buildingco.buildings.House;
+import com.solvd.buildingco.buildings.IndustrialBuilding;
+import com.solvd.buildingco.buildings.Skyscraper;
+
 public class BooleanUtils {
     // check if array is empty or null, or if an array full of null items
     public static boolean isEmptyOrNull(Object[] array) {
@@ -14,5 +18,13 @@ public class BooleanUtils {
             }
         }
         return true;
+    }
+
+    public static <T> boolean isValidBuildingType(T building) {
+        if (building instanceof House || building instanceof IndustrialBuilding || building instanceof Skyscraper) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

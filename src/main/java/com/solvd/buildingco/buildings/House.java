@@ -2,18 +2,14 @@ package com.solvd.buildingco.buildings;
 
 import com.solvd.buildingco.exception.InvalidNumRoomsException;
 import com.solvd.buildingco.finance.Order;
-import com.solvd.buildingco.finance.OrderItem;
-import com.solvd.buildingco.inventory.ItemNames;
-import com.solvd.buildingco.inventory.ItemRepository;
 import com.solvd.buildingco.utilities.BuildingCostCalculator;
 import com.solvd.buildingco.utilities.FieldUtils;
-import com.solvd.buildingco.utilities.OrderUtils;
+import com.solvd.buildingco.utilities.MaterialOrderGenerator;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import java.util.ArrayList;
 
 import static com.solvd.buildingco.buildings.BuildingConstants.*;
 
@@ -61,120 +57,7 @@ public class House extends Building<BigDecimal> implements IEstimate {
     // create order for materials, contributes to material cost calculation
     @Override
     public Order generateMaterialOrder() {
-        // general calculations for rooms
-        int averageRoomPerimeter = 2 * (HOUSE_AVERAGE_ROOM_LENGTH + HOUSE_AVERAGE_ROOM_WIDTH);
-        double wallAreaPerRoom = averageRoomPerimeter * HOUSE_ROOM_HEIGHT;
-        double ceilingAreaPerRoom = HOUSE_AVERAGE_ROOM_LENGTH * HOUSE_AVERAGE_ROOM_WIDTH;
-
-        // general calculations for material quantities for rooms
-        double woodFramingQuantityPerRoom = wallAreaPerRoom * HOUSE_WOOD_USAGE_FACTOR_PER_FOOT;
-        double drywallQuantityPerRoom = wallAreaPerRoom + ceilingAreaPerRoom;
-        double paintQuantityPerRoom =
-                (wallAreaPerRoom + ceilingAreaPerRoom) / HOUSE_PAINT_COVERAGE_BY_SQUARE_FEET_PER_GALLON;
-        double insulationQuantityPerRoom = wallAreaPerRoom * HOUSE_INSULATION_THICKNESS_IN_FEET;
-
-        // general calculations for garage
-        double garageSquareFootage, garageCeilingArea;
-        garageSquareFootage = garageCeilingArea =
-                HOUSE_ADDITIONAL_SQUARE_FOOTAGE_PER_CAR * garageCapacity;
-        int garagePerimeter = 2 * ((int) Math.sqrt(garageSquareFootage) + HOUSE_AVERAGE_ROOM_WIDTH);
-        double garageWallArea = garagePerimeter * HOUSE_ROOM_HEIGHT;
-
-        // general calculations for material quantities for garage
-        double woodFramingQuantityForGarage = garageWallArea * HOUSE_WOOD_USAGE_FACTOR_PER_FOOT;
-        double drywallQuantityForGarage = garageWallArea + garageCeilingArea;
-        double paintQuantityForGarage =
-                (garageWallArea + garageCeilingArea) / HOUSE_PAINT_COVERAGE_BY_SQUARE_FEET_PER_GALLON;
-        double insulationQuantityForGarage = garageWallArea + HOUSE_INSULATION_THICKNESS_IN_FEET;
-
-        // final quantities for each item
-        int concreteQuantity, roofingQuantity;
-        concreteQuantity = roofingQuantity = squareFootage;
-        int structuralWoodQuantity =
-                ((int) woodFramingQuantityPerRoom * numRooms) + (int) woodFramingQuantityForGarage;
-        int drywallQuantity =
-                ((int) drywallQuantityPerRoom * numRooms) + (int) drywallQuantityForGarage;
-        int insulationQuantity =
-                ((int) insulationQuantityPerRoom * numRooms) + (int) insulationQuantityForGarage;
-        int flooringQuantity = squareFootage - (int) garageSquareFootage;
-        int paintQuantity = ((int) paintQuantityPerRoom * numRooms) + (int) paintQuantityForGarage;
-        int plumbingSuppliesQuantity = numBathrooms + HOUSE_KITCHEN_QUANTITY;
-        int electricalSuppliesQuantity = numRooms + HOUSE_GARAGE_QUANTITY;
-
-
-        // initialize the ArrayList of OrderItems
-        ArrayList<OrderItem> orderItems = new ArrayList<>();
-
-        // add items to the list
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.CONCRETE),
-                        concreteQuantity
-                )
-        );
-
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.ROOFING_HOUSE),
-                        roofingQuantity
-                )
-        );
-
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.STRUCTURAL_WOOD),
-                        structuralWoodQuantity
-                )
-        );
-
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.DRYWALL),
-                        drywallQuantity
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.INSULATION_MATERIALS),
-                        insulationQuantity
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.FLOORING),
-                        flooringQuantity
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.PAINT),
-                        paintQuantity
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.PLUMBING_SUPPLIES),
-                        plumbingSuppliesQuantity
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.ELECTRICAL_SUPPLIES_HOUSE),
-                        electricalSuppliesQuantity
-                )
-        );
-        orderItems.add(
-                new OrderItem(
-                        ItemRepository.getItem(ItemNames.CONCRETE_MIXER),
-                        1, // one concrete mixer vehicle
-                        1
-                )
-        );
-
-        // populate order with items
-        Order loadedOrder = OrderUtils.loadOrder(orderItems);
-
-        return loadedOrder;
+        return MaterialOrderGenerator.generateMaterialOrder(this);
     }
 
     @Override

@@ -16,6 +16,13 @@
         <log4j.groupId>org.apache.logging.log4j</log4j.groupId>
         <log4j.version>2.21.1</log4j.version>
 
+        <!-- TODO: add usage for later
+        <apache-commons-lang3.version>3.12.0</apache-commons-lang3.version>
+        -->
+        <!-- TODO: add usage for later
+        <apache-commons-io.version>2.15.0</apache-commons-io.version>
+        -->
+
         <maven-compiler-plugin.version>3.11.0</maven-compiler-plugin.version>
 
         <exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
@@ -55,16 +62,38 @@
     </build>
 
     <dependencies>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
         <dependency>
             <groupId>${log4j.groupId}</groupId>
             <artifactId>log4j-api</artifactId>
             <version>${log4j.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
         <dependency>
             <groupId>${log4j.groupId}</groupId>
             <artifactId>log4j-core</artifactId>
             <version>${log4j.version}</version>
         </dependency>
+
+        <!-- TODO: add usage for later
+        https://mvnrepository.com/artifact/org.apache.commons/commons-lang3
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${apache-commons-lang3.version}</version>
+        </dependency>
+        -->
+
+        <!-- TODO: add usage for later
+        https://mvnrepository.com/artifact/commons-io/commons-io
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${apache-commons-io.version}</version>
+        </dependency>
+        -->
+
     </dependencies>
 </project>
