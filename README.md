@@ -43,7 +43,9 @@ Plugins
       article.
     - Use `StringUtils` and `FileUtils` for that purpose.
     - As output, you should have another `.txt` file in the resources which contains the
-      following information:
+      information in the block below. In the example below, `I`, `day`, and `give` are three words
+      that appear in a given `.txt` file and the `25`, `45`, and `99` are how many times,
+      respectively, that each of these three words appear in the `.txt` file.
 
          ```text
          I = 25
