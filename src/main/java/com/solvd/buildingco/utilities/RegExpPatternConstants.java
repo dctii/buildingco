@@ -1,10 +1,32 @@
 package com.solvd.buildingco.utilities;
 
-public class RegExpConstants {
-    final String POSSESSIVE_FORM_PATTERN = ".*'s$";
-    final String PREFIX_SUFFIX_PATTERN = "\\b(-\\w+|\\w+-)\\b";
-    final String SINGLE_QUOTE_PATTERN = "^'|'$";
-    final String ROMAN_NUMERAL_IN_PARENTHESIS_PATTERN =
-            "\\(\\s*(?i)(m{0,4}(cm|cd|d?c{0,3})(xc|xl|l?x{0,3})(ix|iv|v?i{0,3}))\\s*\\)";
-    private RegExpConstants() {}
+public class RegExpPatternConstants {
+    /*
+        https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html
+        Contains reference for regexp constructs
+
+        Matches roman numerals `i` to `x`, 1 to 10, enclosed in parentheses. For example, "(iii)", "
+        (iv)", "
+        (X)", etc.
+
+        `\s*` - match any whitespace char
+        `(?i)` - case-insensitivity to deal with "III" and "iii" for roman numeral 3 for example
+        `v?i{0,3}`
+            - `v`'s appearance is optional
+            - `i` can occur 0 or up to 3 times
+            - if `v` does not appear, then `i` accounts for `i`, `ii`, `iii`
+            - if `i` does not appear, but `v` does, then it accounts for `v`
+            - if `i` and `v` appear, then it accounts for `vi`, `vii`, and `viii`
+
+     */
+    public static final String ROMAN_NUMERAL_IN_PARENTHESES_PATTERN =
+            "\\(\\s*(?i)(ix|iv|v?i{0,3}|x)\\s*\\)";
+
+    /*
+        Matches digits enclosed in parentheses. For example, "(1)", "(2)", "(100)" etc.
+     */
+    public static final String NUMBERS_IN_PARENTHESES_PATTERN = "\\(\\d+\\)";
+
+    private RegExpPatternConstants() {
+    }
 }
