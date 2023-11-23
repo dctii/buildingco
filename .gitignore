@@ -41,3 +41,4 @@ bin/
 playground/
 *.class
 *.iml
+counted-words.txt
