@@ -2,6 +2,7 @@ Title:      Politics and the English Language
 Author:     George Orwell
 Source URL: https://gutenberg.net.au/ebooks02/0200151.txt
 
+
 Most people who bother with the matter at all would admit that the
 English language is in a bad way, but it is generally assumed that we
 cannot by conscious action do anything about it. Our civilization is
@@ -183,16 +184,9 @@ formation. It is often easier to make up words of this kind
 forth) than to think up the English words that will cover one's meaning.
 The result, in general, is an increase in slovenliness and vagueness.
 
-1. An interesting illustration of this is the way in which the English
-flower names which were in use till very recently are being ousted by
-Greek ones, snap-dragon becoming antirrhinum, forget-me-not becoming
-myosotis, etc. It is hard to see any practical reason for this change of
-fashion: it is probably due to an instinctive turning-away from the more
-homely word and a vague feeling that the Greek word is scientific.
-
 Meaningless words. In certain kinds of writing, particularly in art
 criticism and literary criticism, it is normal to come across long
-passages which are almost completely lacking in meaning.2 Words like
+passages which are almost completely lacking in meaning. Words like
 romantic, plastic, values, human, dead, sentimental, natural, vitality,
 as used in art criticism, are strictly meaningless, in the sense that
 they not only do not point to any discoverable object, but are hardly
@@ -428,16 +422,12 @@ explore every avenue and leave no stone unturned, which were killed by
 the jeers of a few journalists. There is a long list of fly-blown
 metaphors which could similarly be got rid of if enough people would
 interest themselves in the job; and it should also be possible to laugh
-the not 'un-' formation out of existence,3 to reduce the amount of Latin
+the not 'un-' formation out of existence, to reduce the amount of Latin
 and Greek in the average sentence, to drive out foreign phrases and
 strayed scientific words, and, in general, to make pretentiousness
 unfashionable. But all these are minor points. The defense of the English
 language implies more than this, and perhaps it is best to start by
 saying what it does not imply.
-
-3. One can cure oneself of the not 'un-' formation by memorizing this
-sentence: A not unblack dog was chasing a not unsmall rabbit across a not
-ungreen field.
 
 To begin with, it has nothing to do with archaism, with the salvaging of
 obsolete words and turns of speech, or with the setting-up of a
