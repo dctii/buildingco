@@ -11,7 +11,8 @@
 
     <properties>
         <java.version>11</java.version>
-        <entrypoint>com.solvd.buildingco.Main</entrypoint>
+
+        <entrypoint>com.solvd.buildingco.WordCounter</entrypoint>
 
         <log4j.groupId>org.apache.logging.log4j</log4j.groupId>
         <log4j.version>2.21.1</log4j.version>
