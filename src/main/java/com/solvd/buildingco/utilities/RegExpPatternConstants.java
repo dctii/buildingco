@@ -1,6 +1,6 @@
 package com.solvd.buildingco.utilities;
 
-public class RegExpPatternConstants {
+public final class RegExpPatternConstants {
     /*
         https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html
         Contains reference for regexp constructs

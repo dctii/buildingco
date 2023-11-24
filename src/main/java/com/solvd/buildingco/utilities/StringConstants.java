@@ -1,6 +1,6 @@
 package com.solvd.buildingco.utilities;
 
-public class StringConstants {
+public final class StringConstants {
 
     public static final String EMPTY_STRING = "";
     public static final String SINGLE_WHITESPACE_CHAR_STRING = " ";
