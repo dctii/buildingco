@@ -4,7 +4,7 @@ package com.solvd.buildingco.finance;
 // TODO: add overtime rate consideration
 
 public abstract class PayRate<T extends Number> {
-    protected T rate;
+    private T rate;
 
     public PayRate(T baseRate) {
         this.rate = baseRate;
