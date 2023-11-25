@@ -38,7 +38,7 @@ public final class BuildingConstants {
     // amount of wood used for each foot of a wall length
     public final static double HOUSE_WOOD_USAGE_FACTOR_PER_FOOT = 0.5; // ft
     // thickness of house insulation in feet
-    public final static double HOUSE_INSULATION_THICKNESS_IN_FEET = 3 / 12; // ft
+    public final static double HOUSE_INSULATION_THICKNESS_IN_FEET = 3.0 / 12.0; // ft
     // how much square footage is covered by one gallon of paint
     public final static int HOUSE_PAINT_COVERAGE_BY_SQUARE_FEET_PER_GALLON = 375; // sq ft
     // starting construction time of a house
@@ -56,7 +56,7 @@ public final class BuildingConstants {
     // max number of floors for industrial building
     public final static int INDUSTRIAL_MAX_FLOORS = 4;
     // height of each floor for industrial building
-    public final static double INDUSTRIAL_BUILDING_HEIGHT_PER_FLOOR = 18; // ft
+    public final static double INDUSTRIAL_BUILDING_HEIGHT_PER_FLOOR = 18.0; // ft
     // how frequently a steel beam is needed by a certain amount of square feet
     public final static int INDUSTRIAL_BUILDING_SQUARE_FEET_PER_STEEL_BEAM = 1000; // sq ft
     // how frequently a steel column is needed by a certain amount of square feet
@@ -66,7 +66,8 @@ public final class BuildingConstants {
     // how frequently cladding materials are needed by a certain amount of square feet
     public final static int INDUSTRIAL_BUILDING_SQUARE_FEET_PER_UNIT_OF_CLADDING = 2; // sq ft
     // thickness of industrial building insulation in feet
-    public final static double INDUSTRIAL_BUILDING_INSULATION_THICKNESS_IN_FEET = 6 / 12; // 6 in
+    public final static double INDUSTRIAL_BUILDING_INSULATION_THICKNESS_IN_FEET = 6.0 / 12.0; //
+    // 6 in
 
     // Skyscrapers
     // min square footage per level for skyscraper
@@ -74,9 +75,9 @@ public final class BuildingConstants {
     // max square footage per level for skyscraper
     public final static int SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL = 50000;
     // height of each floor of the Skyscraper
-    public final static double SKYSCRAPER_HEIGHT_PER_LEVEL = 9; // ft
+    public final static double SKYSCRAPER_HEIGHT_PER_LEVEL = 9.0; // ft
     // thickness of skyscraper insulation in feet
-    public final static double SKYSCRAPER_INSULATION_THICKNESS_IN_FEET = 1 / 12; // in
+    public final static double SKYSCRAPER_INSULATION_THICKNESS_IN_FEET = 1.0 / 12.0; // in
     // how frequently a steel beam is needed by a certain amount of square feet
     public final static int SKYSCRAPER_SQUARE_FEET_PER_STEEL_BEAM = 40; // sq ft
     // min amount of levels the skyscraper can have
