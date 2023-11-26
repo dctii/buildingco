@@ -1,6 +1,11 @@
 package com.solvd.buildingco.utilities;
 
+import com.solvd.buildingco.exception.InvalidContentException;
+import com.solvd.buildingco.exception.InvalidLineException;
+import com.solvd.buildingco.exception.WordParsingException;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -10,6 +15,7 @@ import static com.solvd.buildingco.utilities.RegExpPatternConstants.*;
 import static com.solvd.buildingco.utilities.StringConstants.*;
 
 public class WordCounterUtils {
+    private static final Logger LOGGER = LogManager.getLogger(WordCounterUtils.class);
 
     public static String generateCountedWordsList(Map<String, Integer> wordCounts) {
         ArrayList<String> outputLines = new ArrayList<>();
@@ -39,6 +45,11 @@ public class WordCounterUtils {
     }
 
     public static Map<String, Integer> countWords(String content) {
+        if (StringUtils.isBlank(content)) {
+            final String BLANK_CONTENT_MESSAGE = "Content for word counting is blank.";
+            LOGGER.warn(BLANK_CONTENT_MESSAGE);
+            throw new InvalidContentException(BLANK_CONTENT_MESSAGE);
+        }
 
         // split the content into lines for every "\r\n"
         final String lineSeparatorCharacters =
@@ -84,6 +95,12 @@ public class WordCounterUtils {
     }
 
     public static boolean isMetadataLine(String line) {
+        if (line == null) {
+            final String NULL_LINE_MESSAGE = "Line for metadata check is null.";
+            LOGGER.warn(NULL_LINE_MESSAGE);
+            throw new InvalidLineException(NULL_LINE_MESSAGE);
+        }
+
         // metadata clues that should appear at the head of the document
         final String TITLE_LINE_LABEL = "Title:";
         final String AUTHOR_LINE_LABEL = "Author:";
@@ -108,20 +125,21 @@ public class WordCounterUtils {
     }
 
     public static String[] splitWords(String line) {
+        try {
 
         /*
             Removes any denotations for a numbered list item that are a number wrapped
             in parentheses like "(1)", "(2)", etc. Also for the same type of denotation
             but wrapped roman numerals like "(iii)" or "(iv)".
         */
-        line = line.replaceAll(
-                NUMBERS_IN_PARENTHESES_PATTERN,
-                EMPTY_STRING
-        );
-        line = line.replaceAll(
-                ROMAN_NUMERAL_IN_PARENTHESES_PATTERN,
-                EMPTY_STRING
-        );
+            line = line.replaceAll(
+                    NUMBERS_IN_PARENTHESES_PATTERN,
+                    EMPTY_STRING
+            );
+            line = line.replaceAll(
+                    ROMAN_NUMERAL_IN_PARENTHESES_PATTERN,
+                    EMPTY_STRING
+            );
         /*
             Replaces the string "--" that denotes an intermission within a sentence with a single
              whitespace character, such as in this sentence:
@@ -130,32 +148,39 @@ public class WordCounterUtils {
                 dislike one thing and want to express solidarity with another--but they are not
                 interested in the detail of what they are saying."
         */
-        line = StringUtils.replace(
-                line,
-                MANUAL_EM_DASH_STRING,
-                SINGLE_WHITESPACE_CHAR_STRING
-        );
+            line = StringUtils.replace(
+                    line,
+                    MANUAL_EM_DASH_STRING,
+                    SINGLE_WHITESPACE_CHAR_STRING
+            );
 
-        String[] splitWordsArray = line.split(SEPARATOR_CHARS);
+            String[] splitWordsArray = line.split(SEPARATOR_CHARS);
 
-        ArrayList<String> words = new ArrayList<>();
+            ArrayList<String> words = new ArrayList<>();
 
-        for (String word : splitWordsArray) {
-            // ensure `word` is not null or an empty string
-            if (StringUtils.isNotBlank(word)) {
+            for (String word : splitWordsArray) {
+                // ensure `word` is not null or an empty string
+                if (StringUtils.isNotBlank(word)) {
 
-                // remove single quotation marks from word if it has them
-                word = StringUtils.strip(
-                        word,
-                        SINGLE_QUOTATION
-                );
+                    // remove single quotation marks from word if it has them
+                    word = StringUtils.strip(
+                            word,
+                            SINGLE_QUOTATION
+                    );
 
-                // add word to list
-                words.add(word);
+                    // add word to list
+                    words.add(word);
+                }
             }
-        }
 
-        String[] resultArray = new String[words.size()];
-        return words.toArray(resultArray);
+            String[] resultArray = new String[words.size()];
+            return words.toArray(resultArray);
+        } catch (RuntimeException e) {
+            final String WORD_PARSING_EXCEPTION_MESSAGE_LABEL = "Error parsing words in line: ";
+            String wordParsingExceptionMessage =
+                    WORD_PARSING_EXCEPTION_MESSAGE_LABEL + e.getMessage();
+            LOGGER.warn(wordParsingExceptionMessage);
+            throw new WordParsingException(wordParsingExceptionMessage);
+        }
     }
 }
