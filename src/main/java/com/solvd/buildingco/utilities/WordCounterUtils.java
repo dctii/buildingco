@@ -83,20 +83,20 @@ public class WordCounterUtils {
 
     public static boolean isMetadataLine(String line) {
         // metadata clues that should appear at the head of the document
-        final String TITLE_LINE_PREFIX = "Title:";
-        final String AUTHOR_LINE_PREFIX = "Author:";
-        final String SOURCE_URL_LINE_PREFIX = "Source URL:";
+        final String TITLE_LINE_LABEL = "Title:";
+        final String AUTHOR_LINE_LABEL = "Author:";
+        final String SOURCE_URL_LINE_LABEL = "Source URL:";
 
-        final String[] metadataPrefixes = {
-                TITLE_LINE_PREFIX,
-                AUTHOR_LINE_PREFIX,
-                SOURCE_URL_LINE_PREFIX
+        final String[] metadataLabels = {
+                TITLE_LINE_LABEL,
+                AUTHOR_LINE_LABEL,
+                SOURCE_URL_LINE_LABEL
         };
 
-        // true if the line starts with any of the items in metadataPrefixes
+        // true if the line starts with any of the items in metadataLabels
         boolean isTrue = false;
-        for (String metadatumPrefix : metadataPrefixes) {
-            if (StringUtils.startsWith(line, metadatumPrefix)) {
+        for (String metadatumLabel : metadataLabels) {
+            if (StringUtils.startsWith(line, metadatumLabel)) {
                 isTrue = true;
                 break;
             }
