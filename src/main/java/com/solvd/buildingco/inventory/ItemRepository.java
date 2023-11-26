@@ -88,10 +88,10 @@ public class ItemRepository {
     public static Priceable<BigDecimal> getItem(String name) {
         Priceable<BigDecimal> item = items.get(name);
         if (item == null) {
-            final String ITEM_NOT_FOUND_PREFIX = "Item not found: ";
+            final String ITEM_NOT_FOUND_LABEL = "Item not found: ";
 
             throw new InventoryItemNotFoundException(
-                    ITEM_NOT_FOUND_PREFIX + name
+                    ITEM_NOT_FOUND_LABEL + name
             );
         }
         return item;
