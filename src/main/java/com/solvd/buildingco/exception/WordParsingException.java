@@ -1,6 +1,7 @@
 package com.solvd.buildingco.exception;
-public class WordParsingException {
-    public static void main(String[] args) {
-        
+
+public class WordParsingException extends RuntimeException {
+    public WordParsingException(String message) {
+        super(message);
     }
 }

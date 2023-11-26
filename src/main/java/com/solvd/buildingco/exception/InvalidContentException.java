@@ -1,6 +1,7 @@
 package com.solvd.buildingco.exception;
-public class InvalidContentException {
-    public static void main(String[] args) {
-        
+
+public class InvalidContentException extends RuntimeException {
+    public InvalidContentException(String message) {
+        super(message);
     }
 }
