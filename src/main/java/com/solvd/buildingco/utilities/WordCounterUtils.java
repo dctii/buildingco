@@ -11,49 +11,6 @@ import static com.solvd.buildingco.utilities.StringConstants.*;
 
 public class WordCounterUtils {
 
-    public static Map<String, Integer> countWords(String content) {
-
-        // map where the key is the word name and the integer is how many occurrences of said word
-        Map<String, Integer> wordCounts = new HashMap<>();
-
-        // split the content into lines for every "\r\n"
-        final String lineSeparatorCharacters =
-                CARRIAGE_RETURN_CHAR_STRING
-                        + NEWLINE_CHAR_STRING;
-        String[] lines = StringUtils.split(
-                content,
-                lineSeparatorCharacters
-        );
-
-        //
-        final int WORD_COUNT_DEFAULT_VALUE = 0;
-        final int WORD_COUNT_INCREMENT_VALUE = 1;
-        for (String line : lines) {
-            // skip to next iteration if line is metadata
-            if (isMetadataLine(line)) {
-                continue;
-            }
-
-            for (String word : splitWords(line)) {
-                if (StringUtils.isNotBlank(word)) {
-                    // desensitize the word
-                    word = word.toLowerCase();
-
-                    // update the count for the given word
-                    wordCounts.put(
-                            word,
-                            wordCounts.getOrDefault(
-                                    word,
-                                    WORD_COUNT_DEFAULT_VALUE
-                            ) + WORD_COUNT_INCREMENT_VALUE
-                    );
-                }
-            }
-        }
-
-        return wordCounts;
-    }
-
     public static String generateCountedWordsList(Map<String, Integer> wordCounts) {
         ArrayList<String> outputLines = new ArrayList<>();
 
@@ -79,6 +36,51 @@ public class WordCounterUtils {
         );
 
         return outputContent;
+    }
+
+    public static Map<String, Integer> countWords(String content) {
+
+        // split the content into lines for every "\r\n"
+        final String lineSeparatorCharacters =
+                CARRIAGE_RETURN_CHAR_STRING
+                        + NEWLINE_CHAR_STRING;
+        String[] lines = StringUtils.split(
+                content,
+                lineSeparatorCharacters
+        );
+
+        // key is the word name and the integer is how many occurrences of said word
+        Map<String, Integer> wordCounts = new HashMap<>();
+        final int WORD_COUNT_DEFAULT_VALUE = 0;
+        final int WORD_COUNT_INCREMENT_VALUE = 1;
+        for (String line : lines) {
+            // skip to next iteration if line is metadata
+            if (isMetadataLine(line)) {
+                continue;
+            }
+
+            /*
+                splitWords() will parse words, but will not consider number labels as words
+                (e.g., `(i)`, `(iv)` or `(1)`, `(100)`, etc.
+            */
+            for (String word : splitWords(line)) {
+                if (StringUtils.isNotBlank(word)) {
+                    // desensitize the word
+                    word = word.toLowerCase();
+
+                    // update or initialize the count for the given word
+                    wordCounts.put(
+                            word,
+                            wordCounts.getOrDefault(
+                                    word,
+                                    WORD_COUNT_DEFAULT_VALUE
+                            ) + WORD_COUNT_INCREMENT_VALUE
+                    );
+                }
+            }
+        }
+
+        return wordCounts;
     }
 
     public static boolean isMetadataLine(String line) {
@@ -121,8 +123,8 @@ public class WordCounterUtils {
                 EMPTY_STRING
         );
         /*
-            Replaces the string "--" that denotes an intermission within a sentence, such as in
-            this sentence:
+            Replaces the string "--" that denotes an intermission within a sentence with a single
+             whitespace character, such as in this sentence:
 
                 "People who write in this manner usually have a general emotional meaning--they
                 dislike one thing and want to express solidarity with another--but they are not
@@ -134,18 +136,6 @@ public class WordCounterUtils {
                 SINGLE_WHITESPACE_CHAR_STRING
         );
 
-        /*
-            Characters to split words by:
-                whitespace, tab, and newline
-                comma, semicolon, colon
-                sentence terminating signs
-                double quotes
-                parentheses, brackets, braces
-
-            https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html
-            Reference for regexp constructs
-         */
-        final String SEPARATOR_CHARS = "[ ,.!?;:\"()\\[\\]{}<>\\t\\n]+";
         String[] splitWordsArray = line.split(SEPARATOR_CHARS);
 
         ArrayList<String> words = new ArrayList<>();
@@ -165,6 +155,7 @@ public class WordCounterUtils {
             }
         }
 
-        return words.toArray(new String[words.size()]);
+        String[] resultArray = new String[words.size()];
+        return words.toArray(resultArray);
     }
 }
