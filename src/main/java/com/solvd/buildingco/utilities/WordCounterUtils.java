@@ -28,11 +28,11 @@ public class WordCounterUtils {
                 goodness = 2
                 ...
         */
-        final String PADDED_EQUALS_OPERAND_STRING = " = ";
+        final String PADDED_EQUALS_OPERATOR_STRING = " = ";
         for (Map.Entry<String, Integer> entry : wordCounts.entrySet()) {
             String word = entry.getKey();
             Integer wordCount = entry.getValue();
-            outputLines.add(word + PADDED_EQUALS_OPERAND_STRING + wordCount);
+            outputLines.add(word + PADDED_EQUALS_OPERATOR_STRING + wordCount);
         }
 
         // join each line with a newline
@@ -51,20 +51,11 @@ public class WordCounterUtils {
             throw new InvalidContentException(BLANK_CONTENT_MESSAGE);
         }
 
-        // split the content into lines for every "\r\n"
-        final String lineSeparatorCharacters =
-                CARRIAGE_RETURN_CHAR_STRING
-                        + NEWLINE_CHAR_STRING;
-        String[] lines = StringUtils.split(
-                content,
-                lineSeparatorCharacters
-        );
-
         // key is the word name and the integer is how many occurrences of said word
         Map<String, Integer> wordCounts = new HashMap<>();
         final int WORD_COUNT_DEFAULT_VALUE = 0;
         final int WORD_COUNT_INCREMENT_VALUE = 1;
-        for (String line : lines) {
+        for (String line : splitLines(content)) {
             // skip to next iteration if line is metadata
             if (isMetadataLine(line)) {
                 continue;
@@ -76,13 +67,9 @@ public class WordCounterUtils {
             */
             for (String word : splitWords(line)) {
                 if (StringUtils.isNotBlank(word)) {
-                    // desensitize the word
-                    word = word.toLowerCase();
-
-                    // update or initialize the count for the given word
                     wordCounts.put(
-                            word,
-                            wordCounts.getOrDefault(
+                            word.toLowerCase(), // de-sensitize the word
+                            wordCounts.getOrDefault( // update or initialize given word's count
                                     word,
                                     WORD_COUNT_DEFAULT_VALUE
                             ) + WORD_COUNT_INCREMENT_VALUE
@@ -92,6 +79,17 @@ public class WordCounterUtils {
         }
 
         return wordCounts;
+    }
+
+    private static String[] splitLines(String content) {
+        final String lineSeparatorCharacters =
+                CARRIAGE_RETURN_CHAR_STRING
+                        + NEWLINE_CHAR_STRING;
+
+        return StringUtils.split(
+                content,
+                lineSeparatorCharacters
+        );
     }
 
     public static boolean isMetadataLine(String line) {
