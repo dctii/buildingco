@@ -11,6 +11,8 @@ Dependencies:
 
 - org.apache.logging.log4j:log4j-api v2.21.1
 - org.apache.logging.log4j:log4j-core v2.21.1
+- org.apache.commons:commons-lang3 v3.12.0
+- commons-io:commons-io v2.15.0
 
 Plugins
 
