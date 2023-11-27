@@ -21,7 +21,7 @@ Plugins
 
 <hr />
 
-### Assignment 9: <span style="color: pink;"> Title Pending... </span>
+### Assignment 9: <span style="color: pink;"> Apache libraries. IDE hotkeys. Debugging. </span>
 
 <hr />
 
