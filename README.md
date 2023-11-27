@@ -23,7 +23,7 @@ Pluginsgit
 
 <hr />
 
-### Assignment 9: <span style="color: pink;"> Apache libraries. IDE hotkeys. Debugging. </span>
+### Assignment 9: Apache libraries. IDE hotkeys. Debugging.
 
 <hr />
 
