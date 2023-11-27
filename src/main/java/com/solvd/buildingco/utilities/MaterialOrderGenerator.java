@@ -56,12 +56,10 @@ public class MaterialOrderGenerator {
         }
 
         buyableItems.forEach(
-                (itemName, quantity)
-                        -> orderBuilder.addItem(itemName, quantity)
+                orderBuilder::addItem
         );
         rentableItems.forEach(
-                (itemName, values)
-                        -> orderBuilder.addItem(itemName, values)
+                orderBuilder::addItem
         );
 
         Order order = orderBuilder.build();
