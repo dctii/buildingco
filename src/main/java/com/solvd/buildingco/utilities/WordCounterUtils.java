@@ -28,11 +28,11 @@ public class WordCounterUtils {
                 goodness = 2
                 ...
         */
-        final String PADDED_EQUALS_OPERAND_STRING = " = ";
+        final String PADDED_EQUALS_OPERATOR_STRING = " = ";
         for (Map.Entry<String, Integer> entry : wordCounts.entrySet()) {
             String word = entry.getKey();
             Integer wordCount = entry.getValue();
-            outputLines.add(word + PADDED_EQUALS_OPERAND_STRING + wordCount);
+            outputLines.add(word + PADDED_EQUALS_OPERATOR_STRING + wordCount);
         }
 
         // join each line with a newline
