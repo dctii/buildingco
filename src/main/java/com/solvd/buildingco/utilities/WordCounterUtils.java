@@ -124,7 +124,7 @@ public class WordCounterUtils {
         return isTrue;
     }
 
-    public static String[] splitWords(String line) {
+    public static ArrayList<String> splitWords(String line) {
         try {
 
         /*
@@ -156,7 +156,7 @@ public class WordCounterUtils {
 
             String[] splitWordsArray = line.split(SEPARATOR_CHARS);
 
-            ArrayList<String> words = new ArrayList<>();
+            ArrayList<String> wordsList = new ArrayList<>();
 
             for (String word : splitWordsArray) {
                 // ensure `word` is not null or an empty string
@@ -169,12 +169,12 @@ public class WordCounterUtils {
                     );
 
                     // add word to list
-                    words.add(word);
+                    wordsList.add(word);
                 }
             }
 
-            String[] resultArray = new String[words.size()];
-            return words.toArray(resultArray);
+            return wordsList;
+
         } catch (RuntimeException e) {
             final String WORD_PARSING_EXCEPTION_MESSAGE_LABEL = "Error parsing words in line: ";
             String wordParsingExceptionMessage =
