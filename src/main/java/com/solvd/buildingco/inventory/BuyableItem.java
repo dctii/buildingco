@@ -1,6 +1,6 @@
 package com.solvd.buildingco.inventory;
 
-import com.solvd.buildingco.exception.InvalidContentException;
+import com.solvd.buildingco.exception.InvalidValueException;
 import com.solvd.buildingco.exception.InvalidPriceException;
 import com.solvd.buildingco.utilities.FieldUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -26,7 +26,7 @@ public class BuyableItem<T extends Number> implements Priceable<T> {
     public BuyableItem(String name) {
         if (StringUtils.isBlank(name)) {
             LOGGER.warn(BLANK_NAME_MESSAGE);
-            throw new InvalidContentException(BLANK_NAME_MESSAGE);
+            throw new InvalidValueException(BLANK_NAME_MESSAGE);
         }
 
         this.name = name;
@@ -35,7 +35,7 @@ public class BuyableItem<T extends Number> implements Priceable<T> {
     public BuyableItem(String name, T pricePerUnit, String unitMeasurement) {
         if (StringUtils.isBlank(name)) {
             LOGGER.warn(BLANK_NAME_MESSAGE);
-            throw new InvalidContentException(BLANK_NAME_MESSAGE);
+            throw new InvalidValueException(BLANK_NAME_MESSAGE);
         }
 
         if (pricePerUnit instanceof BigDecimal && ((BigDecimal) pricePerUnit).compareTo(BigDecimal.ZERO) <= 0) {
