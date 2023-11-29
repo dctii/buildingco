@@ -17,4 +17,11 @@ public class OrderUtils {
 
         return order;
     }
+
+    private OrderUtils() {
+        final String NO_UTILITY_CLASS_INSTANTIATION_MESSAGE =
+                "This is a utility class and instances cannot be made of it.";
+
+        throw new UnsupportedOperationException(NO_UTILITY_CLASS_INSTANTIATION_MESSAGE);
+    }
 }
