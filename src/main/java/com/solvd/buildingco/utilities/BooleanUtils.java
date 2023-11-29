@@ -3,6 +3,7 @@ package com.solvd.buildingco.utilities;
 import com.solvd.buildingco.buildings.House;
 import com.solvd.buildingco.buildings.IndustrialBuilding;
 import com.solvd.buildingco.buildings.Skyscraper;
+import org.apache.commons.lang3.StringUtils;
 
 public class BooleanUtils {
     // check if array is empty or null, or if an array full of null items
@@ -18,6 +19,14 @@ public class BooleanUtils {
             }
         }
         return true;
+    }
+
+    public static boolean isBlankOrEmptyString(String string) {
+        if(StringUtils.isBlank(string) || StringUtils.isEmpty(string)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static <T> boolean isValidBuildingType(T building) {
