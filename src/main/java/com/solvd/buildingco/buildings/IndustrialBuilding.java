@@ -24,6 +24,21 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
     private final static String INVALID_DIMENSIONS_MESSAGE = "Invalid dimensions for IndustrialBuilding.";
     private final static String INVALID_NUM_FLOORS_MESSAGE = "Invalid number of floors for Industrial Building.";
 
+    public IndustrialBuilding() {
+        super();
+    }
+
+    public IndustrialBuilding(int squareFootage) {
+        super();
+        if (squareFootage < INDUSTRIAL_MIN_SQUARE_FOOTAGE || squareFootage > INDUSTRIAL_MAX_SQUARE_FOOTAGE) {
+            LOGGER.warn(INVALID_DIMENSIONS_MESSAGE);
+            throw new InvalidDimensionException(INVALID_DIMENSIONS_MESSAGE);
+        }
+
+        this.squareFootage = squareFootage;
+        this.numberOfFloors = INDUSTRIAL_MIN_FLOORS;
+    }
+
     public IndustrialBuilding(int squareFootage, int numberOfFloors) {
         super();
         if (squareFootage < INDUSTRIAL_MIN_SQUARE_FOOTAGE || squareFootage > INDUSTRIAL_MAX_SQUARE_FOOTAGE) {

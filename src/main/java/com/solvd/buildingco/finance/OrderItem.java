@@ -21,6 +21,9 @@ public class OrderItem {
     final static String NOT_BUYABLE_ITEM_MESSAGE = "Must be a buyable type of item.";
     final static String NOT_RENTABLE_ITEM_MESSAGE = "Must be a rentable type of item.";
 
+    public OrderItem() {
+    }
+
     public OrderItem(Priceable<BigDecimal> item, Number quantity) {
         if (!(item instanceof BuyableItem)) {
             LOGGER.warn(NOT_BUYABLE_ITEM_MESSAGE);

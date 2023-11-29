@@ -26,6 +26,10 @@ public class Order {
         this.orderItems = new LinkedList<>();
     }
 
+    public Order(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
     // chainable addOrderItem
     public Order addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);

@@ -16,11 +16,11 @@ import static com.solvd.buildingco.buildings.BuildingConstants.*;
 public class House extends Building<BigDecimal> implements IEstimate {
     private static final Logger LOGGER = LogManager.getLogger(House.class);
     //
-    private int squareFootage;
     private int numRooms; // number of rooms user chooses in house
     private int numBathrooms; // number of bathrooms user chooses in house
     private int garageCapacity; // number of user wants to fit in garage
     private int constructionDays; // how many business days to build
+    private int squareFootage;
 
     // exception messages
     private final static String INVALID_NUM_ROOMS_MESSAGE = "Invalid number of rooms";
@@ -29,7 +29,12 @@ public class House extends Building<BigDecimal> implements IEstimate {
             "capacity";
 
     // constructor
-    public House(int squareFootage, int numRooms, int numBathrooms, int constructionDays, int garageCapacity) {
+
+    public House() {
+        super();
+    }
+
+    public House(int numRooms, int numBathrooms, int garageCapacity) {
         super();
 
         if (numRooms > HOUSE_MAX_NUM_ROOMS || numRooms < HOUSE_MIN_NUM_ROOMS) {
@@ -47,10 +52,36 @@ public class House extends Building<BigDecimal> implements IEstimate {
             throw new InvalidNumRoomsException(INVALID_NUM_GARAGE_CAP_MESSAGE);
         }
 
-        this.squareFootage = squareFootage;
         this.numRooms = numRooms;
         this.numBathrooms = numBathrooms;
         this.garageCapacity = garageCapacity;
+
+
+    }
+
+    public House(int numRooms, int numBathrooms, int garageCapacity, int squareFootage,
+                 int constructionDays) {
+        super();
+
+        if (numRooms > HOUSE_MAX_NUM_ROOMS || numRooms < HOUSE_MIN_NUM_ROOMS) {
+            LOGGER.warn(INVALID_NUM_ROOMS_MESSAGE);
+            throw new InvalidNumRoomsException(INVALID_NUM_ROOMS_MESSAGE);
+        }
+
+        if (numBathrooms < HOUSE_MIN_NUM_BATHROOMS || numBathrooms > HOUSE_MAX_NUM_BATHROOMS || numBathrooms > numRooms) {
+            LOGGER.warn(INVALID_NUM_BATHROOMS_MESSAGE);
+            throw new InvalidNumRoomsException(INVALID_NUM_BATHROOMS_MESSAGE);
+        }
+
+        if (garageCapacity < HOUSE_MIN_NUM_GARAGE_CAP || garageCapacity > HOUSE_MAX_NUM_GARAGE_CAP || garageCapacity > numRooms) {
+            LOGGER.warn(INVALID_NUM_GARAGE_CAP_MESSAGE);
+            throw new InvalidNumRoomsException(INVALID_NUM_GARAGE_CAP_MESSAGE);
+        }
+
+        this.numRooms = numRooms;
+        this.numBathrooms = numBathrooms;
+        this.garageCapacity = garageCapacity;
+        this.squareFootage = squareFootage;
         this.constructionDays = constructionDays;
     }
 
@@ -90,7 +121,12 @@ public class House extends Building<BigDecimal> implements IEstimate {
         int extraDaysForMoreRooms = 20 * (numRooms - 1);
         int constructionDays = HOUSE_BASE_CONSTRUCTION_DAYS + extraDaysForMoreRooms + extraDaysForGarage;
 
-        return new House(squareFootage, numRooms, numBathrooms, constructionDays, garageCapacity);
+        return new House(
+                numRooms,
+                numBathrooms,
+                garageCapacity,
+                squareFootage,
+                constructionDays);
     }
 
     // getters and setters

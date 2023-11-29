@@ -6,6 +6,9 @@ package com.solvd.buildingco.finance;
 public abstract class PayRate<T extends Number> {
     private T rate;
 
+    public PayRate() {
+    }
+
     public PayRate(T baseRate) {
         this.rate = baseRate;
     }
