@@ -6,7 +6,7 @@ import com.solvd.buildingco.buildings.Skyscraper;
 
 public class BooleanUtils {
     // check if array is empty or null, or if an array full of null items
-    public static boolean isEmptyOrNull(Object[] array) {
+    public static boolean isEmptyOrNullArray(Object[] array) {
         if (array == null || array.length == 0) {
             return true;
         }
