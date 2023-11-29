@@ -26,4 +26,11 @@ public class FieldUtils {
         // if nothing found, return null
         return null;
     }
+
+    private FieldUtils() {
+        final String NO_UTILITY_CLASS_INSTANTIATION_MESSAGE =
+                "This is a utility class and instances cannot be made of it.";
+
+        throw new UnsupportedOperationException(NO_UTILITY_CLASS_INSTANTIATION_MESSAGE);
+    }
 }

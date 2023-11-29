@@ -41,4 +41,11 @@ public class OrderBuilder {
     public Order build() {
         return OrderUtils.loadOrder(orderItems);
     }
+
+    private OrderBuilder() {
+        final String NO_GENERATOR_INSTANTIATION_MESSAGE =
+                "This is a generator class and instances cannot be made of it.";
+
+        throw new UnsupportedOperationException(NO_GENERATOR_INSTANTIATION_MESSAGE);
+    }
 }

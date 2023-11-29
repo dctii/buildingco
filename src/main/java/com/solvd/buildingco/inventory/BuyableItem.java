@@ -1,7 +1,9 @@
 package com.solvd.buildingco.inventory;
 
+import com.solvd.buildingco.exception.InvalidContentException;
 import com.solvd.buildingco.exception.InvalidPriceException;
 import com.solvd.buildingco.utilities.FieldUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -16,8 +18,26 @@ public class BuyableItem<T extends Number> implements Priceable<T> {
     // exception message
     final static String INVALID_PRICE_MESSAGE =
             "Price per unit cannot be less than or equal to zero.";
+    final static String BLANK_NAME_MESSAGE = "The 'name' cannot be blank or empty.";
+
+    public BuyableItem() {
+    }
+
+    public BuyableItem(String name) {
+        if (StringUtils.isBlank(name)) {
+            LOGGER.warn(BLANK_NAME_MESSAGE);
+            throw new InvalidContentException(BLANK_NAME_MESSAGE);
+        }
+
+        this.name = name;
+    }
 
     public BuyableItem(String name, T pricePerUnit, String unitMeasurement) {
+        if (StringUtils.isBlank(name)) {
+            LOGGER.warn(BLANK_NAME_MESSAGE);
+            throw new InvalidContentException(BLANK_NAME_MESSAGE);
+        }
+
         if (pricePerUnit instanceof BigDecimal && ((BigDecimal) pricePerUnit).compareTo(BigDecimal.ZERO) <= 0) {
             LOGGER.warn(INVALID_PRICE_MESSAGE);
             throw new InvalidPriceException(INVALID_PRICE_MESSAGE);

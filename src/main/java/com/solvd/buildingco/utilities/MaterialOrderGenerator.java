@@ -495,4 +495,11 @@ public class MaterialOrderGenerator {
         );
     }
 
+    private MaterialOrderGenerator() {
+        final String NO_GENERATOR_INSTANTIATION_MESSAGE =
+                "This is a generator class and instances cannot be made of it.";
+
+        throw new UnsupportedOperationException(NO_GENERATOR_INSTANTIATION_MESSAGE);
+    }
+
 }

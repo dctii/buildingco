@@ -27,6 +27,10 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     private final static String INVALID_DIMENSIONS_MESSAGE = "Invalid dimensions for Skyscraper.";
     private final static String INVALID_NUM_LEVELS_MESSAGE = "Invalid number of levels for Skyscraper.";
 
+    public Skyscraper() {
+        super();
+    }
+
     public Skyscraper(int squareFootagePerLevel, int numberOfLevels) {
         super();
         if (squareFootagePerLevel < SKYSCRAPER_MIN_SQUARE_FOOTAGE_PER_LEVEL || squareFootagePerLevel > SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL) {

@@ -10,5 +10,9 @@ public final class StringConstants {
     public static final String NEWLINE_CHAR_STRING = "\n";
 
     private StringConstants() {
+        final String NO_CONSTANTS_INSTANTIATION_MESSAGE =
+                "This is a constants class and instances cannot be made of it.";
+
+        throw new UnsupportedOperationException(NO_CONSTANTS_INSTANTIATION_MESSAGE);
     }
 }

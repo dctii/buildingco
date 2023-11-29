@@ -7,6 +7,10 @@ import java.math.BigDecimal;
 public class HourlyRate extends PayRate<BigDecimal> {
     private BigDecimal ratePerHour;
 
+    public HourlyRate() {
+        super();
+    }
+
     public HourlyRate(BigDecimal ratePerHour) {
         super(ratePerHour);
         this.ratePerHour = ratePerHour;

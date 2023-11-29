@@ -161,4 +161,11 @@ public class BigDecimalUtils {
 
         return result;
     }
+
+    private BigDecimalUtils() {
+        final String NO_UTILITY_CLASS_INSTANTIATION_MESSAGE =
+                "This is a utility class and instances cannot be made of it.";
+
+        throw new UnsupportedOperationException(NO_UTILITY_CLASS_INSTANTIATION_MESSAGE);
+    }
 }

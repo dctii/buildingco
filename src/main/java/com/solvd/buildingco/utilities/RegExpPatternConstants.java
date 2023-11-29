@@ -46,5 +46,9 @@ public final class RegExpPatternConstants {
     public static final String SEPARATOR_CHARS = "[ ,.!?;:\"()\\[\\]{}<>\\t\\n]+";
 
     private RegExpPatternConstants() {
+        final String NO_CONSTANTS_INSTANTIATION_MESSAGE =
+                "This is a constants class and instances cannot be made of it.";
+
+        throw new UnsupportedOperationException(NO_CONSTANTS_INSTANTIATION_MESSAGE);
     }
 }
