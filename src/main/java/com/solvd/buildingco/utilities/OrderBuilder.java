@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class OrderBuilder {
     private final ArrayList<OrderItem> orderItems = new ArrayList<>();
 
-    public OrderBuilder addItem(String itemName, Integer quantity) {
+    public OrderBuilder addItem(String itemName, int quantity) {
         orderItems.add(
                 new OrderItem(
                         ItemRepository.getItem(itemName),
@@ -25,8 +25,8 @@ public class OrderBuilder {
             throw new IllegalArgumentException("Integer[] array needs to contain exactly 2 items");
         }
 
-        Integer quantity = values[0];
-        Integer monthsToRent = values[1];
+        int quantity = values[0];
+        int monthsToRent = values[1];
 
         orderItems.add(
                 new OrderItem(

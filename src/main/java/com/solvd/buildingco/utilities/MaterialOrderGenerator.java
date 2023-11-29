@@ -75,15 +75,15 @@ public class MaterialOrderGenerator {
 
         Map<String, Integer> items = new HashMap<>();
 
-        Integer concreteQuantity, roofingQuantity;
+        int concreteQuantity, roofingQuantity;
         concreteQuantity = roofingQuantity = house.getSquareFootage();
-        Integer structuralWoodQuantity = calculateStructuralWoodQuantity(house);
-        Integer drywallQuantity = calculateDrywallQuantity(house);
-        Integer insulationQuantity = calculateInsulationQuantity(house);
-        Integer flooringQuantity = calculateFlooringQuantity(house);
-        Integer paintQuantity = calculatePaintQuantity(house);
-        Integer plumbingSuppliesQuantity = calculatePlumbingSuppliesQuantity(house);
-        Integer electricalSuppliesQuantity = calculateElectricSuppliesQuantity(house);
+        int structuralWoodQuantity = calculateStructuralWoodQuantity(house);
+        int drywallQuantity = calculateDrywallQuantity(house);
+        int insulationQuantity = calculateInsulationQuantity(house);
+        int flooringQuantity = calculateFlooringQuantity(house);
+        int paintQuantity = calculatePaintQuantity(house);
+        int plumbingSuppliesQuantity = calculatePlumbingSuppliesQuantity(house);
+        int electricalSuppliesQuantity = calculateElectricSuppliesQuantity(house);
 
         items.put(ItemNames.CONCRETE, concreteQuantity);
         items.put(ItemNames.ROOFING_HOUSE, roofingQuantity);
@@ -106,8 +106,8 @@ public class MaterialOrderGenerator {
 
         Map<String, Integer[]> items = new HashMap<>();
 
-        final Integer CONCRETE_MIXER_QUANTITY = 1;
-        final Integer CONCRETE_MIXER_MONTHS_TO_RENT = 1;
+        final int CONCRETE_MIXER_QUANTITY = 1;
+        final int CONCRETE_MIXER_MONTHS_TO_RENT = 1;
 
         items.put(ItemNames.CONCRETE_MIXER, new Integer[]{CONCRETE_MIXER_QUANTITY, CONCRETE_MIXER_MONTHS_TO_RENT});
 
@@ -122,16 +122,16 @@ public class MaterialOrderGenerator {
 
         Map<String, Integer> items = new HashMap<>();
 
-        Integer insulationQuantity = calculateInsulationQuantity(industrialBuilding);
-        Integer steelBeamsQuantity = calculateSteelBeamsQuantity(industrialBuilding);
-        Integer steelColumnsQuantity = calculateSteelColumnsQuantity(industrialBuilding);
-        Integer concreteQuantity = calculateConcreteQuantity(industrialBuilding);
-        Integer glassQuantity = calculateGlassQuantity(industrialBuilding);
-        Integer roofingQuantity, interiorFinishingQuantity;
+        int insulationQuantity = calculateInsulationQuantity(industrialBuilding);
+        int steelBeamsQuantity = calculateSteelBeamsQuantity(industrialBuilding);
+        int steelColumnsQuantity = calculateSteelColumnsQuantity(industrialBuilding);
+        int concreteQuantity = calculateConcreteQuantity(industrialBuilding);
+        int glassQuantity = calculateGlassQuantity(industrialBuilding);
+        int roofingQuantity, interiorFinishingQuantity;
         roofingQuantity = interiorFinishingQuantity = industrialBuilding.getSquareFootage();
-        Integer claddingMaterialsQuantity =
+        int claddingMaterialsQuantity =
                 calculateCladdingMaterialsQuantity(industrialBuilding);
-        Integer electricalSuppliesQuantity, plumbingSuppliesQuantity, hvacSuppliesQuantity;
+        int electricalSuppliesQuantity, plumbingSuppliesQuantity, hvacSuppliesQuantity;
         electricalSuppliesQuantity = plumbingSuppliesQuantity = hvacSuppliesQuantity =
                 industrialBuilding.getNumberOfFloors();
 
@@ -158,11 +158,13 @@ public class MaterialOrderGenerator {
 
         Map<String, Integer[]> items = new HashMap<>();
 
-        final Integer FRONT_LOADER_TRUCK_QUANTITY = 1;
-        final Integer FRONT_LOADER_TRUCK_MONTHS_TO_RENT = 1;
+        final int FRONT_LOADER_TRUCK_QUANTITY = 1;
+        final int FRONT_LOADER_TRUCK_MONTHS_TO_RENT = 1;
 
-        items.put(ItemNames.FRONT_LOADER_TRUCK, new Integer[]{FRONT_LOADER_TRUCK_QUANTITY,
-                FRONT_LOADER_TRUCK_MONTHS_TO_RENT});
+        items.put(
+                ItemNames.FRONT_LOADER_TRUCK,
+                new Integer[]{FRONT_LOADER_TRUCK_QUANTITY, FRONT_LOADER_TRUCK_MONTHS_TO_RENT}
+        );
 
         return items;
     }
@@ -175,13 +177,13 @@ public class MaterialOrderGenerator {
 
         Map<String, Integer> items = new HashMap<>();
 
-        Integer concreteQuantity, interiorFinishingQuantity;
+        int concreteQuantity, interiorFinishingQuantity;
         concreteQuantity = interiorFinishingQuantity = calculateAllSquareFootage(skyscraper);
-        Integer steelBeamsQuantity = calculateSteelBeamsQuantity(skyscraper);
-        Integer glassQuantity = calculateGlassQuantity(skyscraper);
-        Integer insulationQuantity = calculateInsulationQuantity(skyscraper);
-        Integer claddingMaterialsQuantity = calculateCladdingMaterialsQuantity(skyscraper);
-        Integer electricalSuppliesQuantity, plumbingSuppliesQuantity, hvacSuppliesQuantity;
+        int steelBeamsQuantity = calculateSteelBeamsQuantity(skyscraper);
+        int glassQuantity = calculateGlassQuantity(skyscraper);
+        int insulationQuantity = calculateInsulationQuantity(skyscraper);
+        int claddingMaterialsQuantity = calculateCladdingMaterialsQuantity(skyscraper);
+        int electricalSuppliesQuantity, plumbingSuppliesQuantity, hvacSuppliesQuantity;
         electricalSuppliesQuantity = plumbingSuppliesQuantity = hvacSuppliesQuantity =
                 skyscraper.getNumberOfLevels();
 
@@ -206,15 +208,18 @@ public class MaterialOrderGenerator {
 
         Map<String, Integer[]> items = new HashMap<>();
 
-        final Integer TOWER_CRANE_QUANTITY = 1;
-        final Integer TOWER_CRANE_MONTHS_TO_RENT = 1;
+        final int TOWER_CRANE_QUANTITY = 1;
+        final int TOWER_CRANE_MONTHS_TO_RENT = 1;
 
-        items.put(ItemNames.TOWER_CRANE, new Integer[]{TOWER_CRANE_QUANTITY, TOWER_CRANE_MONTHS_TO_RENT});
+        items.put(
+                ItemNames.TOWER_CRANE,
+                new Integer[]{TOWER_CRANE_QUANTITY, TOWER_CRANE_MONTHS_TO_RENT}
+        );
 
         return items;
     }
 
-    private static Integer calculateStructuralWoodQuantity(House house) {
+    private static int calculateStructuralWoodQuantity(House house) {
         BigDecimal woodFramingQuantityPerRoom =
                 BigDecimalUtils.multiply(calculateWallAreaPerRoom(), HOUSE_WOOD_USAGE_FACTOR_PER_FOOT);
 
@@ -230,7 +235,7 @@ public class MaterialOrderGenerator {
         );
     }
 
-    private static Integer calculateDrywallQuantity(House house) {
+    private static int calculateDrywallQuantity(House house) {
 
         BigDecimal drywallQuantityPerRoom = BigDecimalUtils.add(
                 calculateWallAreaPerRoom(),
@@ -250,7 +255,7 @@ public class MaterialOrderGenerator {
         );
     }
 
-    private static Integer calculateInsulationQuantity(House house) {
+    private static int calculateInsulationQuantity(House house) {
 
         BigDecimal insulationQuantityPerRoom =
                 BigDecimalUtils.multiply(calculateWallAreaPerRoom(), HOUSE_INSULATION_THICKNESS_IN_FEET);
@@ -270,7 +275,7 @@ public class MaterialOrderGenerator {
         );
     }
 
-    private static Integer calculateFlooringQuantity(House house) {
+    private static int calculateFlooringQuantity(House house) {
         return BigDecimalUtils.roundToInt(
                 BigDecimalUtils.subtract(
                         house.getSquareFootage(),
@@ -279,7 +284,7 @@ public class MaterialOrderGenerator {
         );
     }
 
-    private static Integer calculatePaintQuantity(House house) {
+    private static int calculatePaintQuantity(House house) {
 
         BigDecimal paintQuantityPerRoom =
                 BigDecimalUtils.divide(
@@ -301,11 +306,11 @@ public class MaterialOrderGenerator {
         );
     }
 
-    private static Integer calculatePlumbingSuppliesQuantity(House house) {
+    private static int calculatePlumbingSuppliesQuantity(House house) {
         return house.getNumRooms() + HOUSE_KITCHEN_QUANTITY;
     }
 
-    private static Integer calculateElectricSuppliesQuantity(House house) {
+    private static int calculateElectricSuppliesQuantity(House house) {
         return house.getNumRooms() + HOUSE_GARAGE_QUANTITY;
     }
 
@@ -350,7 +355,7 @@ public class MaterialOrderGenerator {
                 HOUSE_ROOM_HEIGHT);
     }
 
-    private static Integer calculateInsulationQuantity(IndustrialBuilding industrialBuilding) {
+    private static int calculateInsulationQuantity(IndustrialBuilding industrialBuilding) {
         return BigDecimalUtils.roundToInt(
                 BigDecimalUtils.multiply(calculateWallArea(industrialBuilding),
                         INDUSTRIAL_BUILDING_INSULATION_THICKNESS_IN_FEET
@@ -358,7 +363,7 @@ public class MaterialOrderGenerator {
         );
     }
 
-    private static Integer calculateSteelBeamsQuantity(IndustrialBuilding industrialBuilding) {
+    private static int calculateSteelBeamsQuantity(IndustrialBuilding industrialBuilding) {
         return BigDecimalUtils.roundToInt(
                 BigDecimalUtils.divide(industrialBuilding.getSquareFootage(),
                         INDUSTRIAL_BUILDING_SQUARE_FEET_PER_STEEL_BEAM
@@ -366,7 +371,7 @@ public class MaterialOrderGenerator {
         );
     }
 
-    private static Integer calculateSteelColumnsQuantity(IndustrialBuilding industrialBuilding) {
+    private static int calculateSteelColumnsQuantity(IndustrialBuilding industrialBuilding) {
         return BigDecimalUtils.roundToInt(
                 BigDecimalUtils.divide(industrialBuilding.getSquareFootage(),
                         INDUSTRIAL_BUILDING_SQUARE_FEET_PER_STEEL_COLUMN
@@ -374,7 +379,7 @@ public class MaterialOrderGenerator {
         );
     }
 
-    private static Integer calculateConcreteQuantity(IndustrialBuilding industrialBuilding) {
+    private static int calculateConcreteQuantity(IndustrialBuilding industrialBuilding) {
         return BigDecimalUtils.roundToInt(
                 BigDecimalUtils.multiply(industrialBuilding.getSquareFootage(),
                         industrialBuilding.getNumberOfFloors()
@@ -382,7 +387,7 @@ public class MaterialOrderGenerator {
         );
     }
 
-    private static Integer calculateGlassQuantity(IndustrialBuilding industrialBuilding) {
+    private static int calculateGlassQuantity(IndustrialBuilding industrialBuilding) {
         return BigDecimalUtils.roundToInt(
                 BigDecimalUtils.divide(industrialBuilding.getSquareFootage(),
                         INDUSTRIAL_BUILDING_SQUARE_FEET_PER_UNIT_OF_GLASS
@@ -390,7 +395,7 @@ public class MaterialOrderGenerator {
         );
     }
 
-    private static Integer calculateCladdingMaterialsQuantity(IndustrialBuilding industrialBuilding) {
+    private static int calculateCladdingMaterialsQuantity(IndustrialBuilding industrialBuilding) {
         return BigDecimalUtils.roundToInt(
                 BigDecimalUtils.divide(industrialBuilding.getSquareFootage(),
                         INDUSTRIAL_BUILDING_SQUARE_FEET_PER_UNIT_OF_CLADDING
@@ -424,7 +429,7 @@ public class MaterialOrderGenerator {
         return (BigDecimal) BigDecimalUtils.sqrt(squareFootage);
     }
 
-    private static Integer calculateSteelBeamsQuantity(Skyscraper skyscraper) {
+    private static int calculateSteelBeamsQuantity(Skyscraper skyscraper) {
         return BigDecimalUtils.roundToInt(
                 BigDecimalUtils.divide(calculateAllSquareFootage(skyscraper),
                         SKYSCRAPER_SQUARE_FEET_PER_STEEL_BEAM
@@ -432,7 +437,7 @@ public class MaterialOrderGenerator {
         );
     }
 
-    private static Integer calculateGlassQuantity(Skyscraper skyscraper) {
+    private static int calculateGlassQuantity(Skyscraper skyscraper) {
         return BigDecimalUtils.roundToInt(
                 BigDecimalUtils.multiplyAll(
                         calculatePerimeter(skyscraper),
@@ -442,7 +447,7 @@ public class MaterialOrderGenerator {
         );
     }
 
-    private static Integer calculateInsulationQuantity(Skyscraper skyscraper) {
+    private static int calculateInsulationQuantity(Skyscraper skyscraper) {
         return BigDecimalUtils.roundToInt(
                 BigDecimalUtils.multiply(calculateWallArea(skyscraper),
                         SKYSCRAPER_INSULATION_THICKNESS_IN_FEET
@@ -450,7 +455,7 @@ public class MaterialOrderGenerator {
         );
     }
 
-    private static Integer calculateCladdingMaterialsQuantity(Skyscraper skyscraper) {
+    private static int calculateCladdingMaterialsQuantity(Skyscraper skyscraper) {
         return BigDecimalUtils.roundToInt(
                 BigDecimalUtils.divide(
                         BigDecimalUtils.multiply(skyscraper.getSquareFootagePerLevel(),
@@ -461,7 +466,7 @@ public class MaterialOrderGenerator {
         );
     }
 
-    private static Integer calculateAllSquareFootage(Skyscraper skyscraper) {
+    private static int calculateAllSquareFootage(Skyscraper skyscraper) {
         return BigDecimalUtils.roundToInt(
                 (BigDecimalUtils.multiply(
                         skyscraper.getSquareFootagePerLevel(),
