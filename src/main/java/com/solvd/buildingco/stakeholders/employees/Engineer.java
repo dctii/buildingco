@@ -10,6 +10,22 @@ import java.math.BigDecimal;
 // TODO: add options for different kinds of Engineers
 
 public class Engineer extends Employee {
+
+    public Engineer(){
+        super();
+    }
+
+    public Engineer(String[] nameParts){
+        super(nameParts);
+    }
+
+    public Engineer(String[] nameParts, PayRate payRate) {
+        super(nameParts, payRate);
+    }
+
+    public Engineer(String[] nameParts, PayRate payRate, Schedule schedule) {
+        super(nameParts, payRate, schedule);
+    }
     public Engineer(String[] nameParts, String[] postNominals, String[] organizationNames,
                     String[] roles, String[] addresses, String[] phoneNumbers, String[] emails,
                     PayRate payRate, Schedule schedule, String personnelType) {

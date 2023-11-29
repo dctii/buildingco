@@ -8,6 +8,22 @@ import com.solvd.buildingco.utilities.FieldUtils;
 import java.math.BigDecimal;
 
 public class ProjectManager extends Employee {
+
+    public ProjectManager(){
+        super();
+    }
+
+    public ProjectManager(String[] nameParts){
+        super(nameParts);
+    }
+
+    public ProjectManager(String[] nameParts, PayRate payRate) {
+        super(nameParts, payRate);
+    }
+
+    public ProjectManager(String[] nameParts, PayRate payRate, Schedule schedule) {
+        super(nameParts, payRate, schedule);
+    }
     public ProjectManager(String[] nameParts, String[] postNominals, String[] organizationNames,
                           String[] roles, String[] addresses, String[] phoneNumbers, String[] emails,
                           PayRate payRate, Schedule schedule, String personnelType) {
