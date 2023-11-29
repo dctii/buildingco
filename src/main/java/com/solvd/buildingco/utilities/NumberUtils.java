@@ -6,9 +6,9 @@ import java.math.RoundingMode;
 public class NumberUtils {
     public static int roundToInt(Number number) {
         if (number instanceof Float) {
-            return Math.round((Float) number);
+            return Math.round((float) number);
         } else if (number instanceof Double) {
-            return (int) Math.round((Double) number);
+            return (int) Math.round((double) number);
         } else if (number instanceof BigDecimal) {
             /*
                 "Java BigDecimal: Round to the nearest whole value"

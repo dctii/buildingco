@@ -69,6 +69,35 @@ public class WordCounterUtils {
     public static Map<String, Integer> countWords(String content) {
         checkIfBlankContent(content);
 
+        /*
+            Removes any denotations for a numbered list item that are a number wrapped
+            in parentheses like "(1)", "(2)", etc. Also for the same type of denotation
+            but wrapped roman numerals like "(iii)" or "(iv)".
+        */
+        content = content.replaceAll(
+                NUMBERS_IN_PARENTHESES_PATTERN,
+                EMPTY_STRING
+        );
+        content = content.replaceAll(
+                ROMAN_NUMERAL_IN_PARENTHESES_PATTERN,
+                EMPTY_STRING
+        );
+
+        /*
+            Replaces the string "--" that denotes an intermission within a sentence with a single
+             whitespace character, such as in this sentence:
+
+                "People who write in this manner usually have a general emotional meaning--they
+                dislike one thing and want to express solidarity with another--but they are not
+                interested in the detail of what they are saying."
+        */
+        content = StringUtils.replace(
+                content,
+                MANUAL_EM_DASH_STRING,
+                SINGLE_WHITESPACE_CHAR_STRING
+        );
+
+
         // key is the word name and the integer is how many occurrences of said word
         Map<String, Integer> wordCounts = new HashMap<>();
         for (String line : splitLines(content)) {
@@ -154,34 +183,6 @@ public class WordCounterUtils {
 
     public static ArrayList<String> splitWords(String line) {
         try {
-
-        /*
-            Removes any denotations for a numbered list item that are a number wrapped
-            in parentheses like "(1)", "(2)", etc. Also for the same type of denotation
-            but wrapped roman numerals like "(iii)" or "(iv)".
-        */
-            line = line.replaceAll(
-                    NUMBERS_IN_PARENTHESES_PATTERN,
-                    EMPTY_STRING
-            );
-            line = line.replaceAll(
-                    ROMAN_NUMERAL_IN_PARENTHESES_PATTERN,
-                    EMPTY_STRING
-            );
-        /*
-            Replaces the string "--" that denotes an intermission within a sentence with a single
-             whitespace character, such as in this sentence:
-
-                "People who write in this manner usually have a general emotional meaning--they
-                dislike one thing and want to express solidarity with another--but they are not
-                interested in the detail of what they are saying."
-        */
-            line = StringUtils.replace(
-                    line,
-                    MANUAL_EM_DASH_STRING,
-                    SINGLE_WHITESPACE_CHAR_STRING
-            );
-
             String[] splitWordsArray = line.split(SEPARATOR_CHARS);
 
             ArrayList<String> wordsList = new ArrayList<>();
