@@ -1,7 +1,10 @@
 package com.solvd.buildingco.utilities;
 
+import com.solvd.buildingco.exception.TimeConflictException;
 import com.solvd.buildingco.scheduling.Schedule;
 import com.solvd.buildingco.scheduling.ScheduledActivity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,8 +12,13 @@ import java.time.format.DateTimeFormatter;
 import static com.solvd.buildingco.buildings.BuildingConstants.ARCHITECTURE_WORK_DESCRIPTION;
 
 public class ScheduleUtils {
+    private static final Logger LOGGER = LogManager.getLogger(ScheduleUtils.class);
     // short-form to create the Date formatter used throughout the project
     private static final String DATE_PATTERN = "MM/dd/yyyy";
+    final static String IDENTICAL_TIMES_MESSAGE =
+            "The 'startTime' and 'endTime' cannot be identical.";
+    final static String START_AFTER_END_MESSAGE =
+            "The 'startTime' cannot be after the 'endTime'.";
 
     public static DateTimeFormatter getDateFormat() {
         return DateTimeFormatter.ofPattern(DATE_PATTERN);
@@ -50,6 +58,18 @@ public class ScheduleUtils {
 
 
         return schedule;
+    }
+
+    public static void validateScheduledTime(ZonedDateTime startTime, ZonedDateTime endTime) {
+        if (startTime != null && endTime != null) {
+            if (startTime.isEqual(endTime)) {
+                LOGGER.warn(IDENTICAL_TIMES_MESSAGE);
+                throw new TimeConflictException(IDENTICAL_TIMES_MESSAGE);
+            } else if (startTime.isAfter(endTime)) {
+                LOGGER.warn(START_AFTER_END_MESSAGE);
+                throw new TimeConflictException(START_AFTER_END_MESSAGE);
+            }
+        }
     }
 
     private ScheduleUtils() {
