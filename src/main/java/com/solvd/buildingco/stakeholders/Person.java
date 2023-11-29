@@ -7,6 +7,8 @@ import java.util.Arrays;
 import static com.solvd.buildingco.utilities.BooleanUtils.isEmptyOrNullArray;
 
 
+// TODO: add exceptions and additional constructors
+
 // general Person class with usual title and contact information
 public abstract class Person {
     private String[] nameParts;
@@ -14,6 +16,10 @@ public abstract class Person {
     private String[] addresses;
     private String[] emails;
     private String[] phoneNumbers;
+
+    public Person(String[] nameParts) {
+        this.nameParts = nameParts;
+    }
 
     public Person(String[] nameParts, String[] postNominals, String[] addresses, String[] emails, String[] phoneNumbers) {
         this.nameParts = nameParts;

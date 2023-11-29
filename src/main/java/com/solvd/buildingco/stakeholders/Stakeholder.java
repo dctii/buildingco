@@ -12,6 +12,10 @@ public abstract class Stakeholder extends Person {
     private String[] organizationNames;
     private String[] roles;
 
+    public Stakeholder(String[] nameParts) {
+        super(nameParts);
+    }
+
     public Stakeholder(String[] nameParts, String[] postNominals, String[] organizationNames,
                        String[] roles, String[] addresses, String[] phoneNumbers, String[] emails) {
         super(nameParts, postNominals, addresses, emails, phoneNumbers);
