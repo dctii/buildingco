@@ -4,7 +4,7 @@ import com.solvd.buildingco.utilities.FieldUtils;
 
 import java.util.Arrays;
 
-import static com.solvd.buildingco.utilities.BooleanUtils.isEmptyOrNull;
+import static com.solvd.buildingco.utilities.BooleanUtils.isEmptyOrNullArray;
 
 
 // general Person class with usual title and contact information
@@ -26,7 +26,7 @@ public abstract class Person {
     // getters and setters
 
     public String[] getNameParts() {
-        return isEmptyOrNull(nameParts) ? null : nameParts;
+        return isEmptyOrNullArray(nameParts) ? null : nameParts;
     }
 
     public void setNameParts(String[] nameParts) {
@@ -34,7 +34,7 @@ public abstract class Person {
     }
 
     public String getForename() {
-        return isEmptyOrNull(nameParts) ? null : nameParts[0];
+        return isEmptyOrNullArray(nameParts) ? null : nameParts[0];
     }
 
     public void setForename(String forename) {
@@ -42,7 +42,7 @@ public abstract class Person {
     }
 
     public String getMiddleName() {
-        return isEmptyOrNull(nameParts) ? null : nameParts[1];
+        return isEmptyOrNullArray(nameParts) ? null : nameParts[1];
     }
 
     public void setMiddleName(String middleName) {
@@ -50,7 +50,7 @@ public abstract class Person {
     }
 
     public String getSurname() {
-        return isEmptyOrNull(nameParts) ? null : nameParts[2];
+        return isEmptyOrNullArray(nameParts) ? null : nameParts[2];
     }
 
     public void setSurname(String surname) {
@@ -58,7 +58,7 @@ public abstract class Person {
     }
 
     public String getSuffix() {
-        return isEmptyOrNull(nameParts) ? null : nameParts[3];
+        return isEmptyOrNullArray(nameParts) ? null : nameParts[3];
     }
 
     public void setSuffix(String suffix) {
@@ -66,7 +66,7 @@ public abstract class Person {
     }
 
     public String[] getPostNominals() {
-        return isEmptyOrNull(postNominals) ? null : postNominals;
+        return isEmptyOrNullArray(postNominals) ? null : postNominals;
     }
 
     public void setPostNominals(String[] postNominals) {
@@ -98,7 +98,7 @@ public abstract class Person {
 
 
     public String[] getAddresses() {
-        return isEmptyOrNull(addresses) ? null : addresses;
+        return isEmptyOrNullArray(addresses) ? null : addresses;
     }
 
     public void setAddresses(String[] addresses) {
@@ -106,7 +106,7 @@ public abstract class Person {
     }
 
     public String[] getPhoneNumbers() {
-        return isEmptyOrNull(phoneNumbers) ? null : phoneNumbers;
+        return isEmptyOrNullArray(phoneNumbers) ? null : phoneNumbers;
     }
 
     public void setPhoneNumbers(String[] phoneNumbers) {
@@ -114,7 +114,7 @@ public abstract class Person {
     }
 
     public String[] getEmails() {
-        return isEmptyOrNull(emails) ? null : emails;
+        return isEmptyOrNullArray(emails) ? null : emails;
     }
 
     public void setEmails() {

@@ -1,6 +1,6 @@
 package com.solvd.buildingco.utilities;
 
-import com.solvd.buildingco.exception.InvalidContentException;
+import com.solvd.buildingco.exception.InvalidValueException;
 import com.solvd.buildingco.exception.InvalidLineException;
 import com.solvd.buildingco.exception.WordParsingException;
 import org.apache.commons.lang3.StringUtils;
@@ -124,7 +124,7 @@ public class WordCounterUtils {
         if (StringUtils.isBlank(content)) {
             final String BLANK_CONTENT_MESSAGE = "Content for word counting is blank.";
             LOGGER.warn(BLANK_CONTENT_MESSAGE);
-            throw new InvalidContentException(BLANK_CONTENT_MESSAGE);
+            throw new InvalidValueException(BLANK_CONTENT_MESSAGE);
         }
     }
 
