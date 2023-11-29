@@ -1,6 +1,8 @@
 package com.solvd.buildingco.exception;
-public class TimeConflictException {
-    public static void main(String[] args) {
-        
+
+public class TimeConflictException extends RuntimeException {
+    public TimeConflictException(String message) {
+        super(message);
     }
+
 }
