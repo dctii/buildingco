@@ -1,20 +1,86 @@
 package com.solvd.buildingco.scheduling;
 
+import com.solvd.buildingco.exception.InvalidValueException;
+import com.solvd.buildingco.utilities.ScheduleUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.time.DayOfWeek;
 import java.time.ZonedDateTime;
 
 public class ScheduledActivity {
+    private static final Logger LOGGER = LogManager.getLogger(ScheduledActivity.class);
     private String description;
     private String location;
     private DayOfWeek day;
     private ZonedDateTime startTime;
     private ZonedDateTime endTime;
 
+    final static String BLANK_DESCRIPTION_MESSAGE = "The 'description' cannot be blank.";
+    final static String BLANK_LOCATION_MESSAGE = "The 'location' cannot be blank.";
+
+    public ScheduledActivity() {
+
+    }
+
+    public ScheduledActivity(String description) {
+        if (StringUtils.isBlank(description)) {
+            LOGGER.warn(BLANK_DESCRIPTION_MESSAGE);
+            throw new InvalidValueException(BLANK_DESCRIPTION_MESSAGE);
+        }
+        this.description = description;
+    }
+
+    public ScheduledActivity(String description, String location) {
+        if (StringUtils.isBlank(description)) {
+            LOGGER.warn(BLANK_DESCRIPTION_MESSAGE);
+            throw new InvalidValueException(BLANK_DESCRIPTION_MESSAGE);
+        }
+
+        if (StringUtils.isBlank(location)) {
+            LOGGER.warn(BLANK_LOCATION_MESSAGE);
+            throw new InvalidValueException(BLANK_LOCATION_MESSAGE);
+        }
+
+        this.description = description;
+        this.location = location;
+    }
+
     public ScheduledActivity(String description, ZonedDateTime startTime, ZonedDateTime endTime) {
+        if (StringUtils.isBlank(description)) {
+            LOGGER.warn(BLANK_DESCRIPTION_MESSAGE);
+            throw new InvalidValueException(BLANK_DESCRIPTION_MESSAGE);
+        }
+
+        ScheduleUtils.validateScheduledTime(startTime, endTime);
+
         this.description = description; // description/name/type of activity
         this.startTime = startTime;
         this.endTime = endTime;
         this.day = startTime.getDayOfWeek(); // get DOTW that belongs to startTime ZonedDate
+    }
+
+    public ScheduledActivity(String description, String location, ZonedDateTime startTime,
+                             ZonedDateTime endTime
+                             ) {
+        if (StringUtils.isBlank(description)) {
+            LOGGER.warn(BLANK_DESCRIPTION_MESSAGE);
+            throw new InvalidValueException(BLANK_DESCRIPTION_MESSAGE);
+        }
+
+        if (StringUtils.isBlank(location)) {
+            LOGGER.warn(BLANK_LOCATION_MESSAGE);
+            throw new InvalidValueException(BLANK_LOCATION_MESSAGE);
+        }
+
+        ScheduleUtils.validateScheduledTime(startTime, endTime);
+
+        this.description = description; // description/name/type of activity
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.day = startTime.getDayOfWeek(); // get DOTW that belongs to startTime ZonedDate
+        this.location = location;
     }
 
     // getters and setters for ScheduledActivity
@@ -24,6 +90,11 @@ public class ScheduledActivity {
     }
 
     public void setDescription(String description) {
+        if (StringUtils.isBlank(description)) {
+            LOGGER.warn(BLANK_DESCRIPTION_MESSAGE);
+            throw new InvalidValueException(BLANK_DESCRIPTION_MESSAGE);
+        }
+
         this.description = description;
     }
 
@@ -32,6 +103,11 @@ public class ScheduledActivity {
     }
 
     public void setLocation(String location) {
+        if (StringUtils.isBlank(location)) {
+            LOGGER.warn(BLANK_LOCATION_MESSAGE);
+            throw new InvalidValueException(BLANK_LOCATION_MESSAGE);
+        }
+
         this.location = location;
     }
 
@@ -40,6 +116,8 @@ public class ScheduledActivity {
     }
 
     public void setStartTime(ZonedDateTime startTime) {
+        ScheduleUtils.validateScheduledTime(startTime, this.endTime);
+
         this.startTime = startTime;
     }
 
@@ -48,6 +126,8 @@ public class ScheduledActivity {
     }
 
     public void setEndTime(ZonedDateTime endTime) {
+        ScheduleUtils.validateScheduledTime(this.startTime, endTime);
+
         this.endTime = endTime;
     }
 
