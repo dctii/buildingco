@@ -14,10 +14,25 @@ Dependencies:
 - org.apache.commons:commons-lang3 v3.12.0
 - commons-io:commons-io v2.15.0
 
-Pluginsgit 
+Plugins:
 
 - org.apache.maven.plugins:maven-compiler-plugin v3.11.0
 - org.codehaus.mojo:exec-maven-plugin v3.1.0
+
+## How to Run
+
+### Run `Main.class`
+
+```shell
+mvn clean install exec:java
+```
+
+### Run `WordCounter.class`
+```shell
+mvn clean install exec:java -P run-word-counter
+```
+
+
 
 ## Assignments
 
