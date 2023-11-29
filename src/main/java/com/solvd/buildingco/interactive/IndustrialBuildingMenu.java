@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 import static com.solvd.buildingco.buildings.BuildingConstants.*;
 
-public class IndustrialBuildingMenu extends Menu {
+public class IndustrialBuildingMenu extends BuildingMenu {
     private static final Logger LOGGER = LogManager.getLogger(IndustrialBuildingMenu.class);
     // ceiling values
 

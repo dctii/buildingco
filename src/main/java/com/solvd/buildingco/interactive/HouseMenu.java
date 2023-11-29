@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 import static com.solvd.buildingco.buildings.BuildingConstants.*;
 
-public class HouseMenu extends Menu {
+public class HouseMenu extends BuildingMenu {
     private static final Logger LOGGER = LogManager.getLogger(HouseMenu.class);
 
 
