@@ -7,9 +7,10 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
+import java.util.Scanner;
+import java.util.Set;
 
 public class WordCounter {
     private static final Logger LOGGER = LogManager.getLogger(WordCounter.class);
@@ -17,26 +18,36 @@ public class WordCounter {
             "src/main/resources/article.txt";
     private static final String OUTPUT_FILE_PATHNAME =
             "src/main/resources/counted-words.txt";
+    private static final Set<String> wordsToCount
+            = Set.of("the", "with", "metaphors", "time");
 
     public static void main(String[] args) {
         try {
-            final Charset UTF_8 = StandardCharsets.UTF_8;
+
+
+            Scanner scanner = new Scanner(System.in);
+            LOGGER.info("Choose an option, input '1' or '2':");
+            LOGGER.info("1. Count these words only: " + wordsToCount.toString());
+            LOGGER.info("2. Count all words");
+            int choice = scanner.nextInt();
+            scanner.close();
 
             // read input file content and store
-            File inputFile = new File(INPUT_FILE_PATHNAME);
             String inputFileContent = FileUtils.readFileToString(
-                    inputFile,
-                    UTF_8
+                    new File(INPUT_FILE_PATHNAME),
+                    StandardCharsets.UTF_8
             );
-
-
             /*
                 count words in file and set key value to the word and the value to the count of
                 occurrences
             */
-            Map<String, Integer> wordCounts =
-                    WordCounterUtils.countWords(inputFileContent);
 
+            Map<String, Integer> wordCounts;
+            if (choice == 1) {
+                wordCounts = WordCounterUtils.countWords(inputFileContent, wordsToCount);
+            } else {
+                wordCounts = WordCounterUtils.countWords(inputFileContent);
+            }
 
             // prepare the counted words output content to be written to the outputFile
             String outputContent =
@@ -48,7 +59,12 @@ public class WordCounter {
             FileUtils.writeStringToFile(
                     outputFile,
                     outputContent,
-                    UTF_8
+                    StandardCharsets.UTF_8
+            );
+
+
+            LOGGER.info(
+                    "Word counts successfully output as a list in 'src/main/counted-words.txt'"
             );
 
         } catch (IOException e) {
