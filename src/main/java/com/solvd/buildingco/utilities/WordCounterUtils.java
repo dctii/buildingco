@@ -10,6 +10,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import static com.solvd.buildingco.utilities.RegExpPatternConstants.*;
 import static com.solvd.buildingco.utilities.StringConstants.*;
@@ -31,7 +32,7 @@ public class WordCounterUtils {
         final String PADDED_EQUALS_OPERATOR_STRING = " = ";
         for (Map.Entry<String, Integer> entry : wordCounts.entrySet()) {
             String word = entry.getKey();
-            Integer wordCount = entry.getValue();
+            int wordCount = entry.getValue();
             outputLines.add(word + PADDED_EQUALS_OPERATOR_STRING + wordCount);
         }
 
@@ -44,41 +45,70 @@ public class WordCounterUtils {
         return outputContent;
     }
 
-    public static Map<String, Integer> countWords(String content) {
-        if (StringUtils.isBlank(content)) {
-            final String BLANK_CONTENT_MESSAGE = "Content for word counting is blank.";
-            LOGGER.warn(BLANK_CONTENT_MESSAGE);
-            throw new InvalidContentException(BLANK_CONTENT_MESSAGE);
-        }
+    public static Map<String, Integer> countWords(String content, Set<String> wordsToCount) {
+        checkIfBlankContent(content);
 
-        // key is the word name and the integer is how many occurrences of said word
         Map<String, Integer> wordCounts = new HashMap<>();
-        final int WORD_COUNT_DEFAULT_VALUE = 0;
-        final int WORD_COUNT_INCREMENT_VALUE = 1;
+
         for (String line : splitLines(content)) {
-            // skip to next iteration if line is metadata
             if (isMetadataLine(line)) {
                 continue;
             }
 
-            /*
-                splitWords() will parse words, but will not consider number labels as words
-                (e.g., `(i)`, `(iv)` or `(1)`, `(100)`, etc.
-            */
             for (String word : splitWords(line)) {
-                if (StringUtils.isNotBlank(word)) {
-                    wordCounts.put(
-                            word.toLowerCase(), // de-sensitize the word
-                            wordCounts.getOrDefault( // update or initialize given word's count
-                                    word,
-                                    WORD_COUNT_DEFAULT_VALUE
-                            ) + WORD_COUNT_INCREMENT_VALUE
-                    );
+                word = word.toLowerCase();
+                if (wordsToCount.contains(word)) {
+                    updateWordCount(wordCounts, word);
                 }
             }
         }
 
         return wordCounts;
+    }
+
+    public static Map<String, Integer> countWords(String content) {
+        checkIfBlankContent(content);
+
+        // key is the word name and the integer is how many occurrences of said word
+        Map<String, Integer> wordCounts = new HashMap<>();
+        for (String line : splitLines(content)) {
+            // skip to next iteration if line is metadata
+            if (isMetadataLine(line)) {
+                continue;
+            }
+            /*
+                splitWords() will parse words, but will not consider number labels as words
+                (e.g., `(i)`, `(iv)` or `(1)`, `(100)`, etc.
+            */
+            for (String word : splitWords(line)) {
+                word = word.toLowerCase();
+                if (StringUtils.isNotBlank(word)) {
+                    updateWordCount(wordCounts, word);
+                }
+            }
+        }
+
+        return wordCounts;
+    }
+
+    private static void checkIfBlankContent(String content) {
+        if (StringUtils.isBlank(content)) {
+            final String BLANK_CONTENT_MESSAGE = "Content for word counting is blank.";
+            LOGGER.warn(BLANK_CONTENT_MESSAGE);
+            throw new InvalidContentException(BLANK_CONTENT_MESSAGE);
+        }
+    }
+
+    private static void updateWordCount(Map<String, Integer> wordCounts, String word) {
+        final int WORD_COUNT_DEFAULT_VALUE = 0;
+        final int WORD_COUNT_INCREMENT_VALUE = 1;
+        wordCounts.put(
+                word,
+                wordCounts.getOrDefault(
+                        word,
+                        WORD_COUNT_DEFAULT_VALUE
+                ) + WORD_COUNT_INCREMENT_VALUE
+        );
     }
 
     private static String[] splitLines(String content) {

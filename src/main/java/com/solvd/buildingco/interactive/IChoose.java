@@ -1,7 +1,5 @@
 package com.solvd.buildingco.interactive;
 
-import com.solvd.buildingco.buildings.Building;
-
 import java.util.Scanner;
 
 public interface IChoose {
@@ -9,7 +7,8 @@ public interface IChoose {
 
     int getChoice(Scanner scanner);
 
-    Building handleChoice(int choice, Scanner scanner);
+
+    <T> T handleChoice(int choice, Scanner scanner);
 
 
 }

@@ -23,6 +23,27 @@ Pluginsgit
 
 <hr />
 
+### Assignment 10: Enums and Lambda Expressions
+
+<hr />
+
+#### Requirements
+
+##### Comments and Required changes to consider from Assignment 9:
+- make no-argument constructors in classes if possible, else make constructors that reduce the size of the parameter list
+- do not create fields with preset values
+- can use `Calendar` class for date and time
+- should use `UUID.randomUUID()` for generating IDs
+- enable WordCounter to take in a list of words and have the WordCounter count for the words in that list. Use `StringUtils.countMatches()`.
+- use primitive types instead of reference types where needed, for example use `boolean` instead of `Boolean`
+
+##### Requirements for Assignment 10
+
+1. Create 3 Enums files
+2. Create custom Functional Interface based on needs you have in your assignment and provide an implementation of it with a lambda expression.
+
+<hr />
+
 ### Assignment 9: Apache libraries. IDE hotkeys. Debugging.
 
 <hr />
