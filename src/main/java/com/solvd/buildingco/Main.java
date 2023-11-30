@@ -4,7 +4,9 @@ import com.solvd.buildingco.buildings.Building;
 import com.solvd.buildingco.interactive.HouseMenu;
 import com.solvd.buildingco.interactive.IndustrialBuildingMenu;
 import com.solvd.buildingco.interactive.SkyscraperMenu;
+import com.solvd.buildingco.utilities.BigDecimalUtils;
 import com.solvd.buildingco.utilities.BuildingCostCalculator;
+import com.solvd.buildingco.utilities.ITax;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -82,9 +84,13 @@ public class Main {
                  The last is the sum of the material and labor costs.
             */
 
+            ITax taxCalculator = ITax::calculateLosAngelesTax;
+            final double LA_TAX_RATE = 0.095;
+
             if (building != null) {
                 BigDecimal calculatedMaterialCost
                         = building.calculateMaterialCost();
+                BigDecimal materialsTaxAmount = taxCalculator.calculateTax(calculatedMaterialCost);
                 BigDecimal calculatedLaborCost =
                         building.calculateLaborCost(completionDate);
                 BigDecimal calculatedBuildingCost =
@@ -92,10 +98,14 @@ public class Main {
                                 building,
                                 completionDate
                         );
+                BigDecimal calculatedBuildingCostWithTax =
+                        BigDecimalUtils.add(calculatedBuildingCost, materialsTaxAmount);
+
 
                 LOGGER.info("Material Cost: " + calculatedMaterialCost);
+                LOGGER.info("Material Cost Sales Tax: " + materialsTaxAmount);
                 LOGGER.info("Labor Cost: " + calculatedLaborCost);
-                LOGGER.info("Total Building Cost: " + calculatedBuildingCost);
+                LOGGER.info("Total Building Cost: " + calculatedBuildingCostWithTax);
             }
 
 
