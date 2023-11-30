@@ -1,7 +1,5 @@
 package com.solvd.buildingco.buildings;
 
-import com.solvd.buildingco.exception.InvalidDimensionException;
-import com.solvd.buildingco.exception.InvalidFloorNumberException;
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.utilities.BuildingCostCalculator;
 import com.solvd.buildingco.utilities.FieldUtils;
@@ -12,7 +10,10 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
-import static com.solvd.buildingco.buildings.BuildingConstants.*;
+import static com.solvd.buildingco.buildings.BuildingConstants.INDUSTRIAL_BUILDING_TYPE;
+import static com.solvd.buildingco.buildings.BuildingConstants.INDUSTRIAL_MIN_FLOORS;
+import static com.solvd.buildingco.utilities.BuildingUtils.validateNumberOfFloors;
+import static com.solvd.buildingco.utilities.BuildingUtils.validateSquareFootage;
 
 public class IndustrialBuilding extends Building<BigDecimal> implements IEstimate {
     private static final Logger LOGGER = LogManager.getLogger(IndustrialBuilding.class);
@@ -20,20 +21,14 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
     private int numberOfFloors; // number of floors user chooses building to be
     private int constructionDays; // number of business days to construct building
 
-    // exception messages
-    private final static String INVALID_DIMENSIONS_MESSAGE = "Invalid dimensions for IndustrialBuilding.";
-    private final static String INVALID_NUM_FLOORS_MESSAGE = "Invalid number of floors for Industrial Building.";
-
     public IndustrialBuilding() {
         super();
     }
 
     public IndustrialBuilding(int squareFootage) {
         super();
-        if (squareFootage < INDUSTRIAL_MIN_SQUARE_FOOTAGE || squareFootage > INDUSTRIAL_MAX_SQUARE_FOOTAGE) {
-            LOGGER.warn(INVALID_DIMENSIONS_MESSAGE);
-            throw new InvalidDimensionException(INVALID_DIMENSIONS_MESSAGE);
-        }
+
+        validateSquareFootage(squareFootage);
 
         this.squareFootage = squareFootage;
         this.numberOfFloors = INDUSTRIAL_MIN_FLOORS;
@@ -41,14 +36,10 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
 
     public IndustrialBuilding(int squareFootage, int numberOfFloors) {
         super();
-        if (squareFootage < INDUSTRIAL_MIN_SQUARE_FOOTAGE || squareFootage > INDUSTRIAL_MAX_SQUARE_FOOTAGE) {
-            LOGGER.warn(INVALID_DIMENSIONS_MESSAGE);
-            throw new InvalidDimensionException(INVALID_DIMENSIONS_MESSAGE);
-        }
-        if (numberOfFloors < INDUSTRIAL_MIN_FLOORS || numberOfFloors > INDUSTRIAL_MAX_FLOORS) {
-            LOGGER.warn(INVALID_NUM_FLOORS_MESSAGE);
-            throw new InvalidFloorNumberException(INVALID_NUM_FLOORS_MESSAGE);
-        }
+
+        validateSquareFootage(squareFootage);
+        validateNumberOfFloors(numberOfFloors);
+
         this.squareFootage = squareFootage;
         this.numberOfFloors = numberOfFloors;
     }
@@ -99,10 +90,8 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
     }
 
     public void setSquareFootage(int squareFootage) {
-        if (squareFootage < INDUSTRIAL_MIN_SQUARE_FOOTAGE || squareFootage > INDUSTRIAL_MAX_SQUARE_FOOTAGE) {
-            LOGGER.warn(INVALID_DIMENSIONS_MESSAGE);
-            throw new InvalidDimensionException(INVALID_DIMENSIONS_MESSAGE);
-        }
+        validateSquareFootage(squareFootage);
+
         this.squareFootage = squareFootage;
     }
 
@@ -111,10 +100,8 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
     }
 
     public void setNumberOfFloors(int numberOfFloors) {
-        if (numberOfFloors < INDUSTRIAL_MIN_FLOORS || numberOfFloors > INDUSTRIAL_MAX_FLOORS) {
-            LOGGER.warn(INVALID_NUM_FLOORS_MESSAGE);
-            throw new InvalidFloorNumberException(INVALID_NUM_FLOORS_MESSAGE);
-        }
+        validateNumberOfFloors(numberOfFloors);
+
         this.numberOfFloors = numberOfFloors;
     }
 

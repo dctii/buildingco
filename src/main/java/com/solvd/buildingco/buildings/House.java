@@ -1,6 +1,5 @@
 package com.solvd.buildingco.buildings;
 
-import com.solvd.buildingco.exception.InvalidNumRoomsException;
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.utilities.BuildingCostCalculator;
 import com.solvd.buildingco.utilities.FieldUtils;
@@ -12,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
 import static com.solvd.buildingco.buildings.BuildingConstants.*;
+import static com.solvd.buildingco.utilities.BuildingUtils.*;
 
 public class House extends Building<BigDecimal> implements IEstimate {
     private static final Logger LOGGER = LogManager.getLogger(House.class);
@@ -22,11 +22,6 @@ public class House extends Building<BigDecimal> implements IEstimate {
     private int constructionDays; // how many business days to build
     private int squareFootage;
 
-    // exception messages
-    private final static String INVALID_NUM_ROOMS_MESSAGE = "Invalid number of rooms";
-    private final static String INVALID_NUM_BATHROOMS_MESSAGE = "Invalid number of bathrooms";
-    private final static String INVALID_NUM_GARAGE_CAP_MESSAGE = "Invalid number for garage " +
-            "capacity";
 
     // constructor
 
@@ -37,46 +32,22 @@ public class House extends Building<BigDecimal> implements IEstimate {
     public House(int numRooms, int numBathrooms, int garageCapacity) {
         super();
 
-        if (numRooms > HOUSE_MAX_NUM_ROOMS || numRooms < HOUSE_MIN_NUM_ROOMS) {
-            LOGGER.warn(INVALID_NUM_ROOMS_MESSAGE);
-            throw new InvalidNumRoomsException(INVALID_NUM_ROOMS_MESSAGE);
-        }
-
-        if (numBathrooms < HOUSE_MIN_NUM_BATHROOMS || numBathrooms > HOUSE_MAX_NUM_BATHROOMS || numBathrooms > numRooms) {
-            LOGGER.warn(INVALID_NUM_BATHROOMS_MESSAGE);
-            throw new InvalidNumRoomsException(INVALID_NUM_BATHROOMS_MESSAGE);
-        }
-
-        if (garageCapacity < HOUSE_MIN_NUM_GARAGE_CAP || garageCapacity > HOUSE_MAX_NUM_GARAGE_CAP || garageCapacity > numRooms) {
-            LOGGER.warn(INVALID_NUM_GARAGE_CAP_MESSAGE);
-            throw new InvalidNumRoomsException(INVALID_NUM_GARAGE_CAP_MESSAGE);
-        }
+        validateNumberOfRooms(numRooms);
+        validateNumberOfBathrooms(numBathrooms, numRooms);
+        validateGarageCapacity(garageCapacity, numRooms);
 
         this.numRooms = numRooms;
         this.numBathrooms = numBathrooms;
         this.garageCapacity = garageCapacity;
-
-
     }
 
     public House(int numRooms, int numBathrooms, int garageCapacity, int squareFootage,
                  int constructionDays) {
         super();
 
-        if (numRooms > HOUSE_MAX_NUM_ROOMS || numRooms < HOUSE_MIN_NUM_ROOMS) {
-            LOGGER.warn(INVALID_NUM_ROOMS_MESSAGE);
-            throw new InvalidNumRoomsException(INVALID_NUM_ROOMS_MESSAGE);
-        }
-
-        if (numBathrooms < HOUSE_MIN_NUM_BATHROOMS || numBathrooms > HOUSE_MAX_NUM_BATHROOMS || numBathrooms > numRooms) {
-            LOGGER.warn(INVALID_NUM_BATHROOMS_MESSAGE);
-            throw new InvalidNumRoomsException(INVALID_NUM_BATHROOMS_MESSAGE);
-        }
-
-        if (garageCapacity < HOUSE_MIN_NUM_GARAGE_CAP || garageCapacity > HOUSE_MAX_NUM_GARAGE_CAP || garageCapacity > numRooms) {
-            LOGGER.warn(INVALID_NUM_GARAGE_CAP_MESSAGE);
-            throw new InvalidNumRoomsException(INVALID_NUM_GARAGE_CAP_MESSAGE);
-        }
+        validateNumberOfRooms(numRooms);
+        validateNumberOfBathrooms(numBathrooms, numRooms);
+        validateGarageCapacity(garageCapacity, numRooms);
 
         this.numRooms = numRooms;
         this.numBathrooms = numBathrooms;
@@ -84,6 +55,7 @@ public class House extends Building<BigDecimal> implements IEstimate {
         this.squareFootage = squareFootage;
         this.constructionDays = constructionDays;
     }
+
 
     // create order for materials, contributes to material cost calculation
     @Override
@@ -135,8 +107,8 @@ public class House extends Building<BigDecimal> implements IEstimate {
         return constructionDays;
     }
 
-    public int setConstructionDays(int constructionDays) {
-        return this.constructionDays = constructionDays;
+    public void setConstructionDays(int constructionDays) {
+        this.constructionDays = constructionDays;
     }
 
 
@@ -153,10 +125,7 @@ public class House extends Building<BigDecimal> implements IEstimate {
     }
 
     public void setNumRooms(int numRooms) {
-        if (numRooms > HOUSE_MAX_NUM_ROOMS || numRooms < HOUSE_MIN_NUM_ROOMS) {
-            LOGGER.warn(INVALID_NUM_ROOMS_MESSAGE);
-            throw new InvalidNumRoomsException(INVALID_NUM_ROOMS_MESSAGE);
-        }
+        validateNumberOfRooms(numRooms);
 
         this.numRooms = numRooms;
     }
@@ -166,10 +135,7 @@ public class House extends Building<BigDecimal> implements IEstimate {
     }
 
     public void setNumBathrooms(int numBathrooms) {
-        if (numBathrooms < HOUSE_MIN_NUM_BATHROOMS || numBathrooms > HOUSE_MAX_NUM_BATHROOMS || numBathrooms >= this.numRooms) {
-            LOGGER.warn(INVALID_NUM_BATHROOMS_MESSAGE);
-            throw new InvalidNumRoomsException(INVALID_NUM_BATHROOMS_MESSAGE);
-        }
+        validateNumberOfBathrooms(numBathrooms, this.numRooms);
 
         this.numBathrooms = numBathrooms;
     }
@@ -180,13 +146,11 @@ public class House extends Building<BigDecimal> implements IEstimate {
     }
 
     public void setGarageCapacity(int garageCapacity) {
-        if (garageCapacity < HOUSE_MIN_NUM_GARAGE_CAP || garageCapacity > HOUSE_MAX_NUM_GARAGE_CAP || garageCapacity > this.numRooms) {
-            LOGGER.warn(INVALID_NUM_GARAGE_CAP_MESSAGE);
-            throw new InvalidNumRoomsException(INVALID_NUM_GARAGE_CAP_MESSAGE);
-        }
+        validateGarageCapacity(garageCapacity, this.numRooms);
 
         this.garageCapacity = garageCapacity;
     }
+
 
     @Override
     public String toString() {

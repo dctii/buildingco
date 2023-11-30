@@ -7,6 +7,7 @@ import org.apache.logging.log4j.Logger;
 import java.util.Scanner;
 
 import static com.solvd.buildingco.buildings.BuildingConstants.*;
+import static com.solvd.buildingco.utilities.BuildingUtils.*;
 
 public class SkyscraperMenu extends BuildingMenu {
     private static final Logger LOGGER = LogManager.getLogger(SkyscraperMenu.class);
@@ -56,24 +57,45 @@ public class SkyscraperMenu extends BuildingMenu {
     // create Skyscraper object with user input
     private static Skyscraper createSkyscraper(Scanner scanner) {
         int squareFootagePerLevel = 0;
+
         do {
-            LOGGER.info("Enter the square footage per level for the Skyscraper ({}-{}): ", SKYSCRAPER_MIN_SQUARE_FOOTAGE_PER_LEVEL, SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL);
+            LOGGER.info(
+                    "Enter the square footage per level for the Skyscraper ({}-{}): ",
+                    SKYSCRAPER_MIN_SQUARE_FOOTAGE_PER_LEVEL,
+                    SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL
+            );
+
             squareFootagePerLevel = scanner.nextInt();
-            if (squareFootagePerLevel > SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL || squareFootagePerLevel < SKYSCRAPER_MIN_SQUARE_FOOTAGE_PER_LEVEL) {
-                LOGGER.warn("Square footage per level must be between {} and {}. Please try again.", SKYSCRAPER_MIN_SQUARE_FOOTAGE_PER_LEVEL, SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL);
-            }
-        } while (squareFootagePerLevel > SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL || squareFootagePerLevel < SKYSCRAPER_MIN_SQUARE_FOOTAGE_PER_LEVEL);
 
-        int levels = 0;
+            if (hasInvalidSquareFootagePerLevel(squareFootagePerLevel)) {
+                LOGGER.warn("Square footage per level must be between {} and {}. Please try again.",
+                        SKYSCRAPER_MIN_SQUARE_FOOTAGE_PER_LEVEL,
+                        SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL
+                );
+            }
+        } while (hasInvalidSquareFootagePerLevel(squareFootagePerLevel));
+
+        int numberOfLevels = 0;
+
         do {
-            LOGGER.info("Enter the number of levels for the Skyscraper ({}-{}): ", SKYSCRAPER_MIN_LEVELS, SKYSCRAPER_MAX_LEVELS);
-            levels = scanner.nextInt();
-            if (levels > SKYSCRAPER_MAX_LEVELS || levels < SKYSCRAPER_MIN_LEVELS) {
-                LOGGER.warn("The number of levels must be between {} and {}. Please try again.", SKYSCRAPER_MIN_LEVELS, SKYSCRAPER_MAX_LEVELS);
-            }
-        } while (levels > SKYSCRAPER_MAX_LEVELS || levels < SKYSCRAPER_MIN_LEVELS);
+            LOGGER.info(
+                    "Enter the number of levels for the Skyscraper ({}-{}): ",
+                    SKYSCRAPER_MIN_LEVELS,
+                    SKYSCRAPER_MAX_LEVELS
+            );
 
-        return new Skyscraper(squareFootagePerLevel, levels);
+            numberOfLevels = scanner.nextInt();
+
+            if (hasInvalidNumberOfLevels(numberOfLevels)) {
+                LOGGER.warn(
+                        "The number of levels must be between {} and {}. Please try again.",
+                        SKYSCRAPER_MIN_LEVELS,
+                        SKYSCRAPER_MAX_LEVELS
+                );
+            }
+        } while (hasInvalidNumberOfLevels(numberOfLevels));
+
+        return new Skyscraper(squareFootagePerLevel, numberOfLevels);
     }
 
 }
