@@ -1,19 +1,35 @@
 package com.solvd.buildingco.stakeholders;
 
+import com.solvd.buildingco.exception.InvalidValueException;
+import com.solvd.buildingco.utilities.BooleanUtils;
 import com.solvd.buildingco.utilities.FieldUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 
 import static com.solvd.buildingco.utilities.BooleanUtils.isEmptyOrNullArray;
 
 
+// TODO: add exceptions and additional constructors
+
 // general Person class with usual title and contact information
 public abstract class Person {
+    private static final Logger LOGGER = LogManager.getLogger(Person.class);
     private String[] nameParts;
     private String[] postNominals;
     private String[] addresses;
     private String[] emails;
     private String[] phoneNumbers;
+
+    final private String BLANK_FORENAME_MESSAGE = "The 'forename' cannot be blank or empty.";
+    final private String BLANK_SURNAME_MESSAGE = "The 'surname' cannot be blank or empty.";
+
+    public Person() {
+    }
+    public Person(String[] nameParts) {
+        this.nameParts = nameParts;
+    }
 
     public Person(String[] nameParts, String[] postNominals, String[] addresses, String[] emails, String[] phoneNumbers) {
         this.nameParts = nameParts;
@@ -30,6 +46,16 @@ public abstract class Person {
     }
 
     public void setNameParts(String[] nameParts) {
+        if (!BooleanUtils.isBlankOrEmptyString(nameParts[0])) {
+            LOGGER.warn(BLANK_FORENAME_MESSAGE);
+            throw new InvalidValueException(BLANK_FORENAME_MESSAGE);
+        }
+
+        if (!BooleanUtils.isBlankOrEmptyString(nameParts[2])) {
+            LOGGER.warn(BLANK_SURNAME_MESSAGE);
+            throw new InvalidValueException(BLANK_SURNAME_MESSAGE);
+        }
+
         this.nameParts = nameParts;
     }
 
@@ -38,11 +64,17 @@ public abstract class Person {
     }
 
     public void setForename(String forename) {
+        if (BooleanUtils.isBlankOrEmptyString(forename)) {
+            LOGGER.warn(BLANK_FORENAME_MESSAGE);
+            throw new InvalidValueException(BLANK_FORENAME_MESSAGE);
+        }
         nameParts[0] = forename;
     }
 
     public String getMiddleName() {
-        return isEmptyOrNullArray(nameParts) ? null : nameParts[1];
+        return isEmptyOrNullArray(nameParts)
+                ? null
+                : nameParts[1];
     }
 
     public void setMiddleName(String middleName) {
@@ -54,11 +86,17 @@ public abstract class Person {
     }
 
     public void setSurname(String surname) {
+        if (BooleanUtils.isBlankOrEmptyString(surname)) {
+            LOGGER.warn(BLANK_SURNAME_MESSAGE);
+            throw new InvalidValueException(BLANK_SURNAME_MESSAGE);
+        }
         nameParts[2] = surname;
     }
 
     public String getSuffix() {
-        return isEmptyOrNullArray(nameParts) ? null : nameParts[3];
+        return isEmptyOrNullArray(nameParts)
+                ? null :
+                nameParts[3];
     }
 
     public void setSuffix(String suffix) {
@@ -66,7 +104,9 @@ public abstract class Person {
     }
 
     public String[] getPostNominals() {
-        return isEmptyOrNullArray(postNominals) ? null : postNominals;
+        return isEmptyOrNullArray(postNominals)
+                ? null
+                : postNominals;
     }
 
     public void setPostNominals(String[] postNominals) {
@@ -78,9 +118,9 @@ public abstract class Person {
         StringBuilder fullName = new StringBuilder();
 
         // Directly use the nameParts array
-        if (nameParts != null) {
+        if (!isEmptyOrNullArray(nameParts)) {
             for (String namePart : nameParts) {
-                if (namePart != null) {
+                if (BooleanUtils.isBlankOrEmptyString(namePart)) {
                     if (fullName.length() > 0) {
                         fullName.append(" ");
                     }
@@ -98,7 +138,9 @@ public abstract class Person {
 
 
     public String[] getAddresses() {
-        return isEmptyOrNullArray(addresses) ? null : addresses;
+        return isEmptyOrNullArray(addresses)
+                ? null
+                : addresses;
     }
 
     public void setAddresses(String[] addresses) {
@@ -106,7 +148,9 @@ public abstract class Person {
     }
 
     public String[] getPhoneNumbers() {
-        return isEmptyOrNullArray(phoneNumbers) ? null : phoneNumbers;
+        return isEmptyOrNullArray(phoneNumbers)
+                ? null
+                : phoneNumbers;
     }
 
     public void setPhoneNumbers(String[] phoneNumbers) {
@@ -114,7 +158,9 @@ public abstract class Person {
     }
 
     public String[] getEmails() {
-        return isEmptyOrNullArray(emails) ? null : emails;
+        return isEmptyOrNullArray(emails)
+                ? null
+                : emails;
     }
 
     public void setEmails() {

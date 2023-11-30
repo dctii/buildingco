@@ -6,8 +6,12 @@ import com.solvd.buildingco.scheduling.ScheduledActivity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.Map;
 
 import static com.solvd.buildingco.buildings.BuildingConstants.ARCHITECTURE_WORK_DESCRIPTION;
 
@@ -70,6 +74,36 @@ public class ScheduleUtils {
                 throw new TimeConflictException(START_AFTER_END_MESSAGE);
             }
         }
+    }
+
+    public static long calculateTotalWorkHours(Schedule schedule, LocalDate startDate,
+                                               LocalDate endDate) {
+        final long SECONDS_IN_HOUR = 3600;
+        long totalWorkHours = 0;
+
+        for (Map.Entry<DayOfWeek, List<ScheduledActivity>> entry :
+                schedule.getWeeklyActivities().entrySet()) {
+
+            for (ScheduledActivity activity : entry.getValue()) {
+                LocalDate activityDate = activity.getStartTime().toLocalDate();
+
+                boolean isWithinDateSpan =
+                        (activityDate.isEqual(startDate) || activityDate.isAfter(startDate)) &&
+                                (activityDate.isEqual(endDate) || activityDate.isBefore(endDate));
+
+                // if within date range, then update work hours
+                if (isWithinDateSpan) {
+                    // calculate duration of activity in seconds;
+                    // EpochSecond = date and time computers use to measure system time
+                    long hours =
+                            activity.getEndTime().toEpochSecond() - activity.getStartTime().toEpochSecond();
+
+                    // update amount of totalWorkHours
+                    totalWorkHours += (hours / SECONDS_IN_HOUR);
+                }
+            }
+        }
+        return totalWorkHours;
     }
 
     private ScheduleUtils() {

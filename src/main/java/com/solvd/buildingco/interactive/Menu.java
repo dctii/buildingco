@@ -1,7 +1,5 @@
 package com.solvd.buildingco.interactive;
 
-import com.solvd.buildingco.buildings.Building;
-
 import java.util.Scanner;
 
 public abstract class Menu implements IChoose {
@@ -11,7 +9,8 @@ public abstract class Menu implements IChoose {
         return scanner.nextInt();
     }
 
-    public abstract Building handleChoice(int choice, Scanner scanner);
+
+    public abstract Object handleChoice(int choice, Scanner scanner);
 
 
 }

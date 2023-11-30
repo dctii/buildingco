@@ -7,8 +7,9 @@ import org.apache.logging.log4j.Logger;
 import java.util.Scanner;
 
 import static com.solvd.buildingco.buildings.BuildingConstants.*;
+import static com.solvd.buildingco.utilities.BuildingUtils.*;
 
-public class IndustrialBuildingMenu extends Menu {
+public class IndustrialBuildingMenu extends BuildingMenu {
     private static final Logger LOGGER = LogManager.getLogger(IndustrialBuildingMenu.class);
     // ceiling values
 
@@ -58,22 +59,43 @@ public class IndustrialBuildingMenu extends Menu {
 
     private static IndustrialBuilding createIndustrialBuilding(Scanner scanner) {
         int squareFootage = 0;
+
         do {
-            LOGGER.info("Enter the square footage for the Industrial Building ({}-{}): ", INDUSTRIAL_MIN_SQUARE_FOOTAGE, INDUSTRIAL_MAX_SQUARE_FOOTAGE);
+            LOGGER.info(
+                    "Enter the square footage for the Industrial Building ({}-{}): ",
+                    INDUSTRIAL_MIN_SQUARE_FOOTAGE,
+                    INDUSTRIAL_MAX_SQUARE_FOOTAGE
+            );
+
             squareFootage = scanner.nextInt();
-            if (squareFootage > INDUSTRIAL_MAX_SQUARE_FOOTAGE || squareFootage < INDUSTRIAL_MIN_SQUARE_FOOTAGE) {
-                LOGGER.warn("Square footage must be between {} and {}. Please try again.", INDUSTRIAL_MIN_SQUARE_FOOTAGE, INDUSTRIAL_MAX_SQUARE_FOOTAGE);
+            if (hasInvalidSquareFootage(squareFootage)) {
+                LOGGER.warn(
+                        "Square footage must be between {} and {}. Please try again.",
+                        INDUSTRIAL_MIN_SQUARE_FOOTAGE,
+                        INDUSTRIAL_MAX_SQUARE_FOOTAGE
+                );
             }
-        } while (squareFootage > INDUSTRIAL_MAX_SQUARE_FOOTAGE || squareFootage < INDUSTRIAL_MIN_SQUARE_FOOTAGE);
+        } while (hasInvalidSquareFootage(squareFootage));
 
         int numberOfFloors = 0;
+
         do {
-            LOGGER.info("Enter the number of floors for the Industrial Building ({}-{}): ", INDUSTRIAL_MIN_FLOORS, INDUSTRIAL_MAX_FLOORS);
+            LOGGER.info(
+                    "Enter the number of floors for the Industrial Building ({}-{}): ",
+                    INDUSTRIAL_MIN_FLOORS,
+                    INDUSTRIAL_MAX_FLOORS
+            );
+
             numberOfFloors = scanner.nextInt();
-            if (numberOfFloors > INDUSTRIAL_MAX_FLOORS || numberOfFloors < INDUSTRIAL_MIN_FLOORS) {
-                LOGGER.warn("Number of floors must be between {} and {}. Please try again.", INDUSTRIAL_MIN_FLOORS, INDUSTRIAL_MAX_FLOORS);
+
+            if (hasInvalidNumberOfFloors(numberOfFloors)) {
+                LOGGER.warn(
+                        "Number of floors must be between {} and {}. Please try again.",
+                        INDUSTRIAL_MIN_FLOORS,
+                        INDUSTRIAL_MAX_FLOORS
+                );
             }
-        } while (numberOfFloors > INDUSTRIAL_MAX_FLOORS || numberOfFloors < INDUSTRIAL_MIN_FLOORS);
+        } while (hasInvalidNumberOfFloors(numberOfFloors));
 
         return new IndustrialBuilding(squareFootage, numberOfFloors);
     }

@@ -12,6 +12,13 @@ public abstract class Stakeholder extends Person {
     private String[] organizationNames;
     private String[] roles;
 
+    public Stakeholder() {
+        super();
+    }
+    public Stakeholder(String[] nameParts) {
+        super(nameParts);
+    }
+
     public Stakeholder(String[] nameParts, String[] postNominals, String[] organizationNames,
                        String[] roles, String[] addresses, String[] phoneNumbers, String[] emails) {
         super(nameParts, postNominals, addresses, emails, phoneNumbers);
@@ -21,7 +28,9 @@ public abstract class Stakeholder extends Person {
 
     // getters and setters
     public String[] getOrganizationNames() {
-        return isEmptyOrNullArray(organizationNames) ? null : organizationNames;
+        return isEmptyOrNullArray(organizationNames)
+                ? null
+                : organizationNames;
     }
 
     public void setOrganizationNames(String[] organizationNames) {
@@ -29,7 +38,9 @@ public abstract class Stakeholder extends Person {
     }
 
     public String[] getRoles() {
-        return isEmptyOrNullArray(roles) ? null : roles;
+        return isEmptyOrNullArray(roles)
+                ? null
+                : roles;
     }
 
     public void setRoles(String[] roles) {

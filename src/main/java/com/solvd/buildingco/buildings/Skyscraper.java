@@ -1,7 +1,5 @@
 package com.solvd.buildingco.buildings;
 
-import com.solvd.buildingco.exception.InvalidDimensionException;
-import com.solvd.buildingco.exception.InvalidFloorNumberException;
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.utilities.BuildingCostCalculator;
 import com.solvd.buildingco.utilities.FieldUtils;
@@ -13,6 +11,7 @@ import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
 import static com.solvd.buildingco.buildings.BuildingConstants.*;
+import static com.solvd.buildingco.utilities.BuildingUtils.*;
 
 public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     private static final Logger LOGGER = LogManager.getLogger(Skyscraper.class);
@@ -23,9 +22,6 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     private BigDecimal lobbyCost; // lobby is a unique floor, has an arbitrary fixed cost
     private BigDecimal foundationCost; // foundation cost depends on amount of levels
 
-    // exception messages
-    private final static String INVALID_DIMENSIONS_MESSAGE = "Invalid dimensions for Skyscraper.";
-    private final static String INVALID_NUM_LEVELS_MESSAGE = "Invalid number of levels for Skyscraper.";
 
     public Skyscraper() {
         super();
@@ -33,14 +29,9 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
 
     public Skyscraper(int squareFootagePerLevel, int numberOfLevels) {
         super();
-        if (squareFootagePerLevel < SKYSCRAPER_MIN_SQUARE_FOOTAGE_PER_LEVEL || squareFootagePerLevel > SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL) {
-            LOGGER.warn(INVALID_DIMENSIONS_MESSAGE);
-            throw new InvalidDimensionException(INVALID_DIMENSIONS_MESSAGE);
-        }
-        if (numberOfLevels < SKYSCRAPER_MIN_LEVELS || numberOfLevels > SKYSCRAPER_MAX_LEVELS) {
-            LOGGER.warn(INVALID_NUM_LEVELS_MESSAGE);
-            throw new InvalidFloorNumberException(INVALID_NUM_LEVELS_MESSAGE);
-        }
+
+        validateSquareFootagePerLevel(squareFootagePerLevel);
+        validateNumberOfLevels(numberOfLevels);
 
         this.squareFootagePerLevel = squareFootagePerLevel;
         this.numberOfLevels = numberOfLevels;
@@ -99,10 +90,8 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     }
 
     public void setSquareFootagePerLevel(int squareFootagePerLevel) {
-        if (squareFootagePerLevel < SKYSCRAPER_MIN_SQUARE_FOOTAGE_PER_LEVEL || squareFootagePerLevel > SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL) {
-            LOGGER.warn(INVALID_DIMENSIONS_MESSAGE);
-            throw new InvalidDimensionException(INVALID_DIMENSIONS_MESSAGE);
-        }
+        validateSquareFootagePerLevel(squareFootagePerLevel);
+
         this.squareFootagePerLevel = squareFootagePerLevel;
     }
 
@@ -111,10 +100,8 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     }
 
     public void setNumberOfLevels(int numberOfLevels) {
-        if (numberOfLevels < SKYSCRAPER_MIN_LEVELS || numberOfLevels > SKYSCRAPER_MAX_LEVELS) {
-            LOGGER.warn(INVALID_NUM_LEVELS_MESSAGE);
-            throw new InvalidFloorNumberException(INVALID_NUM_LEVELS_MESSAGE);
-        }
+        validateNumberOfLevels(numberOfLevels);
+
         this.numberOfLevels = numberOfLevels;
     }
 

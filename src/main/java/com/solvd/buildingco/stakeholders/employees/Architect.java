@@ -8,6 +8,23 @@ import com.solvd.buildingco.utilities.FieldUtils;
 import java.math.BigDecimal;
 
 public class Architect extends Employee {
+
+    public Architect(){
+        super();
+    }
+
+    public Architect(String[] nameParts){
+        super(nameParts);
+    }
+
+    public Architect(String[] nameParts, PayRate payRate) {
+        super(nameParts, payRate);
+    }
+
+    public Architect(String[] nameParts, PayRate payRate, Schedule schedule) {
+        super(nameParts, payRate, schedule);
+    }
+
     public Architect(String[] nameParts, String[] postNominals, String[] organizationNames,
                      String[] roles, String[] addresses, String[] phoneNumbers, String[] emails,
                      PayRate payRate, Schedule schedule, String personnelType) {

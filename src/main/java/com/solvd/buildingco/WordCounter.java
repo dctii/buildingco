@@ -23,8 +23,6 @@ public class WordCounter {
 
     public static void main(String[] args) {
         try {
-
-
             Scanner scanner = new Scanner(System.in);
             LOGGER.info("Choose an option, input '1' or '2':");
             LOGGER.info("1. Count these words only: " + wordsToCount.toString());
@@ -41,7 +39,6 @@ public class WordCounter {
                 count words in file and set key value to the word and the value to the count of
                 occurrences
             */
-
             Map<String, Integer> wordCounts;
             if (choice == 1) {
                 wordCounts = WordCounterUtils.countWords(inputFileContent, wordsToCount);

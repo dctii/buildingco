@@ -6,9 +6,11 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Scanner;
 
-import static com.solvd.buildingco.buildings.BuildingConstants.*;
+import static com.solvd.buildingco.buildings.BuildingConstants.HOUSE_MAX_NUM_GARAGE_CAP;
+import static com.solvd.buildingco.buildings.BuildingConstants.HOUSE_MAX_NUM_ROOMS;
+import static com.solvd.buildingco.utilities.BuildingUtils.*;
 
-public class HouseMenu extends Menu {
+public class HouseMenu extends BuildingMenu {
     private static final Logger LOGGER = LogManager.getLogger(HouseMenu.class);
 
 
@@ -54,36 +56,54 @@ public class HouseMenu extends Menu {
     // create House object with user input
     private static House createHouse(Scanner scanner) {
         int numRooms = 0;
+
         do {
-            LOGGER.info("How many rooms would you like (up to {})? ", HOUSE_MAX_NUM_ROOMS);
+            LOGGER.info(
+                    "How many rooms would you like (up to {})? ",
+                    HOUSE_MAX_NUM_ROOMS
+            );
+
             numRooms = scanner.nextInt();
-            if (numRooms > HOUSE_MAX_NUM_ROOMS || numRooms < HOUSE_MIN_NUM_ROOMS) {
+
+            if (hasInvalidNumberOfRooms(numRooms)) {
                 LOGGER.info("Sorry, that's not a valid number of rooms. Please try again.");
             }
-        } while (numRooms > HOUSE_MAX_NUM_ROOMS || numRooms < HOUSE_MIN_NUM_ROOMS);
+        } while (hasInvalidNumberOfRooms(numRooms));
 
         // Dynamically calculates the ceiling for bathrooms. Can not have more bathrooms than rooms.
         int numBathrooms = 0;
+
         do {
-            LOGGER.info("How many bathrooms would you like (up to {})? ", numRooms);
+            LOGGER.info(
+                    "How many bathrooms would you like (up to {})? ",
+                    numRooms
+            );
+
             numBathrooms = scanner.nextInt();
-            if (numBathrooms > numRooms || numBathrooms < HOUSE_MIN_NUM_BATHROOMS) {
+
+            if (hasInvalidNumberOfBathrooms(numBathrooms, numRooms)) {
                 LOGGER.info("Sorry, that's not a valid number of bathrooms. Please try again.");
             }
-        } while (numBathrooms > numRooms || numBathrooms < HOUSE_MIN_NUM_BATHROOMS);
+        } while (hasInvalidNumberOfBathrooms(numBathrooms, numRooms));
 
         // Cannot have more than four garage spaces. Also, cannot have more amount of car
         // spaces than rooms. If 2 rooms, then no more than 2 car spaces in garage capacity.
         int maxGarageCapacity = Math.min(HOUSE_MAX_NUM_GARAGE_CAP, numRooms);
         int garageCapacity = 0;
+
         do {
-            LOGGER.info("What garage capacity would you like (up to {}, number of cars)? ", maxGarageCapacity);
+            LOGGER.info(
+                    "What garage capacity would you like (up to {}, number of cars)? ",
+                    maxGarageCapacity
+            );
+
             garageCapacity = scanner.nextInt();
-            if (garageCapacity > maxGarageCapacity || garageCapacity < HOUSE_MIN_NUM_GARAGE_CAP) {
+
+            if (hasInvalidGarageCapacity(garageCapacity, maxGarageCapacity)) {
                 LOGGER.info("Sorry, that's not a valid garage capacity. Please try again.");
             }
-        } while (garageCapacity > maxGarageCapacity || garageCapacity < HOUSE_MIN_NUM_GARAGE_CAP);
+        } while (hasInvalidGarageCapacity(garageCapacity, maxGarageCapacity));
 
-        return com.solvd.buildingco.buildings.House.createHouse(numRooms, numBathrooms, garageCapacity);
+        return House.createHouse(numRooms, numBathrooms, garageCapacity);
     }
 }
