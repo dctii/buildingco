@@ -4,6 +4,7 @@ import com.solvd.buildingco.buildings.Building;
 import com.solvd.buildingco.interactive.HouseMenu;
 import com.solvd.buildingco.interactive.IndustrialBuildingMenu;
 import com.solvd.buildingco.interactive.SkyscraperMenu;
+import com.solvd.buildingco.interactive.TaxMenu;
 import com.solvd.buildingco.utilities.BigDecimalUtils;
 import com.solvd.buildingco.utilities.BuildingCostCalculator;
 import com.solvd.buildingco.utilities.ITax;
@@ -74,8 +75,13 @@ public class Main {
                 are not accurate, but attempt to provide the appearance of scaling costs as the
                 size of the construction grows.
 
+                An interactive menu for tax rates will appear and ask the user which California
+                county to choose from. They will get the rate for that county.
+
                 Material costs are a calculation of things like wood, steel, electrical supplies,
                  and other general things required in any construction project.
+
+                 The cost of taxes will be calculated for the material costs.
 
                  Labor costs are a calculation of worker hours and their respective, differing
                  hourly rates. Employee types include Project Manager, Architect, Engineer, and
@@ -84,10 +90,9 @@ public class Main {
                  The last is the sum of the material and labor costs.
             */
 
-            ITax taxCalculator = ITax::calculateLosAngelesTax;
-            final double LA_TAX_RATE = 0.095;
-
             if (building != null) {
+                ITax taxCalculator = TaxMenu.runMenu(scanner);
+
                 BigDecimal calculatedMaterialCost
                         = building.calculateMaterialCost();
                 BigDecimal materialsTaxAmount = taxCalculator.calculateTax(calculatedMaterialCost);
