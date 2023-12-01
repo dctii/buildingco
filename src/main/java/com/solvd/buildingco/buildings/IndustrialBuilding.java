@@ -4,19 +4,15 @@ import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.utilities.BuildingCostCalculator;
 import com.solvd.buildingco.utilities.FieldUtils;
 import com.solvd.buildingco.utilities.MaterialOrderGenerator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
-import static com.solvd.buildingco.buildings.BuildingConstants.INDUSTRIAL_BUILDING_TYPE;
-import static com.solvd.buildingco.buildings.BuildingConstants.INDUSTRIAL_MIN_FLOORS;
+import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.INDUSTRIAL_BUILDING;
 import static com.solvd.buildingco.utilities.BuildingUtils.validateNumberOfFloors;
 import static com.solvd.buildingco.utilities.BuildingUtils.validateSquareFootage;
 
 public class IndustrialBuilding extends Building<BigDecimal> implements IEstimate {
-    private static final Logger LOGGER = LogManager.getLogger(IndustrialBuilding.class);
     private int squareFootage; // square footage user chooses building to be
     private int numberOfFloors; // number of floors user chooses building to be
     private int constructionDays; // number of business days to construct building
@@ -31,7 +27,7 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
         validateSquareFootage(squareFootage);
 
         this.squareFootage = squareFootage;
-        this.numberOfFloors = INDUSTRIAL_MIN_FLOORS;
+        this.numberOfFloors = INDUSTRIAL_BUILDING.getMinLevels();
     }
 
     public IndustrialBuilding(int squareFootage, int numberOfFloors) {
@@ -63,7 +59,7 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
     public BigDecimal calculateLaborCost(ZonedDateTime customerEndDate) {
         int calculatedConstructionDays =
                 BuildingCostCalculator.calculateConstructionDays(
-                        INDUSTRIAL_BUILDING_TYPE,
+                        INDUSTRIAL_BUILDING.getBuildingType(),
                         squareFootage, // square footage and number of floors passed in by user
                         numberOfFloors
                 );
