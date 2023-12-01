@@ -4,8 +4,6 @@ import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.utilities.BuildingCostCalculator;
 import com.solvd.buildingco.utilities.FieldUtils;
 import com.solvd.buildingco.utilities.MaterialOrderGenerator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -14,8 +12,6 @@ import static com.solvd.buildingco.buildings.BuildingConstants.*;
 import static com.solvd.buildingco.utilities.BuildingUtils.*;
 
 public class House extends Building<BigDecimal> implements IEstimate {
-    private static final Logger LOGGER = LogManager.getLogger(House.class);
-    //
     private int numRooms; // number of rooms user chooses in house
     private int numBathrooms; // number of bathrooms user chooses in house
     private int garageCapacity; // number of user wants to fit in garage
