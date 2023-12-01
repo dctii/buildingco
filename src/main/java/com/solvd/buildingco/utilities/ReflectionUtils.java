@@ -10,10 +10,10 @@ import java.lang.reflect.Field;
 public class ReflectionUtils {
     private static final Logger LOGGER = LogManager.getLogger(ReflectionUtils.class);
 
-    public static <T> T createObject(Class<T> targetClass) {
+    public static <T> T createObject(Class<T> clazz) {
         try {
 
-            Constructor<T> constructor = targetClass.getDeclaredConstructor();
+            Constructor<T> constructor = clazz.getDeclaredConstructor();
             return constructor.newInstance();
 
         } catch (ReflectiveOperationException e) {
