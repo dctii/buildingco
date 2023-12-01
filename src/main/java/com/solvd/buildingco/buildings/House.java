@@ -2,14 +2,14 @@ package com.solvd.buildingco.buildings;
 
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.utilities.BuildingCostCalculator;
+import com.solvd.buildingco.utilities.BuildingUtils;
 import com.solvd.buildingco.utilities.FieldUtils;
 import com.solvd.buildingco.utilities.MaterialOrderGenerator;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
-import static com.solvd.buildingco.buildings.BuildingConstants.*;
-import static com.solvd.buildingco.utilities.BuildingUtils.*;
+import static com.solvd.buildingco.buildings.ResidentialBuildingSpecifications.HOUSE;
 
 public class House extends Building<BigDecimal> implements IEstimate {
     private int numRooms; // number of rooms user chooses in house
@@ -28,9 +28,9 @@ public class House extends Building<BigDecimal> implements IEstimate {
     public House(int numRooms, int numBathrooms, int garageCapacity) {
         super();
 
-        validateNumberOfRooms(numRooms);
-        validateNumberOfBathrooms(numBathrooms, numRooms);
-        validateGarageCapacity(garageCapacity, numRooms);
+        BuildingUtils.validateNumberOfRooms(numRooms);
+        BuildingUtils.validateNumberOfBathrooms(numBathrooms, numRooms);
+        BuildingUtils.validateGarageCapacity(garageCapacity, numRooms);
 
         this.numRooms = numRooms;
         this.numBathrooms = numBathrooms;
@@ -41,9 +41,9 @@ public class House extends Building<BigDecimal> implements IEstimate {
                  int constructionDays) {
         super();
 
-        validateNumberOfRooms(numRooms);
-        validateNumberOfBathrooms(numBathrooms, numRooms);
-        validateGarageCapacity(garageCapacity, numRooms);
+        BuildingUtils.validateNumberOfRooms(numRooms);
+        BuildingUtils.validateNumberOfBathrooms(numBathrooms, numRooms);
+        BuildingUtils.validateGarageCapacity(garageCapacity, numRooms);
 
         this.numRooms = numRooms;
         this.numBathrooms = numBathrooms;
@@ -79,15 +79,15 @@ public class House extends Building<BigDecimal> implements IEstimate {
 
     public static House createHouse(int numRooms, int numBathrooms, int garageCapacity) {
         // calculate square footage for house
-        int garageSquareFootage = (HOUSE_ADDITIONAL_SQUARE_FOOTAGE_PER_CAR * garageCapacity);
+        int garageSquareFootage = (HOUSE.getExtraSquareFootagePerCar() * garageCapacity);
         int extraRoomsSquareFootage = // get the square footage for each additional room
-                (HOUSE_AVERAGE_ROOM_LENGTH * HOUSE_AVERAGE_ROOM_WIDTH) * (numRooms - 1);
-        int squareFootage = HOUSE_BASE_SQUARE_FOOTAGE + extraRoomsSquareFootage + garageSquareFootage;
+                (HOUSE.getAverageRoomLength() * HOUSE.getAverageRoomWidth()) * (numRooms - 1);
+        int squareFootage = HOUSE.getBaseSquareFootage() + extraRoomsSquareFootage + garageSquareFootage;
 
         // set scaled amount of days to complete construction
-        int extraDaysForGarage = HOUSE_ADDITIONAL_CONSTRUCTION_DAYS_PER_CAR * garageCapacity;
+        int extraDaysForGarage = HOUSE.getExtraConstructionDaysPerCar() * garageCapacity;
         int extraDaysForMoreRooms = 20 * (numRooms - 1);
-        int constructionDays = HOUSE_BASE_CONSTRUCTION_DAYS + extraDaysForMoreRooms + extraDaysForGarage;
+        int constructionDays = HOUSE.getBaseConstructionDays() + extraDaysForMoreRooms + extraDaysForGarage;
 
         return new House(
                 numRooms,
@@ -121,7 +121,7 @@ public class House extends Building<BigDecimal> implements IEstimate {
     }
 
     public void setNumRooms(int numRooms) {
-        validateNumberOfRooms(numRooms);
+        BuildingUtils.validateNumberOfRooms(numRooms);
 
         this.numRooms = numRooms;
     }
@@ -131,7 +131,7 @@ public class House extends Building<BigDecimal> implements IEstimate {
     }
 
     public void setNumBathrooms(int numBathrooms) {
-        validateNumberOfBathrooms(numBathrooms, this.numRooms);
+        BuildingUtils.validateNumberOfBathrooms(numBathrooms, this.numRooms);
 
         this.numBathrooms = numBathrooms;
     }
@@ -142,7 +142,7 @@ public class House extends Building<BigDecimal> implements IEstimate {
     }
 
     public void setGarageCapacity(int garageCapacity) {
-        validateGarageCapacity(garageCapacity, this.numRooms);
+        BuildingUtils.validateGarageCapacity(garageCapacity, this.numRooms);
 
         this.garageCapacity = garageCapacity;
     }
