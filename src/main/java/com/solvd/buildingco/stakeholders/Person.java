@@ -2,7 +2,7 @@ package com.solvd.buildingco.stakeholders;
 
 import com.solvd.buildingco.exception.InvalidValueException;
 import com.solvd.buildingco.utilities.BooleanUtils;
-import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.ReflectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -170,7 +170,7 @@ public abstract class Person {
         String[] fieldNames = {"nameParts", "postNominals", "addresses", "emails", "phoneNumbers"};
 
         for (String fieldName : fieldNames) {
-            Object fieldValue = FieldUtils.getField(this, fieldName);
+            Object fieldValue = ReflectionUtils.getField(this, fieldName);
 
             if (fieldValue != null) {
                 builder.append(fieldName).append("=").append(Arrays.toString((Object[]) fieldValue)).append(", ");

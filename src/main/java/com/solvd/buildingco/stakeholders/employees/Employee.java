@@ -4,7 +4,7 @@ import com.solvd.buildingco.exception.InvalidDateFormatException;
 import com.solvd.buildingco.finance.PayRate;
 import com.solvd.buildingco.scheduling.Schedule;
 import com.solvd.buildingco.stakeholders.Stakeholder;
-import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.ReflectionUtils;
 import com.solvd.buildingco.utilities.ScheduleUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -133,7 +133,7 @@ public abstract class Employee extends Stakeholder {
         builder.append(stakeholderStr);
 
         for (String fieldName : fieldNames) {
-            Object fieldValue = FieldUtils.getField(this, fieldName);
+            Object fieldValue = ReflectionUtils.getField(this, fieldName);
             if (fieldValue != null) {
                 builder
                         .append(",")

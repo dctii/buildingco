@@ -2,7 +2,7 @@ package com.solvd.buildingco.utilities;
 
 import java.lang.reflect.Field;
 
-public class FieldUtils {
+public class ReflectionUtils {
     public static Object getField(Object obj, String fieldName) {
         // get various Object's particular class
         Class<?> current = obj.getClass();
@@ -27,7 +27,7 @@ public class FieldUtils {
         return null;
     }
 
-    private FieldUtils() {
+    private ReflectionUtils() {
         final String NO_UTILITY_CLASS_INSTANTIATION_MESSAGE =
                 "This is a utility class and instances cannot be made of it.";
 

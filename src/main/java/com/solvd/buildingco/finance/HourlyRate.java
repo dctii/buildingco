@@ -1,6 +1,6 @@
 package com.solvd.buildingco.finance;
 
-import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.ReflectionUtils;
 
 import java.math.BigDecimal;
 
@@ -42,7 +42,7 @@ public class HourlyRate extends PayRate<BigDecimal> {
         String[] fieldNames = {"ratePerHour"};
 
         for (String fieldName : fieldNames) {
-            Object fieldValue = FieldUtils.getField(this, fieldName);
+            Object fieldValue = ReflectionUtils.getField(this, fieldName);
             if (fieldValue != null) {
                 builder.append(", ")
                         .append(fieldName)

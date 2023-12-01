@@ -3,7 +3,7 @@ package com.solvd.buildingco.buildings;
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.utilities.BuildingCostCalculator;
 import com.solvd.buildingco.utilities.BuildingUtils;
-import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.ReflectionUtils;
 import com.solvd.buildingco.utilities.MaterialOrderGenerator;
 
 import java.math.BigDecimal;
@@ -139,7 +139,7 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
         String[] fieldNames = {"squareFootagePerLevel", "numberOfLevels", "constructionDays", "lobbyCost", "foundationCost"};
 
         for (String fieldName : fieldNames) {
-            Object fieldValue = FieldUtils.getField(this, fieldName);
+            Object fieldValue = ReflectionUtils.getField(this, fieldName);
             if (fieldValue != null) {
                 builder.append(", ").append(fieldName).append("=").append(fieldValue);
             }

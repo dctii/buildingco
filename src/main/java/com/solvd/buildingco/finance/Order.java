@@ -4,7 +4,7 @@ import com.solvd.buildingco.exception.InventoryItemNotFoundException;
 import com.solvd.buildingco.inventory.BuyableItem;
 import com.solvd.buildingco.inventory.Priceable;
 import com.solvd.buildingco.inventory.RentableItem;
-import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.ReflectionUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -78,7 +78,7 @@ public class Order {
         String[] fieldNames = {"orderItems", "count"};
 
         for (String fieldName : fieldNames) {
-            Object fieldValue = FieldUtils.getField(this, fieldName);
+            Object fieldValue = ReflectionUtils.getField(this, fieldName);
             if (fieldValue != null) {
                 if (fieldValue instanceof Object[] && "orderItems".equals(fieldName)) {
                     fieldValue = Arrays.toString(Arrays.copyOf((OrderItem[]) fieldValue, count));

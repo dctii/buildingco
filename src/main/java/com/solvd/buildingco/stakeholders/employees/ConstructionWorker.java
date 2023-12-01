@@ -3,7 +3,7 @@ package com.solvd.buildingco.stakeholders.employees;
 import com.solvd.buildingco.finance.HourlyRate;
 import com.solvd.buildingco.finance.PayRate;
 import com.solvd.buildingco.scheduling.Schedule;
-import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.ReflectionUtils;
 
 import java.math.BigDecimal;
 
@@ -66,7 +66,7 @@ public class ConstructionWorker extends Employee {
         builder.append(stakeholderStr.substring(stakeholderStr.indexOf("{") + 1));
 
         for (String fieldName : fieldNames) {
-            Object fieldValue = FieldUtils.getField(this, fieldName);
+            Object fieldValue = ReflectionUtils.getField(this, fieldName);
             if (fieldValue != null) {
                 builder.append(",")
                         .append(fieldName)

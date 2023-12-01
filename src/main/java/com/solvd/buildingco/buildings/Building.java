@@ -2,7 +2,7 @@ package com.solvd.buildingco.buildings;
 
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.stakeholders.employees.Employee;
-import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.ReflectionUtils;
 
 import java.time.ZonedDateTime;
 
@@ -38,7 +38,7 @@ public abstract class Building<T extends Number> {
         String[] fieldNames = {"worker", "engineer", "architect", "manager"};
 
         for (String fieldName : fieldNames) {
-            Object fieldValue = FieldUtils.getField(this, fieldName);
+            Object fieldValue = ReflectionUtils.getField(this, fieldName);
             if (fieldValue != null) {
                 builder
                         .append(fieldName)

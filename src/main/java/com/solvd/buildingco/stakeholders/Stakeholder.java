@@ -1,7 +1,7 @@
 package com.solvd.buildingco.stakeholders;
 
 import com.solvd.buildingco.utilities.BooleanUtils;
-import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.ReflectionUtils;
 
 import java.util.Arrays;
 
@@ -58,7 +58,7 @@ public abstract class Stakeholder extends Person {
         builder.append(personStr);
 
         for (String fieldName : fieldNames) {
-            Object fieldValue = FieldUtils.getField(this, fieldName);
+            Object fieldValue = ReflectionUtils.getField(this, fieldName);
             if (fieldValue != null) {
                 builder
                         .append(", ")
