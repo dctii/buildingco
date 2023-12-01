@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class OrderUtils {
     public static Order loadOrder (ArrayList<OrderItem> orderItems){
         // initialize order
-        Order order = new Order();
+        Order order = ReflectionUtils.createObject(Order.class);
 
         // populate order with each item in orderItems
         for (OrderItem item : orderItems) {

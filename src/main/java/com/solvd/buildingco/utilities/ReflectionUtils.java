@@ -1,8 +1,30 @@
 package com.solvd.buildingco.utilities;
 
+import com.solvd.buildingco.exception.UnableToCreateWithReflectionException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 
 public class ReflectionUtils {
+    private static final Logger LOGGER = LogManager.getLogger(ReflectionUtils.class);
+
+    public static <T> T createObject(Class<T> targetClass) {
+        try {
+
+            Constructor<T> constructor = targetClass.getDeclaredConstructor();
+            return constructor.newInstance();
+
+        } catch (ReflectiveOperationException e) {
+            final String CREATE_WITH_REFLECTION_EXCEPTION_MESSAGE_PREFIX =
+                    "Unable to create a new Object instantiation via reflect: ";
+
+            LOGGER.warn(CREATE_WITH_REFLECTION_EXCEPTION_MESSAGE_PREFIX + e);
+            throw new UnableToCreateWithReflectionException(CREATE_WITH_REFLECTION_EXCEPTION_MESSAGE_PREFIX + e);
+        }
+    }
+
     public static Object getField(Object obj, String fieldName) {
         // get various Object's particular class
         Class<?> current = obj.getClass();
