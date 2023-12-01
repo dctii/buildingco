@@ -1,7 +1,6 @@
 package com.solvd.buildingco.utilities;
 
 import com.solvd.buildingco.buildings.Building;
-import com.solvd.buildingco.buildings.BuildingConstants;
 import com.solvd.buildingco.exception.BuildingTypeException;
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.scheduling.Schedule;
@@ -11,6 +10,9 @@ import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
+import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.INDUSTRIAL_BUILDING;
+import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.SKYSCRAPER;
+import static com.solvd.buildingco.stakeholders.employees.Personnel.*;
 import static com.solvd.buildingco.utilities.ScheduleUtils.getDateFormat;
 
 public class BuildingCostCalculator {
@@ -37,22 +39,22 @@ public class BuildingCostCalculator {
         Schedule architectureSchedule = ScheduleUtils.generateEmployeeSchedule(
                 customerEndDate,
                 constructionDays,
-                BuildingConstants.ARCHITECTURE_WORK_DESCRIPTION
+                ARCHITECT.getDefaultActivityDescription()
         );
         Schedule constructionWorkerSchedule = ScheduleUtils.generateEmployeeSchedule(
                 customerEndDate,
                 constructionDays,
-                BuildingConstants.CONSTRUCTION_WORK_DESCRIPTION
+                CONSTRUCTION_WORKER.getDefaultActivityDescription()
         );
         Schedule projectManagerSchedule = ScheduleUtils.generateEmployeeSchedule(
                 customerEndDate,
                 constructionDays,
-                BuildingConstants.PROJECT_MANAGEMENT_DESCRIPTION
+                PROJECT_MANAGER.getDefaultActivityDescription()
         );
         Schedule engineerSchedule = ScheduleUtils.generateEmployeeSchedule(
                 customerEndDate,
                 constructionDays,
-                BuildingConstants.ENGINEERING_DESCRIPTION
+                ENGINEER.getDefaultActivityDescription()
         );
 
         Employee architect, manager, engineer, worker;
@@ -124,13 +126,13 @@ public class BuildingCostCalculator {
         int baseConstructionDays = 0;
         int additionalTimePerLevel = 0;
 
-        if (type.equalsIgnoreCase(BuildingConstants.SKYSCRAPER_BUILDING_TYPE)) {
+        if (type.equalsIgnoreCase(SKYSCRAPER.getBuildingType())) {
 
             baseConstructionDays = squareFootage / 50;
             additionalTimePerLevel =
                     DoubleUtils.roundToInt(Math.ceil(baseConstructionDays * numberOfLevels));
 
-        } else if (type.equalsIgnoreCase(BuildingConstants.INDUSTRIAL_BUILDING_TYPE)) {
+        } else if (type.equalsIgnoreCase(INDUSTRIAL_BUILDING.getBuildingType())) {
 
             baseConstructionDays = squareFootage / 100;
             additionalTimePerLevel =

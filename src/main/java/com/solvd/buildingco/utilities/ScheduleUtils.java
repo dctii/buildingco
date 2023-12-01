@@ -13,7 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
-import static com.solvd.buildingco.buildings.BuildingConstants.ARCHITECTURE_WORK_DESCRIPTION;
+import static com.solvd.buildingco.stakeholders.employees.Personnel.ARCHITECT;
 
 public class ScheduleUtils {
     private static final Logger LOGGER = LogManager.getLogger(ScheduleUtils.class);
@@ -42,7 +42,7 @@ public class ScheduleUtils {
 
         ScheduledActivity workerActivity;
 
-        if (!workDescription.equalsIgnoreCase(ARCHITECTURE_WORK_DESCRIPTION)) {
+        if (!workDescription.equalsIgnoreCase(ARCHITECT.getDefaultActivityDescription())) {
             workerActivity =
                     new ScheduledActivity(
                             workDescription,

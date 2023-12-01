@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import static com.solvd.buildingco.buildings.BuildingConstants.*;
+import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.*;
 
 public class BuildingUtils {
     private static final Logger LOGGER = LogManager.getLogger(BuildingUtils.class);
@@ -57,8 +58,8 @@ public class BuildingUtils {
     }
 
     public static boolean hasInvalidSquareFootage(int squareFootage) {
-        return squareFootage < INDUSTRIAL_MIN_SQUARE_FOOTAGE
-                || squareFootage > INDUSTRIAL_MAX_SQUARE_FOOTAGE;
+        return squareFootage < INDUSTRIAL_BUILDING.getMinLevels()
+                || squareFootage > INDUSTRIAL_BUILDING.getMaxLevels();
     }
 
     public static void validateSquareFootage(int squareFootage) {
@@ -72,8 +73,8 @@ public class BuildingUtils {
     }
 
     public static boolean hasInvalidNumberOfFloors(int numberOfFloors) {
-        return numberOfFloors < INDUSTRIAL_MIN_FLOORS
-                || numberOfFloors > INDUSTRIAL_MAX_FLOORS;
+        return numberOfFloors < INDUSTRIAL_BUILDING.getMinLevels()
+                || numberOfFloors > INDUSTRIAL_BUILDING.getMaxLevels();
     }
 
     public static void validateNumberOfFloors(int numberOfFloors) {
@@ -88,8 +89,8 @@ public class BuildingUtils {
 
 
     public static boolean hasInvalidSquareFootagePerLevel(int squareFootagePerLevel) {
-        return squareFootagePerLevel < SKYSCRAPER_MIN_SQUARE_FOOTAGE_PER_LEVEL
-                || squareFootagePerLevel > SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL;
+        return squareFootagePerLevel < SKYSCRAPER.getMinSquareFootage()
+                || squareFootagePerLevel > SKYSCRAPER.getMaxSquareFootage();
     }
 
     public static void validateSquareFootagePerLevel(int squareFootagePerLevel) {
@@ -103,8 +104,8 @@ public class BuildingUtils {
     }
 
     public static boolean hasInvalidNumberOfLevels(int numberOfLevels) {
-        return numberOfLevels < SKYSCRAPER_MIN_LEVELS
-                || numberOfLevels > SKYSCRAPER_MAX_LEVELS;
+        return numberOfLevels < SKYSCRAPER.getMinLevels()
+                || numberOfLevels > SKYSCRAPER.getMaxLevels();
     }
 
     public static void validateNumberOfLevels(int numberOfLevels) {
