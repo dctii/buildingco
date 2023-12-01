@@ -6,8 +6,9 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Scanner;
 
-import static com.solvd.buildingco.buildings.BuildingConstants.*;
-import static com.solvd.buildingco.utilities.BuildingUtils.*;
+import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.SKYSCRAPER;
+import static com.solvd.buildingco.utilities.BuildingUtils.hasInvalidNumberOfLevels;
+import static com.solvd.buildingco.utilities.BuildingUtils.hasInvalidSquareFootagePerLevel;
 
 public class SkyscraperMenu extends BuildingMenu {
     private static final Logger LOGGER = LogManager.getLogger(SkyscraperMenu.class);
@@ -61,16 +62,16 @@ public class SkyscraperMenu extends BuildingMenu {
         do {
             LOGGER.info(
                     "Enter the square footage per level for the Skyscraper ({}-{}): ",
-                    SKYSCRAPER_MIN_SQUARE_FOOTAGE_PER_LEVEL,
-                    SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL
+                    SKYSCRAPER.getMinSquareFootage(),
+                    SKYSCRAPER.getMaxSquareFootage()
             );
 
             squareFootagePerLevel = scanner.nextInt();
 
             if (hasInvalidSquareFootagePerLevel(squareFootagePerLevel)) {
                 LOGGER.warn("Square footage per level must be between {} and {}. Please try again.",
-                        SKYSCRAPER_MIN_SQUARE_FOOTAGE_PER_LEVEL,
-                        SKYSCRAPER_MAX_SQUARE_FOOTAGE_PER_LEVEL
+                        SKYSCRAPER.getMinSquareFootage(),
+                        SKYSCRAPER.getMaxSquareFootage()
                 );
             }
         } while (hasInvalidSquareFootagePerLevel(squareFootagePerLevel));
@@ -80,8 +81,8 @@ public class SkyscraperMenu extends BuildingMenu {
         do {
             LOGGER.info(
                     "Enter the number of levels for the Skyscraper ({}-{}): ",
-                    SKYSCRAPER_MIN_LEVELS,
-                    SKYSCRAPER_MAX_LEVELS
+                    SKYSCRAPER.getMinLevels(),
+                    SKYSCRAPER.getMaxLevels()
             );
 
             numberOfLevels = scanner.nextInt();
@@ -89,8 +90,8 @@ public class SkyscraperMenu extends BuildingMenu {
             if (hasInvalidNumberOfLevels(numberOfLevels)) {
                 LOGGER.warn(
                         "The number of levels must be between {} and {}. Please try again.",
-                        SKYSCRAPER_MIN_LEVELS,
-                        SKYSCRAPER_MAX_LEVELS
+                        SKYSCRAPER.getMinLevels(),
+                        SKYSCRAPER.getMaxLevels()
                 );
             }
         } while (hasInvalidNumberOfLevels(numberOfLevels));
