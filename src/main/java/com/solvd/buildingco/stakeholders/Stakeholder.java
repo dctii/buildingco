@@ -1,10 +1,11 @@
 package com.solvd.buildingco.stakeholders;
 
+import com.solvd.buildingco.utilities.BooleanUtils;
 import com.solvd.buildingco.utilities.FieldUtils;
 
 import java.util.Arrays;
 
-import static com.solvd.buildingco.utilities.BooleanUtils.isEmptyOrNullArray;
+
 
 // Person but adds organizationNames and roles
 public abstract class Stakeholder extends Person {
@@ -28,7 +29,7 @@ public abstract class Stakeholder extends Person {
 
     // getters and setters
     public String[] getOrganizationNames() {
-        return isEmptyOrNullArray(organizationNames)
+        return BooleanUtils.isEmptyOrNullArray(organizationNames)
                 ? null
                 : organizationNames;
     }
@@ -38,7 +39,7 @@ public abstract class Stakeholder extends Person {
     }
 
     public String[] getRoles() {
-        return isEmptyOrNullArray(roles)
+        return BooleanUtils.isEmptyOrNullArray(roles)
                 ? null
                 : roles;
     }

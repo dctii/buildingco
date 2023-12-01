@@ -13,7 +13,6 @@ import java.time.format.DateTimeFormatter;
 import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.INDUSTRIAL_BUILDING;
 import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.SKYSCRAPER;
 import static com.solvd.buildingco.stakeholders.employees.Personnel.*;
-import static com.solvd.buildingco.utilities.ScheduleUtils.getDateFormat;
 
 public class BuildingCostCalculator {
 
@@ -64,7 +63,7 @@ public class BuildingCostCalculator {
         engineer = Engineer.createEmployee(engineerSchedule, new BigDecimal("30.0"));
         worker = ConstructionWorker.createEmployee(constructionWorkerSchedule, new BigDecimal("15.0"));
 
-        final DateTimeFormatter dateFormat = getDateFormat();
+        final DateTimeFormatter dateFormat = ScheduleUtils.getDateFormat();
 
         String startDateStr =
                 customerEndDate

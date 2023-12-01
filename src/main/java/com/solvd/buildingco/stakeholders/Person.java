@@ -8,11 +8,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
 
-import static com.solvd.buildingco.utilities.BooleanUtils.isEmptyOrNullArray;
-
-
-// TODO: add exceptions and additional constructors
-
 // general Person class with usual title and contact information
 public abstract class Person {
     private static final Logger LOGGER = LogManager.getLogger(Person.class);
@@ -27,6 +22,7 @@ public abstract class Person {
 
     public Person() {
     }
+
     public Person(String[] nameParts) {
         this.nameParts = nameParts;
     }
@@ -42,7 +38,7 @@ public abstract class Person {
     // getters and setters
 
     public String[] getNameParts() {
-        return isEmptyOrNullArray(nameParts) ? null : nameParts;
+        return BooleanUtils.isEmptyOrNullArray(nameParts) ? null : nameParts;
     }
 
     public void setNameParts(String[] nameParts) {
@@ -60,7 +56,7 @@ public abstract class Person {
     }
 
     public String getForename() {
-        return isEmptyOrNullArray(nameParts) ? null : nameParts[0];
+        return BooleanUtils.isEmptyOrNullArray(nameParts) ? null : nameParts[0];
     }
 
     public void setForename(String forename) {
@@ -72,7 +68,7 @@ public abstract class Person {
     }
 
     public String getMiddleName() {
-        return isEmptyOrNullArray(nameParts)
+        return BooleanUtils.isEmptyOrNullArray(nameParts)
                 ? null
                 : nameParts[1];
     }
@@ -82,7 +78,7 @@ public abstract class Person {
     }
 
     public String getSurname() {
-        return isEmptyOrNullArray(nameParts) ? null : nameParts[2];
+        return BooleanUtils.isEmptyOrNullArray(nameParts) ? null : nameParts[2];
     }
 
     public void setSurname(String surname) {
@@ -94,7 +90,7 @@ public abstract class Person {
     }
 
     public String getSuffix() {
-        return isEmptyOrNullArray(nameParts)
+        return BooleanUtils.isEmptyOrNullArray(nameParts)
                 ? null :
                 nameParts[3];
     }
@@ -104,7 +100,7 @@ public abstract class Person {
     }
 
     public String[] getPostNominals() {
-        return isEmptyOrNullArray(postNominals)
+        return BooleanUtils.isEmptyOrNullArray(postNominals)
                 ? null
                 : postNominals;
     }
@@ -118,7 +114,7 @@ public abstract class Person {
         StringBuilder fullName = new StringBuilder();
 
         // Directly use the nameParts array
-        if (!isEmptyOrNullArray(nameParts)) {
+        if (!BooleanUtils.isEmptyOrNullArray(nameParts)) {
             for (String namePart : nameParts) {
                 if (BooleanUtils.isBlankOrEmptyString(namePart)) {
                     if (fullName.length() > 0) {
@@ -138,7 +134,7 @@ public abstract class Person {
 
 
     public String[] getAddresses() {
-        return isEmptyOrNullArray(addresses)
+        return BooleanUtils.isEmptyOrNullArray(addresses)
                 ? null
                 : addresses;
     }
@@ -148,7 +144,7 @@ public abstract class Person {
     }
 
     public String[] getPhoneNumbers() {
-        return isEmptyOrNullArray(phoneNumbers)
+        return BooleanUtils.isEmptyOrNullArray(phoneNumbers)
                 ? null
                 : phoneNumbers;
     }
@@ -158,7 +154,7 @@ public abstract class Person {
     }
 
     public String[] getEmails() {
-        return isEmptyOrNullArray(emails)
+        return BooleanUtils.isEmptyOrNullArray(emails)
                 ? null
                 : emails;
     }

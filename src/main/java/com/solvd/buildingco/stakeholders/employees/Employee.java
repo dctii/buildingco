@@ -5,6 +5,7 @@ import com.solvd.buildingco.finance.PayRate;
 import com.solvd.buildingco.scheduling.Schedule;
 import com.solvd.buildingco.stakeholders.Stakeholder;
 import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.ScheduleUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,8 +14,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-import static com.solvd.buildingco.utilities.ScheduleUtils.calculateTotalWorkHours;
-import static com.solvd.buildingco.utilities.ScheduleUtils.getDateFormat;
 
 public abstract class Employee extends Stakeholder {
     private static final Logger LOGGER = LogManager.getLogger(Employee.class);
@@ -22,9 +21,10 @@ public abstract class Employee extends Stakeholder {
     private Schedule schedule;
     private String personnelType;
 
-    public Employee(){
+    public Employee() {
         super();
     }
+
     public Employee(String[] nameParts) {
         super(nameParts);
     }
@@ -56,10 +56,10 @@ public abstract class Employee extends Stakeholder {
     // iterates through the employee's schedule to get their work hours
     public long getWorkHours(String startDateStr, String endDateStr) {
 
-        final DateTimeFormatter dateFormat = getDateFormat();
+        final DateTimeFormatter dateFormat = ScheduleUtils.getDateFormat();
         final String INVALID_START_DATE_STRING_FORMAT_MESSAGE =
-            "'startDateStr' is not in the correct format, so it cannot be parsed by LocalDate" +
-                    ".parse()";
+                "'startDateStr' is not in the correct format, so it cannot be parsed by LocalDate" +
+                        ".parse()";
         final String INVALID_END_DATE_STRING_FORMAT_MESSAGE =
                 "'endDateStr' is not in the correct format, so it cannot be parsed by LocalDate" +
                         ".parse()";
@@ -69,14 +69,14 @@ public abstract class Employee extends Stakeholder {
 
         try {
             startDate = LocalDate.parse(startDateStr, dateFormat);
-        } catch(DateTimeParseException e) {
+        } catch (DateTimeParseException e) {
             LOGGER.warn(INVALID_START_DATE_STRING_FORMAT_MESSAGE);
             throw new InvalidDateFormatException(INVALID_START_DATE_STRING_FORMAT_MESSAGE);
         }
 
         try {
             endDate = LocalDate.parse(endDateStr, dateFormat);
-        } catch(DateTimeParseException e) {
+        } catch (DateTimeParseException e) {
             LOGGER.warn(INVALID_END_DATE_STRING_FORMAT_MESSAGE);
             throw new InvalidDateFormatException(INVALID_END_DATE_STRING_FORMAT_MESSAGE);
         }
@@ -84,7 +84,8 @@ public abstract class Employee extends Stakeholder {
         // if there is a schedule, iterate and see how many hours the employee has on their schedule
         long totalWorkHours;
         if (schedule != null) {
-            totalWorkHours = calculateTotalWorkHours(schedule, startDate, endDate);
+            totalWorkHours =
+                    ScheduleUtils.calculateTotalWorkHours(schedule, startDate, endDate);
         } else {
             totalWorkHours = 0;
         }
