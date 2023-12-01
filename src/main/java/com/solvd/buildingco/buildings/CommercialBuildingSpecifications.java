@@ -1,14 +1,6 @@
 package com.solvd.buildingco.buildings;
 
-public enum CommercialBuilding {
-    // min sq ft
-    // max sq ft
-    // min levels
-    // max levels
-    // sq ft per steel beam
-    // height per level - double
-    // insulation thickness in feet - double
-    // building type - string
+public enum CommercialBuildingSpecifications {
     INDUSTRIAL_BUILDING(
             "industrial building",
             5000,
@@ -18,7 +10,6 @@ public enum CommercialBuilding {
             18.0,
             1000,
             6.0 / 12.0
-
     ),
     SKYSCRAPER(
             "skyscraper",
@@ -29,7 +20,6 @@ public enum CommercialBuilding {
             9.0,
             40,
             1.0 / 12.0
-
     );
 
     private final String buildingType;
@@ -45,9 +35,9 @@ public enum CommercialBuilding {
     // thickness of commercial building insulation in feet
     private final double insulationThickness;
 
-    CommercialBuilding(String buildingType, int minSquareFootage, int maxSquareFootage,
-                       int minLevels, int maxLevels, double heightPerLevel,
-                       int squareFeetPerSteelBeam, double insulationThickness) {
+    CommercialBuildingSpecifications(String buildingType, int minSquareFootage, int maxSquareFootage,
+                                     int minLevels, int maxLevels, double heightPerLevel,
+                                     int squareFeetPerSteelBeam, double insulationThickness) {
         this.buildingType = buildingType;
         this.minSquareFootage = minSquareFootage;
         this.maxSquareFootage = maxSquareFootage;
