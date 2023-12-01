@@ -11,11 +11,11 @@ import static com.solvd.buildingco.stakeholders.employees.Personnel.ARCHITECT;
 
 public class Architect extends Employee {
 
-    public Architect(){
+    public Architect() {
         super();
     }
 
-    public Architect(String[] nameParts){
+    public Architect(String[] nameParts) {
         super(nameParts);
     }
 
