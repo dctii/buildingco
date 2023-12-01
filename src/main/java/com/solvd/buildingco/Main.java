@@ -4,7 +4,10 @@ import com.solvd.buildingco.buildings.Building;
 import com.solvd.buildingco.interactive.HouseMenu;
 import com.solvd.buildingco.interactive.IndustrialBuildingMenu;
 import com.solvd.buildingco.interactive.SkyscraperMenu;
+import com.solvd.buildingco.interactive.TaxMenu;
+import com.solvd.buildingco.utilities.BigDecimalUtils;
 import com.solvd.buildingco.utilities.BuildingCostCalculator;
+import com.solvd.buildingco.utilities.ITax;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -72,8 +75,13 @@ public class Main {
                 are not accurate, but attempt to provide the appearance of scaling costs as the
                 size of the construction grows.
 
+                An interactive menu for tax rates will appear and ask the user which California
+                county to choose from. They will get the rate for that county.
+
                 Material costs are a calculation of things like wood, steel, electrical supplies,
                  and other general things required in any construction project.
+
+                 The cost of taxes will be calculated for the material costs.
 
                  Labor costs are a calculation of worker hours and their respective, differing
                  hourly rates. Employee types include Project Manager, Architect, Engineer, and
@@ -83,8 +91,11 @@ public class Main {
             */
 
             if (building != null) {
+                ITax taxCalculator = TaxMenu.runMenu(scanner);
+
                 BigDecimal calculatedMaterialCost
                         = building.calculateMaterialCost();
+                BigDecimal materialsTaxAmount = taxCalculator.calculateTax(calculatedMaterialCost);
                 BigDecimal calculatedLaborCost =
                         building.calculateLaborCost(completionDate);
                 BigDecimal calculatedBuildingCost =
@@ -92,10 +103,14 @@ public class Main {
                                 building,
                                 completionDate
                         );
+                BigDecimal calculatedBuildingCostWithTax =
+                        BigDecimalUtils.add(calculatedBuildingCost, materialsTaxAmount);
+
 
                 LOGGER.info("Material Cost: " + calculatedMaterialCost);
+                LOGGER.info("Material Cost Sales Tax: " + materialsTaxAmount);
                 LOGGER.info("Labor Cost: " + calculatedLaborCost);
-                LOGGER.info("Total Building Cost: " + calculatedBuildingCost);
+                LOGGER.info("Total Building Cost: " + calculatedBuildingCostWithTax);
             }
 
 

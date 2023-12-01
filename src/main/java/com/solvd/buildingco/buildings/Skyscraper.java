@@ -4,18 +4,17 @@ import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.utilities.BuildingCostCalculator;
 import com.solvd.buildingco.utilities.FieldUtils;
 import com.solvd.buildingco.utilities.MaterialOrderGenerator;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
-import static com.solvd.buildingco.buildings.BuildingConstants.*;
-import static com.solvd.buildingco.utilities.BuildingUtils.*;
+import static com.solvd.buildingco.buildings.BuildingConstants.SKYSCRAPER_FOUNDATION_COST_FACTOR;
+import static com.solvd.buildingco.buildings.BuildingConstants.SKYSCRAPER_LOBBY_FIXED_COST;
+import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.SKYSCRAPER;
+import static com.solvd.buildingco.utilities.BuildingUtils.validateNumberOfLevels;
+import static com.solvd.buildingco.utilities.BuildingUtils.validateSquareFootagePerLevel;
 
 public class Skyscraper extends Building<BigDecimal> implements IEstimate {
-    private static final Logger LOGGER = LogManager.getLogger(Skyscraper.class);
-
     private int squareFootagePerLevel;
     private int numberOfLevels;
     private int constructionDays;
@@ -41,6 +40,19 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
         this.foundationCost = new BigDecimal(numberOfLevels).multiply(SKYSCRAPER_FOUNDATION_COST_FACTOR);
     }
 
+    public Skyscraper(int squareFootagePerLevel, int numberOfLevels, BigDecimal lobbyCost,
+                      BigDecimal foundationCost) {
+        super();
+
+        validateSquareFootagePerLevel(squareFootagePerLevel);
+        validateNumberOfLevels(numberOfLevels);
+
+        this.squareFootagePerLevel = squareFootagePerLevel;
+        this.numberOfLevels = numberOfLevels;
+        this.lobbyCost = lobbyCost;
+        this.foundationCost = foundationCost;
+    }
+
     // create order for materials, contributes to material cost calculation
     @Override
     public Order generateMaterialOrder() {
@@ -64,7 +76,7 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
 
         int calculatedConstructionDays =
                 BuildingCostCalculator.calculateConstructionDays(
-                        SKYSCRAPER_BUILDING_TYPE,
+                        SKYSCRAPER.getBuildingType(),
                         squareFootagePerLevel, // square footage and number of floors passed in by user
                         numberOfLevels
                 );

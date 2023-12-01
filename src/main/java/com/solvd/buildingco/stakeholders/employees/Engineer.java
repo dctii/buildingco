@@ -7,6 +7,8 @@ import com.solvd.buildingco.utilities.FieldUtils;
 
 import java.math.BigDecimal;
 
+import static com.solvd.buildingco.stakeholders.employees.Personnel.ENGINEER;
+
 // TODO: add options for different kinds of Engineers
 
 public class Engineer extends Employee {
@@ -35,14 +37,14 @@ public class Engineer extends Employee {
 
     // factory method for Engineer
     public static Engineer createEmployee(Schedule schedule, BigDecimal ratePerHour) {
-        String personnelType = BuildingCoConstants.PERSONNEL_TYPE_ENGINEER;
+        String personnelType = ENGINEER.getPersonnelType();
         String[] nameParts = {null, null, null, null};
         String[] postNominals = {};
         String[] organizationNames = {BuildingCoConstants.ORGANIZATION_NAME};
         String[] roles = {personnelType};
         String[] addresses = {BuildingCoConstants.ADDRESS_HQ};
         String[] phoneNumbers = {BuildingCoConstants.PHONE_NUMBER_HQ};
-        String[] emails = {BuildingCoConstants.EMAIL_HANDLE_ENGINEERS + BuildingCoConstants.DOMAIN_NAME};
+        String[] emails = {ENGINEER.getDepartmentEmailHandle() + BuildingCoConstants.DOMAIN_NAME};
 
         // hourly rate passed in upon instantiation
         HourlyRate hourlyRate = new HourlyRate(ratePerHour);

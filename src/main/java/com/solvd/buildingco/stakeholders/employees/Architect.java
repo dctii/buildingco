@@ -7,6 +7,8 @@ import com.solvd.buildingco.utilities.FieldUtils;
 
 import java.math.BigDecimal;
 
+import static com.solvd.buildingco.stakeholders.employees.Personnel.ARCHITECT;
+
 public class Architect extends Employee {
 
     public Architect(){
@@ -35,14 +37,14 @@ public class Architect extends Employee {
     // factory method for Architect
 
     public static Architect createEmployee(Schedule schedule, BigDecimal ratePerHour) {
-        String personnelType = BuildingCoConstants.PERSONNEL_TYPE_ARCHITECT;
+        String personnelType = ARCHITECT.getPersonnelType();
         String[] nameParts = {null, null, null, null};
         String[] postNominals = {};
         String[] organizationNames = {BuildingCoConstants.ORGANIZATION_NAME};
         String[] roles = {personnelType};
         String[] addresses = {BuildingCoConstants.ADDRESS_HQ};
         String[] phoneNumbers = {BuildingCoConstants.PHONE_NUMBER_HQ};
-        String[] emails = {BuildingCoConstants.EMAIL_HANDLE_ARCHITECTS + BuildingCoConstants.DOMAIN_NAME};
+        String[] emails = {ARCHITECT.getDepartmentEmailHandle() + BuildingCoConstants.DOMAIN_NAME};
 
         // hourly rate passed in upon instantiation
         HourlyRate hourlyRate = new HourlyRate(ratePerHour);
