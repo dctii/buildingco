@@ -28,15 +28,12 @@ mvn clean install exec:java
 ```
 
 ### Run `WordCounter.class`
+
 ```shell
 mvn clean install exec:java -P run-word-counter
 ```
 
-
-
 ## Assignments
-
-
 
 <hr />
 
@@ -47,6 +44,7 @@ mvn clean install exec:java -P run-word-counter
 #### Requirements
 
 ##### Comments and Required changes to consider from Assignment 10:
+
 - don't use default initializations
 - don't hardcode data everywhere that can be put into one place, like a single and separate `class`
 - may find more instances where _polymorphism_ can be applied
@@ -54,9 +52,9 @@ mvn clean install exec:java -P run-word-counter
 
 ##### Requirements for Assignment 11
 
-1. Create a `class` `Object` using _reflection_ and put data there and use in project workflow (choose any `class`)
+1. Create a `class` `Object` using _reflection_ and put data there and use in project workflow (
+   choose any `class`)
 2. Replace all `for` loops in your project with `Collection` streaming
-
 
 <hr />
 
@@ -67,12 +65,16 @@ mvn clean install exec:java -P run-word-counter
 #### Requirements
 
 ##### Comments and Required changes to consider from Assignment 9:
-- make no-argument constructors in classes if possible, else make constructors that reduce the size of the parameter list
+
+- make no-argument constructors in classes if possible, else make constructors that reduce the size
+  of the parameter list
 - do not create fields with preset values
 - can use `Calendar` class for date and time
 - should use `UUID.randomUUID()` for generating IDs
-- enable WordCounter to take in a list of words and have the WordCounter count for the words in that list. Use `StringUtils.countMatches()`.
-- use primitive types instead of reference types where needed, for example use `boolean` instead of `Boolean`
+- enable WordCounter to take in a list of words and have the WordCounter count for the words in that
+  list. Use `StringUtils.countMatches()`.
+- use primitive types instead of reference types where needed, for example use `boolean` instead
+  of `Boolean`
 
 ##### Requirements for Assignment 10
 
