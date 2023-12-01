@@ -1,12 +1,18 @@
 package com.solvd.buildingco.inventory;
 
-public final class UnitMeasurement {
+public enum UnitMeasurement {
 
-    public final static String SQUARE_FOOT = "square foot";
-    public final static String GALLON = "gallon";
+    SQUARE_FOOT("square foot"),
+    GALLON("gallon"),
+    UNIT("unit");
 
-    public final static String UNIT = "unit";
+    private final String name;
 
-    private UnitMeasurement() {
+    UnitMeasurement(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }
