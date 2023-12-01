@@ -6,15 +6,16 @@ import com.solvd.buildingco.exception.InvalidNumRoomsException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import static com.solvd.buildingco.buildings.BuildingConstants.*;
-import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.*;
+import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.INDUSTRIAL_BUILDING;
+import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.SKYSCRAPER;
+import static com.solvd.buildingco.buildings.ResidentialBuildingSpecifications.HOUSE;
 
 public class BuildingUtils {
     private static final Logger LOGGER = LogManager.getLogger(BuildingUtils.class);
 
     public static boolean hasInvalidNumberOfRooms(int numRooms) {
-        return numRooms > HOUSE_MAX_NUM_ROOMS
-                || numRooms < HOUSE_MIN_NUM_ROOMS;
+        return numRooms > HOUSE.getMaxNumRooms()
+                || numRooms < HOUSE.getMinNumRooms();
     }
 
     public static void validateNumberOfRooms(int numRooms) {
@@ -28,8 +29,8 @@ public class BuildingUtils {
 
     public static boolean hasInvalidNumberOfBathrooms(int numBathrooms, int numRooms) {
         return numBathrooms > numRooms
-                || numBathrooms < HOUSE_MIN_NUM_BATHROOMS
-                || numBathrooms > HOUSE_MAX_NUM_BATHROOMS;
+                || numBathrooms < HOUSE.getMinNumBathrooms()
+                || numBathrooms > HOUSE.getMaxNumBathrooms();
     }
 
     public static void validateNumberOfBathrooms(int numBathrooms, int numRooms) {
@@ -43,8 +44,8 @@ public class BuildingUtils {
 
     public static boolean hasInvalidGarageCapacity(int garageCapacity, int numRooms) {
         return garageCapacity > numRooms
-                || garageCapacity < HOUSE_MIN_NUM_GARAGE_CAP
-                || garageCapacity > HOUSE_MAX_NUM_GARAGE_CAP;
+                || garageCapacity < HOUSE.getMinGarageCapacity()
+                || garageCapacity > HOUSE.getMaxGarageCapacity();
     }
 
     public static void validateGarageCapacity(int garageCapacity, int numRooms) {

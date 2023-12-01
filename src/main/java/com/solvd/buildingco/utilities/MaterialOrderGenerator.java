@@ -14,9 +14,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.solvd.buildingco.buildings.BuildingConstants.*;
-import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.*;
+import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.INDUSTRIAL_BUILDING;
+import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.SKYSCRAPER;
+import static com.solvd.buildingco.buildings.ResidentialBuildingSpecifications.HOUSE;
 import static com.solvd.buildingco.inventory.Item.*;
-import static com.solvd.buildingco.utilities.BooleanUtils.isValidBuildingType;
 
 public class MaterialOrderGenerator {
     private static final Logger LOGGER = LogManager.getLogger(MaterialOrderGenerator.class);
@@ -30,7 +31,7 @@ public class MaterialOrderGenerator {
             "That is not a supported Building type";
 
     public static Order generateMaterialOrder(Building building) {
-        if (isValidBuildingType(building)) {
+        if (BooleanUtils.isValidBuildingType(building)) {
             return generateBuildingOrder(building);
         } else {
             LOGGER.warn(WRONG_BUILDING_TYPE_EXCEPTION_MESSAGE);
@@ -225,11 +226,11 @@ public class MaterialOrderGenerator {
 
     private static int calculateStructuralWoodQuantity(House house) {
         BigDecimal woodFramingQuantityPerRoom =
-                BigDecimalUtils.multiply(calculateWallAreaPerRoom(), HOUSE_WOOD_USAGE_FACTOR_PER_FOOT);
+                BigDecimalUtils.multiply(calculateWallAreaPerRoom(), HOUSE.getWoodUsageFactorPerFoot());
 
         BigDecimal woodFramingQuantityForGarage =
                 BigDecimalUtils.multiply(calculateGarageWallArea(house),
-                        HOUSE_WOOD_USAGE_FACTOR_PER_FOOT);
+                        HOUSE.getWoodUsageFactorPerFoot());
 
         return BigDecimalUtils.roundToInt(
                 BigDecimalUtils.add(
@@ -262,12 +263,12 @@ public class MaterialOrderGenerator {
     private static int calculateInsulationQuantity(House house) {
 
         BigDecimal insulationQuantityPerRoom =
-                BigDecimalUtils.multiply(calculateWallAreaPerRoom(), HOUSE_INSULATION_THICKNESS_IN_FEET);
+                BigDecimalUtils.multiply(calculateWallAreaPerRoom(), HOUSE.getInsulationThickness());
 
         BigDecimal insulationQuantityForGarage =
                 BigDecimalUtils.add(
                         calculateGarageWallArea(house),
-                        HOUSE_INSULATION_THICKNESS_IN_FEET
+                        HOUSE.getInsulationThickness()
                 );
 
 
@@ -293,13 +294,13 @@ public class MaterialOrderGenerator {
         BigDecimal paintQuantityPerRoom =
                 BigDecimalUtils.divide(
                         BigDecimalUtils.add(calculateWallAreaPerRoom(), calculateCeilingAreaPerRoom()),
-                        HOUSE_PAINT_COVERAGE_BY_SQUARE_FEET_PER_GALLON
+                        HOUSE.getPaintCoverageBySquareFeet()
                 );
 
         BigDecimal paintQuantityForGarage =
                 BigDecimalUtils.divide(
                         BigDecimalUtils.add(calculateGarageWallArea(house), calculateGarageCeilingArea(house)),
-                        HOUSE_PAINT_COVERAGE_BY_SQUARE_FEET_PER_GALLON
+                        HOUSE.getPaintCoverageBySquareFeet()
                 );
 
         return BigDecimalUtils.roundToInt(
@@ -311,33 +312,44 @@ public class MaterialOrderGenerator {
     }
 
     private static int calculatePlumbingSuppliesQuantity(House house) {
-        return house.getNumRooms() + HOUSE_KITCHEN_QUANTITY;
+        return house.getNumRooms() + HOUSE.getMinNumKitchens();
     }
 
     private static int calculateElectricSuppliesQuantity(House house) {
-        return house.getNumRooms() + HOUSE_GARAGE_QUANTITY;
+        int garageQuantity;
+
+        if (
+                HOUSE.getMinNumGarages() == 0
+                        && house.getGarageCapacity() > 0
+        ) {
+            garageQuantity = 1;
+        } else {
+            garageQuantity = HOUSE.getMinNumGarages();
+        }
+
+        return house.getNumRooms() + garageQuantity;
     }
 
     private static BigDecimal calculateAverageRoomPerimeter() {
         return BigDecimalUtils.multiply(
                 2,
-                BigDecimalUtils.add(HOUSE_AVERAGE_ROOM_LENGTH, HOUSE_AVERAGE_ROOM_WIDTH)
+                BigDecimalUtils.add(HOUSE.getAverageRoomLength(), HOUSE.getAverageRoomWidth())
         );
     }
 
     private static BigDecimal calculateWallAreaPerRoom() {
         return BigDecimalUtils.multiply(
                 calculateAverageRoomPerimeter(),
-                HOUSE_ROOM_HEIGHT
+                HOUSE.getRoomHeight()
         );
     }
 
     private static BigDecimal calculateCeilingAreaPerRoom() {
-        return BigDecimalUtils.multiply(HOUSE_AVERAGE_ROOM_LENGTH, HOUSE_AVERAGE_ROOM_WIDTH);
+        return BigDecimalUtils.multiply(HOUSE.getAverageRoomLength(), HOUSE.getAverageRoomWidth());
     }
 
     private static BigDecimal calculateGarageSquareFootage(House house) {
-        return BigDecimalUtils.multiply(HOUSE_ADDITIONAL_SQUARE_FOOTAGE_PER_CAR, house.getGarageCapacity());
+        return BigDecimalUtils.multiply(HOUSE.getExtraConstructionDaysPerCar(), house.getGarageCapacity());
     }
 
     private static BigDecimal calculateGarageCeilingArea(House house) {
@@ -349,14 +361,14 @@ public class MaterialOrderGenerator {
                 2,
                 BigDecimalUtils.add(
                         BigDecimalUtils.sqrt(calculateGarageSquareFootage(house)),
-                        HOUSE_AVERAGE_ROOM_WIDTH
+                        HOUSE.getAverageRoomWidth()
                 )
         );
     }
 
     private static BigDecimal calculateGarageWallArea(House house) {
         return BigDecimalUtils.multiply(calculateGaragePerimeter(house),
-                HOUSE_ROOM_HEIGHT);
+                HOUSE.getRoomHeight());
     }
 
     private static int calculateInsulationQuantity(IndustrialBuilding industrialBuilding) {
