@@ -1,13 +1,12 @@
 package com.solvd.buildingco.buildings;
 
 import com.solvd.buildingco.finance.Order;
-import com.solvd.buildingco.utilities.BuildingCostCalculator;
-import com.solvd.buildingco.utilities.BuildingUtils;
-import com.solvd.buildingco.utilities.ReflectionUtils;
-import com.solvd.buildingco.utilities.MaterialOrderGenerator;
+import com.solvd.buildingco.utilities.*;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.INDUSTRIAL_BUILDING;
 
@@ -102,23 +101,29 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(super.toString());
+        String[] fieldNames = {
+                "squareFootage",
+                "numberOfFloors",
+                "constructionDays"
+        };
 
-        String[] fieldNames = {"squareFootage", "numberOfFloors", "constructionDays"};
+        String className = this.getClass().getSimpleName();
+        String superResult = StringFormatters.removeEdges(super.toString());
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = ReflectionUtils.getField(this, fieldName);
-            if (fieldValue != null) {
-                builder.append(", ").append(fieldName).append("=").append(fieldValue);
-            }
-        }
+        String result = Arrays.stream(fieldNames)
+                .map(fieldName -> {
+                    Object fieldValue = ReflectionUtils.getField(this, fieldName);
+                    return fieldValue != null
+                            ? StringFormatters.stateEquivalence(fieldName, fieldValue)
+                            : StringConstants.EMPTY_STRING;
+                })
+                .filter(fieldValue -> !fieldValue.isEmpty())
+                .collect(Collectors.joining(StringConstants.COMMA_DELIMITER));
 
-        builder.append("}");
-
-        int startIndex = builder.indexOf("Building{") + "Building".length();
-        builder.replace(startIndex, startIndex + 1, this.getClass().getSimpleName() + "{");
-
-        return builder.toString();
+        return className
+                + StringFormatters.nestInCurlyBraces(
+                superResult + StringConstants.COMMA_DELIMITER + result
+        );
     }
 
 }

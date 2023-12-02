@@ -13,7 +13,6 @@ import static com.solvd.buildingco.buildings.ResidentialBuildingSpecifications.H
 public class HouseMenu extends BuildingMenu {
     private static final Logger LOGGER = LogManager.getLogger(HouseMenu.class);
 
-
     @Override
     public void display() {
         LOGGER.info("House Menu: ");

@@ -3,8 +3,12 @@ package com.solvd.buildingco.buildings;
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.stakeholders.employees.Employee;
 import com.solvd.buildingco.utilities.ReflectionUtils;
+import com.solvd.buildingco.utilities.StringConstants;
+import com.solvd.buildingco.utilities.StringFormatters;
 
 import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public abstract class Building<T extends Number> {
 
@@ -32,29 +36,20 @@ public abstract class Building<T extends Number> {
 
     @Override
     public String toString() {
-        String className = this.getClass().getSimpleName();
-        StringBuilder builder = new StringBuilder(className + "{");
-
         String[] fieldNames = {"worker", "engineer", "architect", "manager"};
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = ReflectionUtils.getField(this, fieldName);
-            if (fieldValue != null) {
-                builder
-                        .append(fieldName)
-                        .append("=")
-                        .append(fieldValue)
-                        .append(", ");
-            }
-        }
+        String className = this.getClass().getSimpleName();
 
-        if (builder.length() > className.length() + 1) {
-            builder.setLength(builder.length() - 2);
-        }
+        String result = Arrays.stream(fieldNames)
+                .map(fieldName -> {
+                    Object fieldValue = ReflectionUtils.getField(this, fieldName);
+                    return fieldValue != null
+                            ? StringFormatters.stateEquivalence(fieldName, fieldValue)
+                            : StringConstants.EMPTY_STRING;
+                })
+                .filter(fieldValue -> !fieldValue.isEmpty())
+                .collect(Collectors.joining(StringConstants.COMMA_DELIMITER));
 
-        builder.append("}");
-
-        return builder.toString();
+        return className + StringFormatters.nestInCurlyBraces(result);
     }
-
 }

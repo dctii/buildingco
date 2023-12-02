@@ -1,8 +1,12 @@
 package com.solvd.buildingco.finance;
 
 import com.solvd.buildingco.utilities.ReflectionUtils;
+import com.solvd.buildingco.utilities.StringConstants;
+import com.solvd.buildingco.utilities.StringFormatters;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class HourlyRate extends PayRate<BigDecimal> {
     private BigDecimal ratePerHour;
@@ -35,28 +39,25 @@ public class HourlyRate extends PayRate<BigDecimal> {
 
     @Override
     public String toString() {
-        String className = this.getClass().getSimpleName();
-        StringBuilder builder = new StringBuilder(super.toString()); // Start with the PayRate's toString information
-
-        // Append HourlyRate-specific field information
         String[] fieldNames = {"ratePerHour"};
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = ReflectionUtils.getField(this, fieldName);
-            if (fieldValue != null) {
-                builder.append(", ")
-                        .append(fieldName)
-                        .append("=")
-                        .append(fieldValue);
-            }
-        }
+        String className = this.getClass().getSimpleName();
+        String superResult = StringFormatters.removeEdges(super.toString());
 
-        builder.append("}");
+        String result = Arrays.stream(fieldNames)
+                .map(fieldName -> {
+                    Object fieldValue = ReflectionUtils.getField(this, fieldName);
+                    return fieldValue != null
+                            ? StringFormatters.stateEquivalence(fieldName, fieldValue)
+                            : StringConstants.EMPTY_STRING;
+                })
+                .filter(fieldValue -> !fieldValue.isEmpty())
+                .collect(Collectors.joining(StringConstants.COMMA_DELIMITER));
 
-        int startIndex = builder.indexOf("PayRate{") + "PayRate".length();
-        builder.replace(startIndex, startIndex + 1, className + "{");
-
-        return builder.toString();
+        return className
+                + StringFormatters.nestInCurlyBraces(
+                superResult + StringConstants.COMMA_DELIMITER + result
+        );
     }
 
 

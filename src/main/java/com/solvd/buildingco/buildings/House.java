@@ -1,13 +1,12 @@
 package com.solvd.buildingco.buildings;
 
 import com.solvd.buildingco.finance.Order;
-import com.solvd.buildingco.utilities.BuildingCostCalculator;
-import com.solvd.buildingco.utilities.BuildingUtils;
-import com.solvd.buildingco.utilities.ReflectionUtils;
-import com.solvd.buildingco.utilities.MaterialOrderGenerator;
+import com.solvd.buildingco.utilities.*;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import static com.solvd.buildingco.buildings.ResidentialBuildingSpecifications.HOUSE;
 
@@ -150,28 +149,30 @@ public class House extends Building<BigDecimal> implements IEstimate {
 
     @Override
     public String toString() {
+        String[] fieldNames = {
+                "squareFootage",
+                "numRooms",
+                "numBathrooms",
+                "garageCapacity",
+                "constructionDays"
+        };
+
         String className = this.getClass().getSimpleName();
-        StringBuilder builder = new StringBuilder(super.toString()); // Start with the Building's toString information
+        String superResult = StringFormatters.removeEdges(super.toString());
 
-        // Append House-specific field information
-        String[] fieldNames = {"squareFootage", "numRooms", "numBathrooms", "garageCapacity", "constructionDays"};
+        String result = Arrays.stream(fieldNames)
+                .map(fieldName -> {
+                    Object fieldValue = ReflectionUtils.getField(this, fieldName);
+                    return fieldValue != null
+                            ? StringFormatters.stateEquivalence(fieldName, fieldValue)
+                            : StringConstants.EMPTY_STRING;
+                })
+                .filter(fieldValue -> !fieldValue.isEmpty())
+                .collect(Collectors.joining(StringConstants.COMMA_DELIMITER));
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = ReflectionUtils.getField(this, fieldName);
-            if (fieldValue != null) {
-                builder
-                        .append(", ")
-                        .append(fieldName)
-                        .append("=")
-                        .append(fieldValue);
-            }
-        }
-
-        builder.append("}");
-
-        int startIndex = builder.indexOf("Building{") + "Building".length();
-        builder.replace(startIndex, startIndex + 1, className + "{");
-
-        return builder.toString();
+        return className
+                + StringFormatters.nestInCurlyBraces(
+                superResult + StringConstants.COMMA_DELIMITER + result
+        );
     }
 }

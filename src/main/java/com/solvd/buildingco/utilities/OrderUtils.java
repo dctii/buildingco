@@ -2,19 +2,21 @@ package com.solvd.buildingco.utilities;
 
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.finance.OrderItem;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.ArrayList;
 
 public class OrderUtils {
+    private static final Logger LOGGER = LogManager.getLogger(OrderUtils.class);
     public static Order loadOrder (ArrayList<OrderItem> orderItems){
         // initialize order
         Order order = ReflectionUtils.createObject(Order.class);
 
         // populate order with each item in orderItems
-        for (OrderItem item : orderItems) {
-            order.addOrderItem(item);
-        }
+        orderItems.forEach(order::addOrderItem);
 
+        LOGGER.info(order.toString());
         return order;
     }
 

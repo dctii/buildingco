@@ -3,11 +3,15 @@ package com.solvd.buildingco.inventory;
 import com.solvd.buildingco.exception.InvalidValueException;
 import com.solvd.buildingco.exception.InvalidPriceException;
 import com.solvd.buildingco.utilities.ReflectionUtils;
+import com.solvd.buildingco.utilities.StringConstants;
+import com.solvd.buildingco.utilities.StringFormatters;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class BuyableItem<T extends Number> implements Priceable<T> {
     private static final Logger LOGGER = LogManager.getLogger(BuyableItem.class);
@@ -87,28 +91,20 @@ public class BuyableItem<T extends Number> implements Priceable<T> {
 
     @Override
     public String toString() {
+        String[] fieldNames = {"name", "pricePerUnit", "unitMeasurement"};
+
         String className = this.getClass().getSimpleName();
-        StringBuilder builder = new StringBuilder(className + "{");
 
-        String[] fieldNames = {"item", "quantity"};
+        String result = Arrays.stream(fieldNames)
+                .map(fieldName -> {
+                    Object fieldValue = ReflectionUtils.getField(this, fieldName);
+                    return fieldValue != null
+                            ? StringFormatters.stateEquivalence(fieldName, fieldValue)
+                            : StringConstants.EMPTY_STRING;
+                })
+                .filter(fieldValue -> !fieldValue.isEmpty())
+                .collect(Collectors.joining(StringConstants.COMMA_DELIMITER));
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = ReflectionUtils.getField(this, fieldName);
-            if (fieldValue != null) {
-                builder
-                        .append(fieldName)
-                        .append("=")
-                        .append(fieldValue)
-                        .append(", ");
-            }
-        }
-
-        if (builder.length() > className.length() + 1) {
-            builder.setLength(builder.length() - 2);
-        }
-
-        builder.append("}");
-
-        return builder.toString();
+        return className + StringFormatters.nestInCurlyBraces(result);
     }
 }

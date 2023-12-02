@@ -6,10 +6,14 @@ import com.solvd.buildingco.inventory.Priceable;
 import com.solvd.buildingco.inventory.RentableItem;
 import com.solvd.buildingco.utilities.ReflectionUtils;
 import com.solvd.buildingco.utilities.BigDecimalUtils;
+import com.solvd.buildingco.utilities.StringConstants;
+import com.solvd.buildingco.utilities.StringFormatters;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class OrderItem {
     private static final Logger LOGGER = LogManager.getLogger(OrderItem.class);
@@ -75,29 +79,21 @@ public class OrderItem {
 
     @Override
     public String toString() {
-        String className = this.getClass().getSimpleName();
-        StringBuilder builder = new StringBuilder(className + "{");
-
         String[] fieldNames = {"item", "quantity"};
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = ReflectionUtils.getField(this, fieldName);
-            if (fieldValue != null) {
-                builder
-                        .append(fieldName)
-                        .append("=")
-                        .append(fieldValue)
-                        .append(", ");
-            }
-        }
+        String className = this.getClass().getSimpleName();
 
-        if (builder.length() > className.length() + 1) {
-            builder.setLength(builder.length() - 2);
-        }
+        String result = Arrays.stream(fieldNames)
+                .map(fieldName -> {
+                    Object fieldValue = ReflectionUtils.getField(this, fieldName);
+                    return fieldValue != null
+                            ? StringFormatters.stateEquivalence(fieldName, fieldValue)
+                            : StringConstants.EMPTY_STRING;
+                })
+                .filter(fieldValue -> !fieldValue.isEmpty())
+                .collect(Collectors.joining(StringConstants.COMMA_DELIMITER));
 
-        builder.append("}");
-
-        return builder.toString();
+        return className + StringFormatters.nestInCurlyBraces(result);
     }
 
 }
