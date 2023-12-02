@@ -1,6 +1,6 @@
 package com.solvd.buildingco.utilities;
 
-public final class RegExpPatternConstants {
+public final class RegExpConstants {
     /*
         https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html
         Contains reference for regexp constructs
@@ -45,7 +45,7 @@ public final class RegExpPatternConstants {
      */
     public static final String SEPARATOR_CHARS = "[ ,.!?;:\"()\\[\\]{}<>\\t\\n]+";
 
-    private RegExpPatternConstants() {
+    private RegExpConstants() {
         final String NO_CONSTANTS_INSTANTIATION_MESSAGE =
                 "This is a constants class and instances cannot be made of it.";
 
