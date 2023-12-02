@@ -12,8 +12,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import static com.solvd.buildingco.utilities.RegExpPatternConstants.*;
-import static com.solvd.buildingco.utilities.StringConstants.*;
 
 public class WordCounterUtils {
     private static final Logger LOGGER = LogManager.getLogger(WordCounterUtils.class);
@@ -29,17 +27,17 @@ public class WordCounterUtils {
                 goodness = 2
                 ...
         */
-        final String PADDED_EQUALS_OPERATOR_STRING = " = ";
+
         for (Map.Entry<String, Integer> entry : wordCounts.entrySet()) {
             String word = entry.getKey();
             int wordCount = entry.getValue();
-            outputLines.add(word + PADDED_EQUALS_OPERATOR_STRING + wordCount);
+            outputLines.add(word + StringConstants.PADDED_EQUALS_OPERATOR + wordCount);
         }
 
         // join each line with a newline
         String outputContent = StringUtils.join(
                 outputLines,
-                NEWLINE_CHAR_STRING
+                StringConstants.NEWLINE
         );
 
         return outputContent;
@@ -75,12 +73,12 @@ public class WordCounterUtils {
             but wrapped roman numerals like "(iii)" or "(iv)".
         */
         content = content.replaceAll(
-                NUMBERS_IN_PARENTHESES_PATTERN,
-                EMPTY_STRING
+                RegExpConstants.PARENTHESIZED_NUMBERS,
+                StringConstants.EMPTY_STRING
         );
         content = content.replaceAll(
-                ROMAN_NUMERAL_IN_PARENTHESES_PATTERN,
-                EMPTY_STRING
+                RegExpConstants.PARENTHESIZED_ROMAN_NUMERALS,
+                StringConstants.EMPTY_STRING
         );
 
         /*
@@ -93,8 +91,8 @@ public class WordCounterUtils {
         */
         content = StringUtils.replace(
                 content,
-                MANUAL_EM_DASH_STRING,
-                SINGLE_WHITESPACE_CHAR_STRING
+                StringConstants.EM_DASH,
+                StringConstants.SINGLE_WHITESPACE
         );
 
 
@@ -142,8 +140,8 @@ public class WordCounterUtils {
 
     private static String[] splitLines(String content) {
         final String lineSeparatorCharacters =
-                CARRIAGE_RETURN_CHAR_STRING
-                        + NEWLINE_CHAR_STRING;
+                StringConstants.CARRIAGE_RETURN
+                        + StringConstants.NEWLINE;
 
         return StringUtils.split(
                 content,
@@ -183,7 +181,7 @@ public class WordCounterUtils {
 
     public static ArrayList<String> splitWords(String line) {
         try {
-            String[] splitWordsArray = line.split(SEPARATOR_CHARS);
+            String[] splitWordsArray = line.split(RegExpConstants.SEPARATOR_CHARS);
 
             ArrayList<String> wordsList = new ArrayList<>();
 
@@ -194,7 +192,7 @@ public class WordCounterUtils {
                     // remove single quotation marks from word if it has them
                     word = StringUtils.strip(
                             word,
-                            SINGLE_QUOTATION
+                            StringConstants.SINGLE_QUOTATION
                     );
 
                     // add word to list

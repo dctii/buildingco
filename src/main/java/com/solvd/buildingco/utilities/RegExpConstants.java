@@ -21,7 +21,7 @@ public final class RegExpPatternConstants {
             - if `i` and `v` appear, then it accounts for `vi`, `vii`, and `viii`
 
      */
-    public static final String ROMAN_NUMERAL_IN_PARENTHESES_PATTERN =
+    public static final String PARENTHESIZED_ROMAN_NUMERALS =
             "\\(\\s*(?i)(ix|iv|v?i{0,3}|x)\\s*\\)";
 
     /*
@@ -30,7 +30,7 @@ public final class RegExpPatternConstants {
         `\d` - digit character [0-9]
         `X+` - postfix to denote one or more times
      */
-    public static final String NUMBERS_IN_PARENTHESES_PATTERN = "\\(\\d+\\)";
+    public static final String PARENTHESIZED_NUMBERS = "\\(\\d+\\)";
 
     /*
             Characters to split words by:
