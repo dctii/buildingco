@@ -1,11 +1,6 @@
 package com.solvd.buildingco.stakeholders;
 
-import com.solvd.buildingco.utilities.BooleanUtils;
-import com.solvd.buildingco.utilities.ReflectionUtils;
-
-import java.util.Arrays;
-
-
+import com.solvd.buildingco.utilities.StringFormatters;
 
 // Person but adds organizationNames and roles
 public abstract class Stakeholder extends Person {
@@ -16,6 +11,7 @@ public abstract class Stakeholder extends Person {
     public Stakeholder() {
         super();
     }
+
     public Stakeholder(String[] nameParts) {
         super(nameParts);
     }
@@ -29,9 +25,7 @@ public abstract class Stakeholder extends Person {
 
     // getters and setters
     public String[] getOrganizationNames() {
-        return BooleanUtils.isEmptyOrNullArray(organizationNames)
-                ? null
-                : organizationNames;
+        return organizationNames;
     }
 
     public void setOrganizationNames(String[] organizationNames) {
@@ -39,9 +33,7 @@ public abstract class Stakeholder extends Person {
     }
 
     public String[] getRoles() {
-        return BooleanUtils.isEmptyOrNullArray(roles)
-                ? null
-                : roles;
+        return roles;
     }
 
     public void setRoles(String[] roles) {
@@ -50,31 +42,23 @@ public abstract class Stakeholder extends Person {
 
     @Override
     public String toString() {
-        String className = "Stakeholder";
-        String personStr = super.toString();
-        String[] fieldNames = {"organizationNames", "roles"};
+        Class<?> currClass = Stakeholder.class;
+        String[] fieldNames = {
+                "organizationNames",
+                "roles"
+        };
 
-        StringBuilder builder = new StringBuilder(className + "{");
-        builder.append(personStr);
+        String parentToString = super.toString();
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = ReflectionUtils.getField(this, fieldName);
-            if (fieldValue != null) {
-                builder
-                        .append(", ")
-                        .append(fieldName)
-                        .append("=")
-                        .append(Arrays.toString(
-                                (Object[]) fieldValue
-                        ));
-
-            }
-        }
-
-        builder.append("}");
-
-        return builder.toString();
-
+        return StringFormatters.buildToString(
+                currClass,
+                fieldNames,
+                parentToString,
+                fieldsString
+        );
     }
+
 
 }

@@ -4,8 +4,8 @@ import com.solvd.buildingco.exception.InvalidDateFormatException;
 import com.solvd.buildingco.finance.PayRate;
 import com.solvd.buildingco.scheduling.Schedule;
 import com.solvd.buildingco.stakeholders.Stakeholder;
-import com.solvd.buildingco.utilities.ReflectionUtils;
 import com.solvd.buildingco.utilities.ScheduleUtils;
+import com.solvd.buildingco.utilities.StringFormatters;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -96,8 +96,8 @@ public abstract class Employee extends Stakeholder {
 
     // getters and setters
 
-    public BigDecimal getPayRate() {
-        return payRate.getRate();
+    public PayRate<BigDecimal> getPayRate() {
+        return payRate;
     }
 
     public void setPayRate(PayRate payRate) {
@@ -121,31 +121,22 @@ public abstract class Employee extends Stakeholder {
         this.personnelType = personnelType;
     }
 
-
     @Override
     public String toString() {
-        String className = "Personnel";
-        String stakeholderStr = super.toString();
-        String[] fieldNames = {"payRate", "schedule",
-                "personnelType"};
+        Class<?> currClass = Employee.class;
+        String[] fieldNames = {
+                "payRate",
+                "schedule",
+                "personnelType"
+        };
 
-        StringBuilder builder = new StringBuilder(className + "{");
-        builder.append(stakeholderStr);
+        String parentToString = super.toString();
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = ReflectionUtils.getField(this, fieldName);
-            if (fieldValue != null) {
-                builder
-                        .append(",")
-                        .append(fieldName)
-                        .append("=")
-                        .append(fieldValue);
-            }
-        }
 
-        builder.append("}");
-        return builder.toString();
+        return StringFormatters.buildToString(currClass, fieldNames, parentToString,
+                fieldsString);
     }
-
-
 }
+

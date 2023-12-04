@@ -1,9 +1,7 @@
 package com.solvd.buildingco.scheduling;
 
 import com.solvd.buildingco.exception.InvalidValueException;
-import com.solvd.buildingco.utilities.ReflectionUtils;
 import com.solvd.buildingco.utilities.ScheduleUtils;
-import com.solvd.buildingco.utilities.StringConstants;
 import com.solvd.buildingco.utilities.StringFormatters;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -11,8 +9,6 @@ import org.apache.logging.log4j.Logger;
 
 import java.time.DayOfWeek;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class ScheduledActivity {
     private static final Logger LOGGER = LogManager.getLogger(ScheduledActivity.class);
@@ -68,7 +64,7 @@ public class ScheduledActivity {
 
     public ScheduledActivity(String description, String location, ZonedDateTime startTime,
                              ZonedDateTime endTime
-                             ) {
+    ) {
         if (StringUtils.isBlank(description)) {
             LOGGER.warn(BLANK_DESCRIPTION_MESSAGE);
             throw new InvalidValueException(BLANK_DESCRIPTION_MESSAGE);
@@ -146,6 +142,7 @@ public class ScheduledActivity {
 
     @Override
     public String toString() {
+        Class<?> currClass = ScheduledActivity.class;
         String[] fieldNames = {
                 "description",
                 "location",
@@ -154,18 +151,10 @@ public class ScheduledActivity {
                 "endTime"
         };
 
-        String className = this.getClass().getSimpleName();
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
 
-        String result = Arrays.stream(fieldNames)
-                .map(fieldName -> {
-                    Object fieldValue = ReflectionUtils.getField(this, fieldName);
-                    return fieldValue != null
-                            ? StringFormatters.stateEquivalence(fieldName, fieldValue)
-                            : StringConstants.EMPTY_STRING;
-                })
-                .filter(fieldValue -> !fieldValue.isEmpty())
-                .collect(Collectors.joining(StringConstants.COMMA_DELIMITER));
+        return StringFormatters.buildToString(currClass, fieldNames, fieldsString);
 
-        return className + StringFormatters.nestInCurlyBraces(result);
     }
 }

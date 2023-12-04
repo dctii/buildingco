@@ -1,17 +1,13 @@
 package com.solvd.buildingco.inventory;
 
-import com.solvd.buildingco.exception.InvalidValueException;
 import com.solvd.buildingco.exception.InvalidPriceException;
-import com.solvd.buildingco.utilities.ReflectionUtils;
-import com.solvd.buildingco.utilities.StringConstants;
+import com.solvd.buildingco.exception.InvalidValueException;
 import com.solvd.buildingco.utilities.StringFormatters;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class BuyableItem<T extends Number> implements Priceable<T> {
     private static final Logger LOGGER = LogManager.getLogger(BuyableItem.class);
@@ -71,7 +67,9 @@ public class BuyableItem<T extends Number> implements Priceable<T> {
     }
 
     public void setPricePerUnit(T pricePerUnit) {
-        if (pricePerUnit instanceof BigDecimal && ((BigDecimal) pricePerUnit).compareTo(BigDecimal.ZERO) <= 0) {
+        if (pricePerUnit instanceof BigDecimal
+                && ((BigDecimal) pricePerUnit).compareTo(BigDecimal.ZERO) <= 0
+        ) {
             LOGGER.warn(INVALID_PRICE_MESSAGE);
             throw new InvalidPriceException(INVALID_PRICE_MESSAGE);
         }
@@ -91,20 +89,17 @@ public class BuyableItem<T extends Number> implements Priceable<T> {
 
     @Override
     public String toString() {
-        String[] fieldNames = {"name", "pricePerUnit", "unitMeasurement"};
+        Class<?> currClass = BuyableItem.class;
+        String[] fieldNames = {
+                "name",
+                "pricePerUnit",
+                "unitMeasurement"
+        };
 
-        String className = this.getClass().getSimpleName();
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
 
-        String result = Arrays.stream(fieldNames)
-                .map(fieldName -> {
-                    Object fieldValue = ReflectionUtils.getField(this, fieldName);
-                    return fieldValue != null
-                            ? StringFormatters.stateEquivalence(fieldName, fieldValue)
-                            : StringConstants.EMPTY_STRING;
-                })
-                .filter(fieldValue -> !fieldValue.isEmpty())
-                .collect(Collectors.joining(StringConstants.COMMA_DELIMITER));
+        return StringFormatters.buildToString(currClass, fieldNames, fieldsString);
 
-        return className + StringFormatters.nestInCurlyBraces(result);
     }
 }

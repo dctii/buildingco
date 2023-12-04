@@ -4,16 +4,12 @@ import com.solvd.buildingco.exception.InventoryItemNotFoundException;
 import com.solvd.buildingco.inventory.BuyableItem;
 import com.solvd.buildingco.inventory.Priceable;
 import com.solvd.buildingco.inventory.RentableItem;
-import com.solvd.buildingco.utilities.ReflectionUtils;
 import com.solvd.buildingco.utilities.BigDecimalUtils;
-import com.solvd.buildingco.utilities.StringConstants;
 import com.solvd.buildingco.utilities.StringFormatters;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class OrderItem {
     private static final Logger LOGGER = LogManager.getLogger(OrderItem.class);
@@ -79,21 +75,19 @@ public class OrderItem {
 
     @Override
     public String toString() {
-        String[] fieldNames = {"item", "quantity"};
+        Class<?> currClass = OrderItem.class;
+        String[] fieldNames = {
+                "item",
+                "quantity"
+        };
 
-        String className = this.getClass().getSimpleName();
+        String parentToString = super.toString();
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
 
-        String result = Arrays.stream(fieldNames)
-                .map(fieldName -> {
-                    Object fieldValue = ReflectionUtils.getField(this, fieldName);
-                    return fieldValue != null
-                            ? StringFormatters.stateEquivalence(fieldName, fieldValue)
-                            : StringConstants.EMPTY_STRING;
-                })
-                .filter(fieldValue -> !fieldValue.isEmpty())
-                .collect(Collectors.joining(StringConstants.COMMA_DELIMITER));
+        return StringFormatters.buildToString(currClass, fieldNames, parentToString,
+                fieldsString);
 
-        return className + StringFormatters.nestInCurlyBraces(result);
     }
 
 }

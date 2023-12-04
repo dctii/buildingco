@@ -60,7 +60,6 @@ public class ScheduleUtils {
 
         schedule.addActivity(workerActivity);
 
-
         return schedule;
     }
 

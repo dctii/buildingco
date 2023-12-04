@@ -9,6 +9,7 @@ public final class StringConstants {
     public static final String CARRIAGE_RETURN = "\r";
     public static final String NEWLINE = "\n";
     public static final String PADDED_EQUALS_OPERATOR = " = ";
+    public static final String EQUALS_OPERATOR = "=";
     public static final String COMMA_DELIMITER = ", ";
     public static final String COLON_DELIMITER = ": ";
 

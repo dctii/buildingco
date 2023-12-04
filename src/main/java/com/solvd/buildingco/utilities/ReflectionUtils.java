@@ -26,26 +26,19 @@ public class ReflectionUtils {
     }
 
     public static Object getField(Object obj, String fieldName) {
-        // get various Object's particular class
         Class<?> current = obj.getClass();
 
-        // iterate until fieldName is found in the object
         while (current != null) {
             try {
-                // get field from class
-                Field field = obj.getClass().getDeclaredField(fieldName);
-                // override private, protected, etc
+                Field field = current.getDeclaredField(fieldName);
                 field.setAccessible(true);
-                // return the value of the field
                 return field.get(obj);
-
-                // Either no field or not accessible
-            } catch (NoSuchFieldException | IllegalAccessException e) {
-                // if nothing found, then move to super class
+            } catch (NoSuchFieldException e) {
                 current = current.getSuperclass();
+            } catch (IllegalAccessException e) {
+                return null;
             }
         }
-        // if nothing found, return null
         return null;
     }
 

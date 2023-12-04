@@ -2,11 +2,13 @@ package com.solvd.buildingco.stakeholders;
 
 import com.solvd.buildingco.exception.InvalidValueException;
 import com.solvd.buildingco.utilities.BooleanUtils;
-import com.solvd.buildingco.utilities.ReflectionUtils;
+import com.solvd.buildingco.utilities.StringConstants;
+import com.solvd.buildingco.utilities.StringFormatters;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 // general Person class with usual title and contact information
 public abstract class Person {
@@ -42,12 +44,12 @@ public abstract class Person {
     }
 
     public void setNameParts(String[] nameParts) {
-        if (!BooleanUtils.isBlankOrEmptyString(nameParts[0])) {
+        if (BooleanUtils.isBlankOrEmptyString(nameParts[0])) {
             LOGGER.warn(BLANK_FORENAME_MESSAGE);
             throw new InvalidValueException(BLANK_FORENAME_MESSAGE);
         }
 
-        if (!BooleanUtils.isBlankOrEmptyString(nameParts[2])) {
+        if (BooleanUtils.isBlankOrEmptyString(nameParts[2])) {
             LOGGER.warn(BLANK_SURNAME_MESSAGE);
             throw new InvalidValueException(BLANK_SURNAME_MESSAGE);
         }
@@ -115,18 +117,14 @@ public abstract class Person {
 
         // Directly use the nameParts array
         if (!BooleanUtils.isEmptyOrNullArray(nameParts)) {
-            for (String namePart : nameParts) {
-                if (BooleanUtils.isBlankOrEmptyString(namePart)) {
-                    if (fullName.length() > 0) {
-                        fullName.append(" ");
-                    }
-                    fullName.append(namePart);
-                }
-            }
+            String namePartsStr = Arrays.stream(nameParts)
+                    .filter(namePart -> !BooleanUtils.isBlankOrEmptyString(namePart))
+                    .collect(Collectors.joining(StringConstants.SINGLE_WHITESPACE));
+            fullName.append(namePartsStr);
         }
 
         if (getPostNominals() != null && getPostNominals().length > 0) {
-            fullName.append(", ").append(String.join(", ", getPostNominals()));
+            fullName.append(StringConstants.COMMA_DELIMITER).append(String.join(StringConstants.COMMA_DELIMITER, getPostNominals()));
         }
 
         return fullName.toString();
@@ -165,23 +163,19 @@ public abstract class Person {
 
     @Override
     public String toString() {
-        String className = "Person";
-        StringBuilder builder = new StringBuilder(className + "{");
-        String[] fieldNames = {"nameParts", "postNominals", "addresses", "emails", "phoneNumbers"};
+        Class<?> currClass = Person.class;
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = ReflectionUtils.getField(this, fieldName);
+        String[] fieldNames = {
+                "nameParts",
+                "postNominals",
+                "addresses",
+                "emails",
+                "phoneNumbers"
+        };
 
-            if (fieldValue != null) {
-                builder.append(fieldName).append("=").append(Arrays.toString((Object[]) fieldValue)).append(", ");
-            }
-        }
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
 
-        if (builder.length() > (className + "{").length()) {
-            builder.setLength(builder.length() - 2);
-        }
-
-        builder.append("}");
-        return builder.toString();
+        return StringFormatters.buildToString(currClass, fieldNames, fieldsString);
     }
 }

@@ -59,6 +59,7 @@ public class BuildingCostCalculator {
         Employee architect, manager, engineer, worker;
 
         architect = Architect.createEmployee(architectureSchedule, new BigDecimal("35.0"));
+        System.out.println(architect);
         manager = ProjectManager.createEmployee(projectManagerSchedule, new BigDecimal("40.0"));
         engineer = Engineer.createEmployee(engineerSchedule, new BigDecimal("30.0"));
         worker = ConstructionWorker.createEmployee(constructionWorkerSchedule, new BigDecimal("15.0"));
@@ -104,6 +105,7 @@ public class BuildingCostCalculator {
             BigDecimal employeeCost =
                     employee
                             .getPayRate()
+                            .getRate()
                             .multiply(employeeHours);
 
             // update total labor cost

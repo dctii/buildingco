@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class ItemRepository {
     private static final Logger LOGGER = LogManager.getLogger(ItemRepository.class);
@@ -15,9 +16,8 @@ public class ItemRepository {
     private static final Map<String, Priceable<BigDecimal>> items = new HashMap<>();
 
     static {
-        for (Item item : Item.values()) {
-            loadItem(item);
-        }
+        Stream.of(Item.values())
+                .forEach(item -> loadItem(item));
     }
 
     private static void loadItem(Item item) {

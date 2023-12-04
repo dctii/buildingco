@@ -1,12 +1,13 @@
 package com.solvd.buildingco.buildings;
 
 import com.solvd.buildingco.finance.Order;
-import com.solvd.buildingco.utilities.*;
+import com.solvd.buildingco.utilities.BuildingCostCalculator;
+import com.solvd.buildingco.utilities.BuildingUtils;
+import com.solvd.buildingco.utilities.MaterialOrderGenerator;
+import com.solvd.buildingco.utilities.StringFormatters;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 import static com.solvd.buildingco.buildings.BuildingConstants.SKYSCRAPER_FOUNDATION_COST_FACTOR;
 import static com.solvd.buildingco.buildings.BuildingConstants.SKYSCRAPER_LOBBY_FIXED_COST;
@@ -134,6 +135,7 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
 
     @Override
     public String toString() {
+        Class<?> currClass = Skyscraper.class;
         String[] fieldNames = {
                 "squareFootagePerLevel",
                 "numberOfLevels",
@@ -142,23 +144,12 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
                 "foundationCost"
         };
 
-        String className = this.getClass().getSimpleName();
-        String superResult = StringFormatters.removeEdges(super.toString());
+        String parentToString = super.toString();
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
 
-        String result = Arrays.stream(fieldNames)
-                .map(fieldName -> {
-                    Object fieldValue = ReflectionUtils.getField(this, fieldName);
-                    return fieldValue != null
-                            ? StringFormatters.stateEquivalence(fieldName, fieldValue)
-                            : StringConstants.EMPTY_STRING;
-                })
-                .filter(fieldValue -> !fieldValue.isEmpty())
-                .collect(Collectors.joining(StringConstants.COMMA_DELIMITER));
-
-        return className
-                + StringFormatters.nestInCurlyBraces(
-                superResult + StringConstants.COMMA_DELIMITER + result
-        );
+        return StringFormatters.buildToString(currClass, fieldNames, parentToString,
+                fieldsString);
     }
 
 }

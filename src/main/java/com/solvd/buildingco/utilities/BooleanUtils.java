@@ -22,20 +22,20 @@ public class BooleanUtils {
     }
 
     public static boolean isBlankOrEmptyString(String string) {
-        if(StringUtils.isBlank(string) || StringUtils.isEmpty(string)) {
-            return true;
-        } else {
-            return false;
-        }
+        return StringUtils.isBlank(string) || StringUtils.isEmpty(string);
     }
 
     public static <T> boolean isValidBuildingType(T building) {
-        if (building instanceof House || building instanceof IndustrialBuilding || building instanceof Skyscraper) {
-            return true;
-        } else {
-            return false;
-        }
+        return building instanceof House || building instanceof IndustrialBuilding || building instanceof Skyscraper;
     }
+
+    public static <T> boolean hasObjectAsParent(Class<T> clazz) {
+        return clazz
+                .getSuperclass()
+                .getSimpleName()
+                .equals(Object.class.getSimpleName());
+    }
+
 
     private BooleanUtils() {
         final String NO_UTILITY_CLASS_INSTANTIATION_MESSAGE =

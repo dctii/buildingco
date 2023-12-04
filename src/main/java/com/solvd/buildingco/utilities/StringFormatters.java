@@ -1,12 +1,16 @@
 package com.solvd.buildingco.utilities;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 public class StringFormatters {
+    private static final Logger LOGGER = LogManager.getLogger(StringFormatters.class);
 
     public static String removeEdges(String string) {
         int stringLength = string.length();
@@ -25,16 +29,25 @@ public class StringFormatters {
         }
         return string;
     }
+
     public static String nestInCurlyBraces(String string) {
         return "{" + string + "}";
     }
 
     public static String stateEquivalence(Object leftOperand, Object rightOperand) {
-        String leftOperandString = String.valueOf(leftOperand);
-        String rightOperandString = String.valueOf(rightOperand);
+        String leftOperandString = leftOperand.toString();
+        String rightOperandString = rightOperand.toString();
 
-        return leftOperandString + StringConstants.PADDED_EQUALS_OPERATOR + rightOperandString;
+        return leftOperandString + StringConstants.EQUALS_OPERATOR + rightOperandString;
     }
+
+    public static String stateEquivalence(Object leftOperand, Object[] rightOperand) {
+        String leftOperandString = leftOperand.toString();
+        String rightOperandString = Arrays.toString(rightOperand);
+
+        return leftOperandString + StringConstants.EQUALS_OPERATOR + rightOperandString;
+    }
+
 
     public static String listToString(List<?> list) {
         return list.stream()
@@ -50,6 +63,111 @@ public class StringFormatters {
                             + listToString(entry.getValue());
                 })
                 .collect(Collectors.joining(StringConstants.COMMA_DELIMITER));
+    }
+
+    public static String buildFieldsString(Object object, String[] fieldNames) {
+        return Arrays.stream(fieldNames)
+                .map(fieldName -> {
+                    Object fieldValue = ReflectionUtils.getField(object, fieldName);
+
+                    if (fieldValue == null) {
+                        return stateEquivalence(
+                                fieldName,
+                                "null"
+                        );
+                    } else {
+                        if (fieldValue.getClass().isArray()) {
+                            return stateEquivalence(
+                                    fieldName,
+                                    (Object[]) fieldValue
+                            );
+                        } else if (fieldValue instanceof Map){
+                          return stateEquivalence(
+                                  fieldName,
+                                  mapToString((Map<?, List<?>>) fieldValue)
+                          );
+                        } else {
+                            return stateEquivalence(
+                                    fieldName,
+                                    fieldValue
+                            );
+                        }
+                    }
+                })
+                .collect(Collectors.joining(StringConstants.COMMA_DELIMITER));
+
+    }
+
+    public static String buildToString(Class<?> currClass, String[] fieldNames,
+                                       String parentToString,
+                                       String fieldsString) {
+        String className = currClass.getSimpleName();
+
+        // removes the parent classname as header and removes curly braces wrapping body
+        parentToString = StringFormatters.cleanParentToString(currClass, parentToString);
+
+        if (fieldNames.length != 0) {
+            // check if parentToString is empty after cleaning, if so, do not use delimiter
+            String finalToStringBody;
+            if (BooleanUtils.isBlankOrEmptyString(parentToString)) {
+                finalToStringBody = fieldsString;
+            } else {
+                finalToStringBody = parentToString
+                        + StringConstants.COMMA_DELIMITER
+                        + fieldsString;
+            }
+
+            return className + StringFormatters.nestInCurlyBraces(finalToStringBody);
+
+        } else {
+
+            if (BooleanUtils.isBlankOrEmptyString(parentToString)) {
+                return buildToString(currClass);
+            } else {
+                return buildToString(currClass, parentToString);
+            }
+
+        }
+    }
+
+    public static String buildToString(Class<?> currClass, String[] fieldNames,
+                                       String fieldsString) {
+        String className = currClass.getSimpleName();
+
+        if (BooleanUtils.isEmptyOrNullArray(fieldNames)) {
+            fieldsString = StringConstants.EMPTY_STRING;
+        }
+        return className + StringFormatters.nestInCurlyBraces(fieldsString);
+    }
+
+    public static String buildToString(Class<?> currClass, String parentToString) {
+        String className = currClass.getSimpleName();
+        parentToString = StringFormatters.cleanParentToString(currClass, parentToString);
+
+        return className
+                + StringFormatters.nestInCurlyBraces(parentToString);
+    }
+
+    public static String buildToString(Class<?> currClass) {
+        String className = currClass.getSimpleName();
+
+        return className
+                + StringFormatters.nestInCurlyBraces(StringConstants.EMPTY_STRING);
+    }
+
+
+    public static String cleanParentToString(Class<?> currClass, String parentToString) {
+        String parentName = currClass.getSuperclass().getSimpleName();
+
+        parentToString = StringUtils.replace(
+                parentToString,
+                parentName,
+                StringConstants.EMPTY_STRING
+        );
+
+        parentToString = removeEdges(parentToString);
+
+        return parentToString;
     }
 
     private StringFormatters() {

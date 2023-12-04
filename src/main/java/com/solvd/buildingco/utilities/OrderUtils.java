@@ -9,14 +9,14 @@ import java.util.ArrayList;
 
 public class OrderUtils {
     private static final Logger LOGGER = LogManager.getLogger(OrderUtils.class);
-    public static Order loadOrder (ArrayList<OrderItem> orderItems){
+
+    public static Order loadOrder(ArrayList<OrderItem> orderItems) {
         // initialize order
         Order order = ReflectionUtils.createObject(Order.class);
 
         // populate order with each item in orderItems
         orderItems.forEach(order::addOrderItem);
 
-        LOGGER.info(order.toString());
         return order;
     }
 

@@ -3,7 +3,7 @@ package com.solvd.buildingco.stakeholders.employees;
 import com.solvd.buildingco.finance.HourlyRate;
 import com.solvd.buildingco.finance.PayRate;
 import com.solvd.buildingco.scheduling.Schedule;
-import com.solvd.buildingco.utilities.ReflectionUtils;
+import com.solvd.buildingco.utilities.StringFormatters;
 
 import java.math.BigDecimal;
 
@@ -53,24 +53,13 @@ public class ProjectManager extends Employee {
 
     @Override
     public String toString() {
-        String className = this.getClass().getSimpleName();
-        String stakeholderStr = super.toString();
-        String[] fieldNames = {"payRate", "schedule", "personnelType"};
+        Class<?> currClass = ProjectManager.class;
 
-        StringBuilder builder = new StringBuilder(className + "{");
-        builder.append(stakeholderStr.substring(stakeholderStr.indexOf("{") + 1));
+        String parentToString = super.toString();
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = ReflectionUtils.getField(this, fieldName);
-            if (fieldValue != null) {
-                builder.append(",")
-                        .append(fieldName)
-                        .append("=")
-                        .append(fieldValue);
-            }
-        }
-
-        builder.append("}");
-        return builder.toString();
+        return StringFormatters.buildToString(
+                currClass,
+                parentToString
+        );
     }
 }

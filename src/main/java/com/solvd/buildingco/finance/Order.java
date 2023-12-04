@@ -4,17 +4,13 @@ import com.solvd.buildingco.exception.InventoryItemNotFoundException;
 import com.solvd.buildingco.inventory.BuyableItem;
 import com.solvd.buildingco.inventory.Priceable;
 import com.solvd.buildingco.inventory.RentableItem;
-import com.solvd.buildingco.utilities.ReflectionUtils;
-import com.solvd.buildingco.utilities.StringConstants;
 import com.solvd.buildingco.utilities.StringFormatters;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
 import java.util.LinkedList;
-import java.util.stream.Collectors;
+import java.util.List;
 
 public class Order {
     private static final Logger LOGGER = LogManager.getLogger(Order.class);
@@ -63,36 +59,20 @@ public class Order {
 
     // calculates the total cost of the order
     public BigDecimal getTotalCost() {
-        BigDecimal totalCost = BigDecimal.ZERO;
-        for (OrderItem item : orderItems) {
-            BigDecimal lineTotal = item.getTotalPrice();
-            totalCost = totalCost.add(lineTotal);
-        }
-        return totalCost;
+        return orderItems.stream()
+                .map(orderItem -> orderItem.getTotalPrice())
+                .reduce(BigDecimal.ZERO, (total, price) -> total.add(price));
     }
 
     @Override
     public String toString() {
-
+        Class<?> currClass = Order.class;
         String[] fieldNames = {"orderItems"};
 
-        String className = this.getClass().getSimpleName();
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
 
-        String result = Arrays.stream(fieldNames)
-                .map(fieldName -> {
-                    Object fieldValue = ReflectionUtils.getField(this, fieldName);
-                    return fieldValue != null
-                            ? StringFormatters.stateEquivalence(
-                            fieldName,
-                            StringFormatters.listToString((List<?>) fieldValue)
-                            )
-                            : StringConstants.EMPTY_STRING;
-                })
-                .filter(fieldValue -> !fieldValue.isEmpty())
-                .collect(Collectors.joining(StringConstants.COMMA_DELIMITER));
-
-        return className + StringFormatters.nestInCurlyBraces(result);
+        return StringFormatters.buildToString(currClass, fieldNames, fieldsString);
     }
-
 
 }

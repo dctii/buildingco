@@ -111,6 +111,8 @@ public class Main {
                 LOGGER.info("Material Cost Sales Tax: " + materialsTaxAmount);
                 LOGGER.info("Labor Cost: " + calculatedLaborCost);
                 LOGGER.info("Total Building Cost: " + calculatedBuildingCostWithTax);
+
+                LOGGER.info(building.toString());
             }
 
 
