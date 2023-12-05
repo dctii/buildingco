@@ -1,8 +1,5 @@
 package com.solvd.buildingco.finance;
 
-// TODO: add category for annual rate
-// TODO: add overtime rate consideration
-
 import com.solvd.buildingco.utilities.StringFormatters;
 
 public abstract class PayRate<T extends Number> {
