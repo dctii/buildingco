@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -17,7 +19,7 @@ public class StringFormatters {
         int firstCharPosition = 1;
         int lastCharPosition = stringLength - 1;
 
-        if (!BooleanUtils.isBlankOrEmptyString(string) && stringLength > 1) {
+        if (BooleanUtils.isNotBlankOrEmptyString(string) && stringLength > 1) {
 
             // returns the string without its first and last character
             return StringUtils
@@ -51,17 +53,15 @@ public class StringFormatters {
 
     public static String listToString(List<?> list) {
         return list.stream()
-                .map(Object::toString)
+                .map(object -> object.toString())
                 .collect(Collectors.joining(StringConstants.COMMA_DELIMITER));
     }
 
     public static String mapToString(Map<?, List<?>> targetMap) {
         return targetMap.entrySet().stream()
-                .map(entry -> {
-                    return entry.getKey()
-                            + StringConstants.COLON_DELIMITER
-                            + listToString(entry.getValue());
-                })
+                .map(entry -> entry.getKey()
+                        + StringConstants.COLON_DELIMITER
+                        + listToString(entry.getValue()))
                 .collect(Collectors.joining(StringConstants.COMMA_DELIMITER));
     }
 
@@ -81,11 +81,11 @@ public class StringFormatters {
                                     fieldName,
                                     (Object[]) fieldValue
                             );
-                        } else if (fieldValue instanceof Map){
-                          return stateEquivalence(
-                                  fieldName,
-                                  mapToString((Map<?, List<?>>) fieldValue)
-                          );
+                        } else if (fieldValue instanceof Map) {
+                            return stateEquivalence(
+                                    fieldName,
+                                    mapToString((Map<?, List<?>>) fieldValue)
+                            );
                         } else {
                             return stateEquivalence(
                                     fieldName,
@@ -168,6 +168,19 @@ public class StringFormatters {
         parentToString = removeEdges(parentToString);
 
         return parentToString;
+    }
+
+    public static String toReadableDateString(LocalDate datetime) {
+        return datetime.getMonth()
+                + StringConstants.DASH_STRING + datetime.getDayOfMonth()
+                + StringConstants.DASH_STRING + datetime.getYear();
+    }
+
+    public static String toReadableDateString(ZonedDateTime datetime) {
+        return datetime.getMonth()
+                + StringConstants.DASH_STRING + datetime.getDayOfMonth()
+                + StringConstants.DASH_STRING + datetime.getYear();
+
     }
 
     private StringFormatters() {
