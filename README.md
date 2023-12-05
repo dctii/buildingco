@@ -37,6 +37,28 @@ mvn clean install exec:java -P run-word-counter
 
 <hr />
 
+### Assignment 12: Multithreading
+
+<hr />
+
+#### Requirements
+
+##### Comments and Required changes to consider from Assignment 11:
+
+- Change _lambda expressions_ to _method references_ where possible.
+
+##### Requirements for Assignment 12
+
+1. Create 3 classes, `Connection`, `ConnectionPool`, and, thirdly, some client which can be used in
+   multithreading.
+2. The `ConnectionPool` should be a _singleton_ and should have a set maximum value, which can be
+   set to `5` of connections.
+3. Any `Thread` should be able to wait for an available connection. Print the connection's name, or
+   use some other strategy, to identify and show explicit proof that it is waiting. See the
+   screenshot in our Google Classroom.
+
+<hr />
+
 ### Assignment 11: Reflection. Collection streaming
 
 <hr />
