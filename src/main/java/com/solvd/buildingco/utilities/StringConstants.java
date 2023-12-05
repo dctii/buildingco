@@ -13,6 +13,25 @@ public final class StringConstants {
     public static final String COMMA_DELIMITER = ", ";
     public static final String COLON_DELIMITER = ": ";
 
+    public static final String ADD_STRING = "add";
+    public static final String SUBTRACT_STRING = "subtract";
+    public static final String MULTIPLY_STRING = "multiply";
+    public static final String DIVIDE_STRING = "divide";
+    public static final String DASH_STRING = "-";
+
+    public static final String AND_STRING = "and";
+    public static final String OR_STRING = "or";
+    public static final String UNION_STRING = "union";
+    public static final String INTERSECTION_STRING = "intersection";
+    public static final String[] COMMUTATIVE_OPERATIONS = {
+            ADD_STRING,
+            MULTIPLY_STRING,
+            AND_STRING,
+            OR_STRING,
+            UNION_STRING,
+            INTERSECTION_STRING
+    };
+
 
     private StringConstants() {
         final String NO_CONSTANTS_INSTANTIATION_MESSAGE =
