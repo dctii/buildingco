@@ -9,7 +9,6 @@ import java.util.Scanner;
 
 import static com.solvd.buildingco.buildings.ResidentialBuildingSpecifications.HOUSE;
 
-
 public class HouseMenu extends BuildingMenu {
     private static final Logger LOGGER = LogManager.getLogger(HouseMenu.class);
 
