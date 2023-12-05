@@ -61,7 +61,7 @@ public class WordCounter {
 
 
             LOGGER.info(
-                    "Word counts successfully output as a list in 'src/main/counted-words.txt'"
+                    "Word counts successfully output as a list in '{}'", OUTPUT_FILE_PATHNAME
             );
 
         } catch (IOException e) {
