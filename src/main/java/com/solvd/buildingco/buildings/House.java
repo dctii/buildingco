@@ -72,7 +72,7 @@ public class House extends Building<BigDecimal> implements IEstimate {
     public BigDecimal calculateLaborCost(ZonedDateTime customerEndDate) {
         return BuildingCostCalculator.calculateLaborCost(
                 customerEndDate,
-                constructionDays
+                getConstructionDays()
         );
     }
 
@@ -80,14 +80,14 @@ public class House extends Building<BigDecimal> implements IEstimate {
     public static House createHouse(int numRooms, int numBathrooms, int garageCapacity) {
         // calculate square footage for house
         int garageSquareFootage = (HOUSE.getExtraSquareFootagePerCar() * garageCapacity);
-        int extraRoomsSquareFootage = // get the square footage for each additional room
+        int extraSquareFootagePerRoom = // get the square footage for each additional room
                 (HOUSE.getAverageRoomLength() * HOUSE.getAverageRoomWidth()) * (numRooms - 1);
-        int squareFootage = HOUSE.getBaseSquareFootage() + extraRoomsSquareFootage + garageSquareFootage;
+        int squareFootage = HOUSE.getBaseSquareFootage() + extraSquareFootagePerRoom + garageSquareFootage;
 
         // set scaled amount of days to complete construction
         int extraDaysForGarage = HOUSE.getExtraConstructionDaysPerCar() * garageCapacity;
-        int extraDaysForMoreRooms = 20 * (numRooms - 1);
-        int constructionDays = HOUSE.getBaseConstructionDays() + extraDaysForMoreRooms + extraDaysForGarage;
+        int extraDaysPerRoom = 20 * (numRooms - 1); // 0 if only one bedroom
+        int constructionDays = HOUSE.getBaseConstructionDays() + extraDaysPerRoom + extraDaysForGarage;
 
         return new House(
                 numRooms,
