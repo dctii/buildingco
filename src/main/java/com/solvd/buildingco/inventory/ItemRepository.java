@@ -31,7 +31,7 @@ public class ItemRepository {
                             item.getPrice()
                     )
             );
-        } else if (Priceable.BUYABLE_TYPE.equals(itemType)){
+        } else if (Priceable.BUYABLE_TYPE.equals(itemType)) {
             items.put(
                     item.getName(),
                     new BuyableItem<>(
@@ -47,6 +47,7 @@ public class ItemRepository {
             throw new InvalidItemTypeException(INVALID_ITEM_TYPE_MESSAGE);
         }
     }
+
     // retrieves item from ItemRepository by String name
     public static Priceable<BigDecimal> getItem(String name) {
         Priceable<BigDecimal> item = items.get(name);
