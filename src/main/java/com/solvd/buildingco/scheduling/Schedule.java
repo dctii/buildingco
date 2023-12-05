@@ -52,7 +52,9 @@ public class Schedule {
     @Override
     public String toString() {
         Class<?> currClass = Schedule.class;
-        String[] fieldNames = {"weeklyActivities"};
+        String[] fieldNames = {
+                "weeklyActivities"
+        };
 
         String fieldsString = StringFormatters.buildFieldsString(this, fieldNames);
 

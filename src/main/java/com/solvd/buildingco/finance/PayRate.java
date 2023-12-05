@@ -28,7 +28,9 @@ public abstract class PayRate<T extends Number> {
     @Override
     public String toString() {
         Class<?> currClass = PayRate.class;
-        String[] fieldNames = {"rate"};
+        String[] fieldNames = {
+                "rate"
+        };
 
         String fieldsString =
                 StringFormatters.buildFieldsString(this, fieldNames);

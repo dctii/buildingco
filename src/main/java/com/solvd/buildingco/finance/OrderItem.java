@@ -78,7 +78,8 @@ public class OrderItem {
         Class<?> currClass = OrderItem.class;
         String[] fieldNames = {
                 "item",
-                "quantity"
+                "quantity",
+                "monthsToRent"
         };
 
         String parentToString = super.toString();
