@@ -63,6 +63,8 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
                         numberOfFloors
                 );
 
+        setConstructionDays(calculatedConstructionDays);
+
         return BuildingCostCalculator.calculateLaborCost(
                 customerEndDate,
                 calculatedConstructionDays

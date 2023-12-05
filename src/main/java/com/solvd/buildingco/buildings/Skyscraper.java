@@ -80,6 +80,8 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
                         numberOfLevels
                 );
 
+        setConstructionDays(calculatedConstructionDays);
+
         return BuildingCostCalculator.calculateLaborCost(
                 customerEndDate,
                 calculatedConstructionDays
