@@ -1,7 +1,7 @@
 package com.solvd.buildingco.exception;
 
-public class TemporalTypeException extends RuntimeException {
-    public IllegalTemporalTypeException(String message) {
+public class InvalidTemporalTypeException extends RuntimeException {
+    public InvalidTemporalTypeException(String message) {
         super(message);
     }
 }

@@ -1,6 +1,7 @@
 package com.solvd.buildingco.exception;
-public class ScheduleMismatchException {
-    public static void main(String[] args) {
-        
+
+public class ScheduleMismatchException extends RuntimeException {
+    public ScheduleMismatchException(String message) {
+        super(message);
     }
 }
