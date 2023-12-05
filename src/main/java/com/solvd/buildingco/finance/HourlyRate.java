@@ -36,7 +36,9 @@ public class HourlyRate extends PayRate<BigDecimal> {
     @Override
     public String toString() {
         Class<?> currClass = HourlyRate.class;
-        String[] fieldNames = {"ratePerHour"};
+        String[] fieldNames = {
+                "ratePerHour"
+        };
 
         String parentToString = super.toString();
         String fieldsString =

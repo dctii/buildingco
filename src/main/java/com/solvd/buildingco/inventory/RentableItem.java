@@ -76,7 +76,10 @@ public class RentableItem<T extends Number> implements Priceable<T> {
     @Override
     public String toString() {
         Class<?> currClass = RentableItem.class;
-        String[] fieldNames = {"name", "pricePerMonth"};
+        String[] fieldNames = {
+                "name",
+                "pricePerMonth"
+        };
 
         String fieldsString =
                 StringFormatters.buildFieldsString(this, fieldNames);

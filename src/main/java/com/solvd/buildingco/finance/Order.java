@@ -66,7 +66,9 @@ public class Order {
     @Override
     public String toString() {
         Class<?> currClass = Order.class;
-        String[] fieldNames = {"orderItems"};
+        String[] fieldNames = {
+                "orderItems"
+        };
 
         String fieldsString =
                 StringFormatters.buildFieldsString(this, fieldNames);
