@@ -4,6 +4,7 @@ import com.solvd.buildingco.exception.InventoryItemNotFoundException;
 import com.solvd.buildingco.inventory.BuyableItem;
 import com.solvd.buildingco.inventory.Priceable;
 import com.solvd.buildingco.inventory.RentableItem;
+import com.solvd.buildingco.utilities.OrderUtils;
 import com.solvd.buildingco.utilities.StringFormatters;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -59,9 +60,7 @@ public class Order {
 
     // calculates the total cost of the order
     public BigDecimal getTotalCost() {
-        return orderItems.stream()
-                .map(orderItem -> orderItem.getTotalPrice())
-                .reduce(BigDecimal.ZERO, (total, price) -> total.add(price));
+        return OrderUtils.sumItemCosts(orderItems);
     }
 
     @Override
