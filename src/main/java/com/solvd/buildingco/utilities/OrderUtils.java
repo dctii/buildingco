@@ -2,22 +2,28 @@ package com.solvd.buildingco.utilities;
 
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.finance.OrderItem;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 public class OrderUtils {
-    private static final Logger LOGGER = LogManager.getLogger(OrderUtils.class);
 
     public static Order loadOrder(ArrayList<OrderItem> orderItems) {
         // initialize order
         Order order = ReflectionUtils.createObject(Order.class);
 
         // populate order with each item in orderItems
-        orderItems.forEach(order::addOrderItem);
+        orderItems.forEach(orderItem -> order.addOrderItem(orderItem));
 
         return order;
+    }
+
+    public static BigDecimal sumItemCosts(List<OrderItem> orderItems) {
+        return orderItems.stream()
+                .map(orderItem -> orderItem.getTotalPrice())
+                // (total, price) -> total.add(price)
+                .reduce(BigDecimal.ZERO, BigDecimalUtils.ADD_OPERATION);
     }
 
     private OrderUtils() {
