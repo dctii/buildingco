@@ -13,11 +13,11 @@ import static com.solvd.buildingco.stakeholders.employees.Personnel.ENGINEER;
 
 public class Engineer extends Employee {
 
-    public Engineer(){
+    public Engineer() {
         super();
     }
 
-    public Engineer(String[] nameParts){
+    public Engineer(String[] nameParts) {
         super(nameParts);
     }
 
@@ -28,6 +28,7 @@ public class Engineer extends Employee {
     public Engineer(String[] nameParts, PayRate payRate, Schedule schedule) {
         super(nameParts, payRate, schedule);
     }
+
     public Engineer(String[] nameParts, String[] postNominals, String[] organizationNames,
                     String[] roles, String[] addresses, String[] phoneNumbers, String[] emails,
                     PayRate payRate, Schedule schedule, String personnelType) {

@@ -11,11 +11,11 @@ import static com.solvd.buildingco.stakeholders.employees.Personnel.PROJECT_MANA
 
 public class ProjectManager extends Employee {
 
-    public ProjectManager(){
+    public ProjectManager() {
         super();
     }
 
-    public ProjectManager(String[] nameParts){
+    public ProjectManager(String[] nameParts) {
         super(nameParts);
     }
 
@@ -26,6 +26,7 @@ public class ProjectManager extends Employee {
     public ProjectManager(String[] nameParts, PayRate payRate, Schedule schedule) {
         super(nameParts, payRate, schedule);
     }
+
     public ProjectManager(String[] nameParts, String[] postNominals, String[] organizationNames,
                           String[] roles, String[] addresses, String[] phoneNumbers, String[] emails,
                           PayRate payRate, Schedule schedule, String personnelType) {

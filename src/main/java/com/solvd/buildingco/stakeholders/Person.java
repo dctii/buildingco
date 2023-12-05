@@ -116,9 +116,9 @@ public abstract class Person {
         StringBuilder fullName = new StringBuilder();
 
         // Directly use the nameParts array
-        if (!BooleanUtils.isEmptyOrNullArray(nameParts)) {
+        if (BooleanUtils.isNotEmptyOrNullArray(nameParts)) {
             String namePartsStr = Arrays.stream(nameParts)
-                    .filter(namePart -> !BooleanUtils.isBlankOrEmptyString(namePart))
+                    .filter(namePart -> BooleanUtils.isNotBlankOrEmptyString(namePart))
                     .collect(Collectors.joining(StringConstants.SINGLE_WHITESPACE));
             fullName.append(namePartsStr);
         }
