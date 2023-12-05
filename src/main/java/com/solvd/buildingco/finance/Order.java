@@ -4,19 +4,18 @@ import com.solvd.buildingco.exception.InventoryItemNotFoundException;
 import com.solvd.buildingco.inventory.BuyableItem;
 import com.solvd.buildingco.inventory.Priceable;
 import com.solvd.buildingco.inventory.RentableItem;
-import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.OrderUtils;
+import com.solvd.buildingco.utilities.StringFormatters;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.List;
 import java.util.LinkedList;
+import java.util.List;
 
 public class Order {
     private static final Logger LOGGER = LogManager.getLogger(Order.class);
     private List<OrderItem> orderItems;
-    private int count;
 
     // exception messages
     final static String NOT_BUYABLE_ITEM_MESSAGE = "Must be a buyable type of item.";
@@ -61,42 +60,18 @@ public class Order {
 
     // calculates the total cost of the order
     public BigDecimal getTotalCost() {
-        BigDecimal totalCost = BigDecimal.ZERO;
-        for (OrderItem item : orderItems) {
-            BigDecimal lineTotal = item.getTotalPrice();
-            totalCost = totalCost.add(lineTotal);
-        }
-        return totalCost;
+        return OrderUtils.sumItemCosts(orderItems);
     }
 
     @Override
     public String toString() {
-        String className = this.getClass().getSimpleName();
-        StringBuilder builder = new StringBuilder(className + "{");
+        Class<?> currClass = Order.class;
+        String[] fieldNames = {"orderItems"};
 
-        // Append fields using FieldUtils
-        String[] fieldNames = {"orderItems", "count"};
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = FieldUtils.getField(this, fieldName);
-            if (fieldValue != null) {
-                if (fieldValue instanceof Object[] && "orderItems".equals(fieldName)) {
-                    fieldValue = Arrays.toString(Arrays.copyOf((OrderItem[]) fieldValue, count));
-                }
-                builder
-                        .append(fieldName)
-                        .append("=")
-                        .append(fieldValue)
-                        .append(", ");
-            }
-        }
-
-        if (builder.length() > className.length() + 1) {
-            builder.setLength(builder.length() - 2);
-        }
-
-        builder.append("}");
-
-        return builder.toString();
+        return StringFormatters.buildToString(currClass, fieldNames, fieldsString);
     }
+
 }

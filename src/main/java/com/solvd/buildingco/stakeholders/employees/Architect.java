@@ -3,7 +3,7 @@ package com.solvd.buildingco.stakeholders.employees;
 import com.solvd.buildingco.finance.HourlyRate;
 import com.solvd.buildingco.finance.PayRate;
 import com.solvd.buildingco.scheduling.Schedule;
-import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.StringFormatters;
 
 import java.math.BigDecimal;
 
@@ -38,8 +38,8 @@ public class Architect extends Employee {
 
     public static Architect createEmployee(Schedule schedule, BigDecimal ratePerHour) {
         String personnelType = ARCHITECT.getPersonnelType();
-        String[] nameParts = {null, null, null, null};
-        String[] postNominals = {};
+        String[] nameParts = {"Bing", "Bong", "Bilson", "Jr."};
+        String[] postNominals = {"PhD"};
         String[] organizationNames = {BuildingCoConstants.ORGANIZATION_NAME};
         String[] roles = {personnelType};
         String[] addresses = {BuildingCoConstants.ADDRESS_HQ};
@@ -55,24 +55,13 @@ public class Architect extends Employee {
 
     @Override
     public String toString() {
-        String className = this.getClass().getSimpleName();
-        String stakeholderStr = super.toString();
-        String[] fieldNames = {"payRate", "schedule", "personnelType"};
+        Class<?> currClass = Architect.class;
 
-        StringBuilder builder = new StringBuilder(className + "{");
-        builder.append(stakeholderStr.substring(stakeholderStr.indexOf("{") + 1));
+        String parentToString = super.toString();
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = FieldUtils.getField(this, fieldName);
-            if (fieldValue != null) {
-                builder.append(",")
-                        .append(fieldName)
-                        .append("=")
-                        .append(fieldValue);
-            }
-        }
-
-        builder.append("}");
-        return builder.toString();
+        return StringFormatters.buildToString(
+                currClass,
+                parentToString
+        );
     }
 }

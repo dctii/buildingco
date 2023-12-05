@@ -2,8 +2,9 @@ package com.solvd.buildingco.buildings;
 
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.utilities.BuildingCostCalculator;
-import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.BuildingUtils;
 import com.solvd.buildingco.utilities.MaterialOrderGenerator;
+import com.solvd.buildingco.utilities.StringFormatters;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
@@ -11,8 +12,6 @@ import java.time.ZonedDateTime;
 import static com.solvd.buildingco.buildings.BuildingConstants.SKYSCRAPER_FOUNDATION_COST_FACTOR;
 import static com.solvd.buildingco.buildings.BuildingConstants.SKYSCRAPER_LOBBY_FIXED_COST;
 import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.SKYSCRAPER;
-import static com.solvd.buildingco.utilities.BuildingUtils.validateNumberOfLevels;
-import static com.solvd.buildingco.utilities.BuildingUtils.validateSquareFootagePerLevel;
 
 public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     private int squareFootagePerLevel;
@@ -29,8 +28,8 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     public Skyscraper(int squareFootagePerLevel, int numberOfLevels) {
         super();
 
-        validateSquareFootagePerLevel(squareFootagePerLevel);
-        validateNumberOfLevels(numberOfLevels);
+        BuildingUtils.validateSquareFootagePerLevel(squareFootagePerLevel);
+        BuildingUtils.validateNumberOfLevels(numberOfLevels);
 
         this.squareFootagePerLevel = squareFootagePerLevel;
         this.numberOfLevels = numberOfLevels;
@@ -44,8 +43,8 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
                       BigDecimal foundationCost) {
         super();
 
-        validateSquareFootagePerLevel(squareFootagePerLevel);
-        validateNumberOfLevels(numberOfLevels);
+        BuildingUtils.validateSquareFootagePerLevel(squareFootagePerLevel);
+        BuildingUtils.validateNumberOfLevels(numberOfLevels);
 
         this.squareFootagePerLevel = squareFootagePerLevel;
         this.numberOfLevels = numberOfLevels;
@@ -81,6 +80,8 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
                         numberOfLevels
                 );
 
+        setConstructionDays(calculatedConstructionDays);
+
         return BuildingCostCalculator.calculateLaborCost(
                 customerEndDate,
                 calculatedConstructionDays
@@ -102,7 +103,7 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     }
 
     public void setSquareFootagePerLevel(int squareFootagePerLevel) {
-        validateSquareFootagePerLevel(squareFootagePerLevel);
+        BuildingUtils.validateSquareFootagePerLevel(squareFootagePerLevel);
 
         this.squareFootagePerLevel = squareFootagePerLevel;
     }
@@ -112,7 +113,7 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     }
 
     public void setNumberOfLevels(int numberOfLevels) {
-        validateNumberOfLevels(numberOfLevels);
+        BuildingUtils.validateNumberOfLevels(numberOfLevels);
 
         this.numberOfLevels = numberOfLevels;
     }
@@ -136,23 +137,21 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(super.toString());
+        Class<?> currClass = Skyscraper.class;
+        String[] fieldNames = {
+                "squareFootagePerLevel",
+                "numberOfLevels",
+                "constructionDays",
+                "lobbyCost",
+                "foundationCost"
+        };
 
-        String[] fieldNames = {"squareFootagePerLevel", "numberOfLevels", "constructionDays", "lobbyCost", "foundationCost"};
+        String parentToString = super.toString();
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = FieldUtils.getField(this, fieldName);
-            if (fieldValue != null) {
-                builder.append(", ").append(fieldName).append("=").append(fieldValue);
-            }
-        }
-
-        builder.append("}");
-
-        int startIndex = builder.indexOf("Building{") + "Building".length();
-        builder.replace(startIndex, startIndex + 1, this.getClass().getSimpleName() + "{");
-
-        return builder.toString();
+        return StringFormatters.buildToString(currClass, fieldNames, parentToString,
+                fieldsString);
     }
 
 }

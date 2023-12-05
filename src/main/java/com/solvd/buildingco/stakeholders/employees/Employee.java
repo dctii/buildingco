@@ -4,7 +4,8 @@ import com.solvd.buildingco.exception.InvalidDateFormatException;
 import com.solvd.buildingco.finance.PayRate;
 import com.solvd.buildingco.scheduling.Schedule;
 import com.solvd.buildingco.stakeholders.Stakeholder;
-import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.ScheduleUtils;
+import com.solvd.buildingco.utilities.StringFormatters;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -13,8 +14,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
-import static com.solvd.buildingco.utilities.ScheduleUtils.calculateTotalWorkHours;
-import static com.solvd.buildingco.utilities.ScheduleUtils.getDateFormat;
 
 public abstract class Employee extends Stakeholder {
     private static final Logger LOGGER = LogManager.getLogger(Employee.class);
@@ -22,9 +21,10 @@ public abstract class Employee extends Stakeholder {
     private Schedule schedule;
     private String personnelType;
 
-    public Employee(){
+    public Employee() {
         super();
     }
+
     public Employee(String[] nameParts) {
         super(nameParts);
     }
@@ -56,10 +56,10 @@ public abstract class Employee extends Stakeholder {
     // iterates through the employee's schedule to get their work hours
     public long getWorkHours(String startDateStr, String endDateStr) {
 
-        final DateTimeFormatter dateFormat = getDateFormat();
+        final DateTimeFormatter dateFormat = ScheduleUtils.getDateFormat();
         final String INVALID_START_DATE_STRING_FORMAT_MESSAGE =
-            "'startDateStr' is not in the correct format, so it cannot be parsed by LocalDate" +
-                    ".parse()";
+                "'startDateStr' is not in the correct format, so it cannot be parsed by LocalDate" +
+                        ".parse()";
         final String INVALID_END_DATE_STRING_FORMAT_MESSAGE =
                 "'endDateStr' is not in the correct format, so it cannot be parsed by LocalDate" +
                         ".parse()";
@@ -69,14 +69,14 @@ public abstract class Employee extends Stakeholder {
 
         try {
             startDate = LocalDate.parse(startDateStr, dateFormat);
-        } catch(DateTimeParseException e) {
+        } catch (DateTimeParseException e) {
             LOGGER.warn(INVALID_START_DATE_STRING_FORMAT_MESSAGE);
             throw new InvalidDateFormatException(INVALID_START_DATE_STRING_FORMAT_MESSAGE);
         }
 
         try {
             endDate = LocalDate.parse(endDateStr, dateFormat);
-        } catch(DateTimeParseException e) {
+        } catch (DateTimeParseException e) {
             LOGGER.warn(INVALID_END_DATE_STRING_FORMAT_MESSAGE);
             throw new InvalidDateFormatException(INVALID_END_DATE_STRING_FORMAT_MESSAGE);
         }
@@ -84,7 +84,8 @@ public abstract class Employee extends Stakeholder {
         // if there is a schedule, iterate and see how many hours the employee has on their schedule
         long totalWorkHours;
         if (schedule != null) {
-            totalWorkHours = calculateTotalWorkHours(schedule, startDate, endDate);
+            totalWorkHours =
+                    ScheduleUtils.calculateTotalWorkHours(schedule, startDate, endDate);
         } else {
             totalWorkHours = 0;
         }
@@ -95,8 +96,8 @@ public abstract class Employee extends Stakeholder {
 
     // getters and setters
 
-    public BigDecimal getPayRate() {
-        return payRate.getRate();
+    public PayRate<BigDecimal> getPayRate() {
+        return payRate;
     }
 
     public void setPayRate(PayRate payRate) {
@@ -120,31 +121,22 @@ public abstract class Employee extends Stakeholder {
         this.personnelType = personnelType;
     }
 
-
     @Override
     public String toString() {
-        String className = "Personnel";
-        String stakeholderStr = super.toString();
-        String[] fieldNames = {"payRate", "schedule",
-                "personnelType"};
+        Class<?> currClass = Employee.class;
+        String[] fieldNames = {
+                "payRate",
+                "schedule",
+                "personnelType"
+        };
 
-        StringBuilder builder = new StringBuilder(className + "{");
-        builder.append(stakeholderStr);
+        String parentToString = super.toString();
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = FieldUtils.getField(this, fieldName);
-            if (fieldValue != null) {
-                builder
-                        .append(",")
-                        .append(fieldName)
-                        .append("=")
-                        .append(fieldValue);
-            }
-        }
 
-        builder.append("}");
-        return builder.toString();
+        return StringFormatters.buildToString(currClass, fieldNames, parentToString,
+                fieldsString);
     }
-
-
 }
+

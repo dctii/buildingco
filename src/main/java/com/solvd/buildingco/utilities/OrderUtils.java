@@ -3,19 +3,27 @@ package com.solvd.buildingco.utilities;
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.finance.OrderItem;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 public class OrderUtils {
-    public static Order loadOrder (ArrayList<OrderItem> orderItems){
+
+    public static Order loadOrder(ArrayList<OrderItem> orderItems) {
         // initialize order
-        Order order = new Order();
+        Order order = ReflectionUtils.createObject(Order.class);
 
         // populate order with each item in orderItems
-        for (OrderItem item : orderItems) {
-            order.addOrderItem(item);
-        }
+        orderItems.forEach(orderItem -> order.addOrderItem(orderItem));
 
         return order;
+    }
+
+    public static BigDecimal sumItemCosts(List<OrderItem> orderItems) {
+        return orderItems.stream()
+                .map(orderItem -> orderItem.getTotalPrice())
+                // (total, price) -> total.add(price)
+                .reduce(BigDecimal.ZERO, BigDecimalUtils.ADD_OPERATION);
     }
 
     private OrderUtils() {

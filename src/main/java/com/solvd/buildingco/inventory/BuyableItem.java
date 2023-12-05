@@ -1,8 +1,8 @@
 package com.solvd.buildingco.inventory;
 
-import com.solvd.buildingco.exception.InvalidValueException;
 import com.solvd.buildingco.exception.InvalidPriceException;
-import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.exception.InvalidValueException;
+import com.solvd.buildingco.utilities.StringFormatters;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -67,7 +67,9 @@ public class BuyableItem<T extends Number> implements Priceable<T> {
     }
 
     public void setPricePerUnit(T pricePerUnit) {
-        if (pricePerUnit instanceof BigDecimal && ((BigDecimal) pricePerUnit).compareTo(BigDecimal.ZERO) <= 0) {
+        if (pricePerUnit instanceof BigDecimal
+                && ((BigDecimal) pricePerUnit).compareTo(BigDecimal.ZERO) <= 0
+        ) {
             LOGGER.warn(INVALID_PRICE_MESSAGE);
             throw new InvalidPriceException(INVALID_PRICE_MESSAGE);
         }
@@ -87,28 +89,17 @@ public class BuyableItem<T extends Number> implements Priceable<T> {
 
     @Override
     public String toString() {
-        String className = this.getClass().getSimpleName();
-        StringBuilder builder = new StringBuilder(className + "{");
+        Class<?> currClass = BuyableItem.class;
+        String[] fieldNames = {
+                "name",
+                "pricePerUnit",
+                "unitMeasurement"
+        };
 
-        String[] fieldNames = {"item", "quantity"};
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = FieldUtils.getField(this, fieldName);
-            if (fieldValue != null) {
-                builder
-                        .append(fieldName)
-                        .append("=")
-                        .append(fieldValue)
-                        .append(", ");
-            }
-        }
+        return StringFormatters.buildToString(currClass, fieldNames, fieldsString);
 
-        if (builder.length() > className.length() + 1) {
-            builder.setLength(builder.length() - 2);
-        }
-
-        builder.append("}");
-
-        return builder.toString();
     }
 }

@@ -2,16 +2,13 @@ package com.solvd.buildingco.stakeholders;
 
 import com.solvd.buildingco.exception.InvalidValueException;
 import com.solvd.buildingco.utilities.BooleanUtils;
-import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.StringConstants;
+import com.solvd.buildingco.utilities.StringFormatters;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;
-
-import static com.solvd.buildingco.utilities.BooleanUtils.isEmptyOrNullArray;
-
-
-// TODO: add exceptions and additional constructors
+import java.util.stream.Collectors;
 
 // general Person class with usual title and contact information
 public abstract class Person {
@@ -27,6 +24,7 @@ public abstract class Person {
 
     public Person() {
     }
+
     public Person(String[] nameParts) {
         this.nameParts = nameParts;
     }
@@ -42,16 +40,16 @@ public abstract class Person {
     // getters and setters
 
     public String[] getNameParts() {
-        return isEmptyOrNullArray(nameParts) ? null : nameParts;
+        return BooleanUtils.isEmptyOrNullArray(nameParts) ? null : nameParts;
     }
 
     public void setNameParts(String[] nameParts) {
-        if (!BooleanUtils.isBlankOrEmptyString(nameParts[0])) {
+        if (BooleanUtils.isBlankOrEmptyString(nameParts[0])) {
             LOGGER.warn(BLANK_FORENAME_MESSAGE);
             throw new InvalidValueException(BLANK_FORENAME_MESSAGE);
         }
 
-        if (!BooleanUtils.isBlankOrEmptyString(nameParts[2])) {
+        if (BooleanUtils.isBlankOrEmptyString(nameParts[2])) {
             LOGGER.warn(BLANK_SURNAME_MESSAGE);
             throw new InvalidValueException(BLANK_SURNAME_MESSAGE);
         }
@@ -60,7 +58,7 @@ public abstract class Person {
     }
 
     public String getForename() {
-        return isEmptyOrNullArray(nameParts) ? null : nameParts[0];
+        return BooleanUtils.isEmptyOrNullArray(nameParts) ? null : nameParts[0];
     }
 
     public void setForename(String forename) {
@@ -72,7 +70,7 @@ public abstract class Person {
     }
 
     public String getMiddleName() {
-        return isEmptyOrNullArray(nameParts)
+        return BooleanUtils.isEmptyOrNullArray(nameParts)
                 ? null
                 : nameParts[1];
     }
@@ -82,7 +80,7 @@ public abstract class Person {
     }
 
     public String getSurname() {
-        return isEmptyOrNullArray(nameParts) ? null : nameParts[2];
+        return BooleanUtils.isEmptyOrNullArray(nameParts) ? null : nameParts[2];
     }
 
     public void setSurname(String surname) {
@@ -94,7 +92,7 @@ public abstract class Person {
     }
 
     public String getSuffix() {
-        return isEmptyOrNullArray(nameParts)
+        return BooleanUtils.isEmptyOrNullArray(nameParts)
                 ? null :
                 nameParts[3];
     }
@@ -104,7 +102,7 @@ public abstract class Person {
     }
 
     public String[] getPostNominals() {
-        return isEmptyOrNullArray(postNominals)
+        return BooleanUtils.isEmptyOrNullArray(postNominals)
                 ? null
                 : postNominals;
     }
@@ -118,19 +116,15 @@ public abstract class Person {
         StringBuilder fullName = new StringBuilder();
 
         // Directly use the nameParts array
-        if (!isEmptyOrNullArray(nameParts)) {
-            for (String namePart : nameParts) {
-                if (BooleanUtils.isBlankOrEmptyString(namePart)) {
-                    if (fullName.length() > 0) {
-                        fullName.append(" ");
-                    }
-                    fullName.append(namePart);
-                }
-            }
+        if (BooleanUtils.isNotEmptyOrNullArray(nameParts)) {
+            String namePartsStr = Arrays.stream(nameParts)
+                    .filter(namePart -> BooleanUtils.isNotBlankOrEmptyString(namePart))
+                    .collect(Collectors.joining(StringConstants.SINGLE_WHITESPACE));
+            fullName.append(namePartsStr);
         }
 
         if (getPostNominals() != null && getPostNominals().length > 0) {
-            fullName.append(", ").append(String.join(", ", getPostNominals()));
+            fullName.append(StringConstants.COMMA_DELIMITER).append(String.join(StringConstants.COMMA_DELIMITER, getPostNominals()));
         }
 
         return fullName.toString();
@@ -138,7 +132,7 @@ public abstract class Person {
 
 
     public String[] getAddresses() {
-        return isEmptyOrNullArray(addresses)
+        return BooleanUtils.isEmptyOrNullArray(addresses)
                 ? null
                 : addresses;
     }
@@ -148,7 +142,7 @@ public abstract class Person {
     }
 
     public String[] getPhoneNumbers() {
-        return isEmptyOrNullArray(phoneNumbers)
+        return BooleanUtils.isEmptyOrNullArray(phoneNumbers)
                 ? null
                 : phoneNumbers;
     }
@@ -158,7 +152,7 @@ public abstract class Person {
     }
 
     public String[] getEmails() {
-        return isEmptyOrNullArray(emails)
+        return BooleanUtils.isEmptyOrNullArray(emails)
                 ? null
                 : emails;
     }
@@ -169,23 +163,19 @@ public abstract class Person {
 
     @Override
     public String toString() {
-        String className = "Person";
-        StringBuilder builder = new StringBuilder(className + "{");
-        String[] fieldNames = {"nameParts", "postNominals", "addresses", "emails", "phoneNumbers"};
+        Class<?> currClass = Person.class;
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = FieldUtils.getField(this, fieldName);
+        String[] fieldNames = {
+                "nameParts",
+                "postNominals",
+                "addresses",
+                "emails",
+                "phoneNumbers"
+        };
 
-            if (fieldValue != null) {
-                builder.append(fieldName).append("=").append(Arrays.toString((Object[]) fieldValue)).append(", ");
-            }
-        }
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
 
-        if (builder.length() > (className + "{").length()) {
-            builder.setLength(builder.length() - 2);
-        }
-
-        builder.append("}");
-        return builder.toString();
+        return StringFormatters.buildToString(currClass, fieldNames, fieldsString);
     }
 }

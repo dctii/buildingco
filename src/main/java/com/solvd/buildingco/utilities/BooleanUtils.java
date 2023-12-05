@@ -5,37 +5,66 @@ import com.solvd.buildingco.buildings.IndustrialBuilding;
 import com.solvd.buildingco.buildings.Skyscraper;
 import org.apache.commons.lang3.StringUtils;
 
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.util.Arrays;
+
 public class BooleanUtils {
     // check if array is empty or null, or if an array full of null items
     public static boolean isEmptyOrNullArray(Object[] array) {
-        if (array == null || array.length == 0) {
-            return true;
-        }
+        return array == null
+                || array.length == 0
+                || Arrays.stream(array).allMatch(item -> item == null);
+    }
 
-        // if one non-null item, then return false
-        for (Object item : array) {
-            if (item != null) {
-                return false;
-            }
-        }
-        return true;
+    public static boolean isNotEmptyOrNullArray(Object[] array) {
+        return !isEmptyOrNullArray(array);
     }
 
     public static boolean isBlankOrEmptyString(String string) {
-        if(StringUtils.isBlank(string) || StringUtils.isEmpty(string)) {
-            return true;
-        } else {
-            return false;
-        }
+        return StringUtils.isBlank(string) || StringUtils.isEmpty(string);
+    }
+
+    public static boolean isNotBlankOrEmptyString(String string) {
+        return !isBlankOrEmptyString(string);
     }
 
     public static <T> boolean isValidBuildingType(T building) {
-        if (building instanceof House || building instanceof IndustrialBuilding || building instanceof Skyscraper) {
-            return true;
-        } else {
-            return false;
-        }
+        return building instanceof House || building instanceof IndustrialBuilding || building instanceof Skyscraper;
     }
+
+    public static boolean isWithinDateSpan(LocalDate activityDate, LocalDate startDate,
+                                           LocalDate endDate) {
+        return (
+                isSameDate(activityDate, startDate)
+                        || activityDate.isAfter(startDate)
+        )
+                && (
+                isSameDate(activityDate, endDate)
+                        || activityDate.isBefore(endDate)
+        );
+    }
+
+    public static boolean isSameDate(LocalDate comparans, LocalDate comparandum) {
+        return comparans.isEqual(comparandum);
+    }
+
+    public static boolean isSameDate(ZonedDateTime comparans, ZonedDateTime comparandum) {
+        return comparans.isEqual(comparandum);
+    }
+
+    public static boolean isWeekend(DayOfWeek dayOfWeek) {
+        final DayOfWeek[] weekends = {
+                DayOfWeek.SATURDAY,
+                DayOfWeek.SUNDAY
+        };
+
+        return Arrays
+                .asList(weekends)
+                .contains(dayOfWeek);
+    }
+
 
     private BooleanUtils() {
         final String NO_UTILITY_CLASS_INSTANTIATION_MESSAGE =

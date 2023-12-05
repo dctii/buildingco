@@ -2,15 +2,14 @@ package com.solvd.buildingco.buildings;
 
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.utilities.BuildingCostCalculator;
-import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.BuildingUtils;
 import com.solvd.buildingco.utilities.MaterialOrderGenerator;
+import com.solvd.buildingco.utilities.StringFormatters;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
 import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.INDUSTRIAL_BUILDING;
-import static com.solvd.buildingco.utilities.BuildingUtils.validateNumberOfFloors;
-import static com.solvd.buildingco.utilities.BuildingUtils.validateSquareFootage;
 
 public class IndustrialBuilding extends Building<BigDecimal> implements IEstimate {
     private int squareFootage; // square footage user chooses building to be
@@ -24,7 +23,7 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
     public IndustrialBuilding(int squareFootage) {
         super();
 
-        validateSquareFootage(squareFootage);
+        BuildingUtils.validateSquareFootage(squareFootage);
 
         this.squareFootage = squareFootage;
         this.numberOfFloors = INDUSTRIAL_BUILDING.getMinLevels();
@@ -33,8 +32,8 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
     public IndustrialBuilding(int squareFootage, int numberOfFloors) {
         super();
 
-        validateSquareFootage(squareFootage);
-        validateNumberOfFloors(numberOfFloors);
+        BuildingUtils.validateSquareFootage(squareFootage);
+        BuildingUtils.validateNumberOfFloors(numberOfFloors);
 
         this.squareFootage = squareFootage;
         this.numberOfFloors = numberOfFloors;
@@ -64,6 +63,8 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
                         numberOfFloors
                 );
 
+        setConstructionDays(calculatedConstructionDays);
+
         return BuildingCostCalculator.calculateLaborCost(
                 customerEndDate,
                 calculatedConstructionDays
@@ -86,7 +87,7 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
     }
 
     public void setSquareFootage(int squareFootage) {
-        validateSquareFootage(squareFootage);
+        BuildingUtils.validateSquareFootage(squareFootage);
 
         this.squareFootage = squareFootage;
     }
@@ -96,30 +97,26 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
     }
 
     public void setNumberOfFloors(int numberOfFloors) {
-        validateNumberOfFloors(numberOfFloors);
+        BuildingUtils.validateNumberOfFloors(numberOfFloors);
 
         this.numberOfFloors = numberOfFloors;
     }
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder(super.toString());
+        Class<?> currClass = IndustrialBuilding.class;
+        String[] fieldNames = {
+                "squareFootage",
+                "numberOfFloors",
+                "constructionDays"
+        };
 
-        String[] fieldNames = {"squareFootage", "numberOfFloors", "constructionDays"};
+        String parentToString = super.toString();
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = FieldUtils.getField(this, fieldName);
-            if (fieldValue != null) {
-                builder.append(", ").append(fieldName).append("=").append(fieldValue);
-            }
-        }
-
-        builder.append("}");
-
-        int startIndex = builder.indexOf("Building{") + "Building".length();
-        builder.replace(startIndex, startIndex + 1, this.getClass().getSimpleName() + "{");
-
-        return builder.toString();
+        return StringFormatters.buildToString(currClass, fieldNames, parentToString,
+                fieldsString);
     }
 
 }

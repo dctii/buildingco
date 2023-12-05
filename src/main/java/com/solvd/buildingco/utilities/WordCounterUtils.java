@@ -1,26 +1,20 @@
 package com.solvd.buildingco.utilities;
 
-import com.solvd.buildingco.exception.InvalidValueException;
 import com.solvd.buildingco.exception.InvalidLineException;
+import com.solvd.buildingco.exception.InvalidValueException;
 import com.solvd.buildingco.exception.WordParsingException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
-import static com.solvd.buildingco.utilities.RegExpPatternConstants.*;
-import static com.solvd.buildingco.utilities.StringConstants.*;
 
 public class WordCounterUtils {
     private static final Logger LOGGER = LogManager.getLogger(WordCounterUtils.class);
 
     public static String generateCountedWordsList(Map<String, Integer> wordCounts) {
-        ArrayList<String> outputLines = new ArrayList<>();
-
         /*
             populate the output content where each line follows this format:
                 ...
@@ -29,18 +23,17 @@ public class WordCounterUtils {
                 goodness = 2
                 ...
         */
-        final String PADDED_EQUALS_OPERATOR_STRING = " = ";
-        for (Map.Entry<String, Integer> entry : wordCounts.entrySet()) {
-            String word = entry.getKey();
-            int wordCount = entry.getValue();
-            outputLines.add(word + PADDED_EQUALS_OPERATOR_STRING + wordCount);
-        }
 
-        // join each line with a newline
-        String outputContent = StringUtils.join(
-                outputLines,
-                NEWLINE_CHAR_STRING
-        );
+        Set<Map.Entry<String, Integer>> wordCountsSet = wordCounts.entrySet();
+
+        String outputContent =
+                wordCountsSet.stream()
+                        .map(entry -> {
+                            String word = entry.getKey();
+                            int count = entry.getValue();
+                            return StringUtils.join(word, StringConstants.PADDED_EQUALS_OPERATOR, count);
+                        })
+                        .collect(Collectors.joining(StringConstants.NEWLINE));
 
         return outputContent;
     }
@@ -48,20 +41,21 @@ public class WordCounterUtils {
     public static Map<String, Integer> countWords(String content, Set<String> wordsToCount) {
         checkIfBlankContent(content);
 
+        content = deleteParenthesizedNumbers(content);
+        content = deleteParenthesizedRomanNumerals(content);
+        content = replaceEmDashesWithWhitespace(content);
+
         Map<String, Integer> wordCounts = new HashMap<>();
 
-        for (String line : splitLines(content)) {
-            if (isMetadataLine(line)) {
-                continue;
-            }
-
-            for (String word : splitWords(line)) {
-                word = word.toLowerCase();
-                if (wordsToCount.contains(word)) {
-                    updateWordCount(wordCounts, word);
-                }
-            }
-        }
+        Arrays.stream(splitLines(content))
+                .filter(line -> !isMetadataLine(line))
+                .flatMap(line -> splitWords(line).stream())
+                .forEach(word -> {
+                    word = word.toLowerCase();
+                    if (StringUtils.isNotBlank(word) && wordsToCount.contains(word)) {
+                        updateWordCount(wordCounts, word);
+                    }
+                });
 
         return wordCounts;
     }
@@ -69,20 +63,31 @@ public class WordCounterUtils {
     public static Map<String, Integer> countWords(String content) {
         checkIfBlankContent(content);
 
-        /*
-            Removes any denotations for a numbered list item that are a number wrapped
-            in parentheses like "(1)", "(2)", etc. Also for the same type of denotation
-            but wrapped roman numerals like "(iii)" or "(iv)".
-        */
-        content = content.replaceAll(
-                NUMBERS_IN_PARENTHESES_PATTERN,
-                EMPTY_STRING
-        );
-        content = content.replaceAll(
-                ROMAN_NUMERAL_IN_PARENTHESES_PATTERN,
-                EMPTY_STRING
-        );
+        content = deleteParenthesizedNumbers(content);
+        content = deleteParenthesizedRomanNumerals(content);
+        content = replaceEmDashesWithWhitespace(content);
 
+        // key is the word name and the integer is how many occurrences of said word
+        Map<String, Integer> wordCounts = new HashMap<>();
+
+        Arrays.stream(splitLines(content))
+                .filter(line -> !isMetadataLine(line))
+                /*
+                    splitWords() will parse words, but will not consider number labels as words
+                    (e.g., `(i)`, `(iv)` or `(1)`, `(100)`, etc.
+                */
+                .flatMap(line -> splitWords(line).stream())
+                .forEach(word -> {
+                    word = word.toLowerCase();
+                    if (StringUtils.isNotBlank(word)) {
+                        updateWordCount(wordCounts, word);
+                    }
+                });
+
+        return wordCounts;
+    }
+
+    private static String replaceEmDashesWithWhitespace(String content) {
         /*
             Replaces the string "--" that denotes an intermission within a sentence with a single
              whitespace character, such as in this sentence:
@@ -91,33 +96,33 @@ public class WordCounterUtils {
                 dislike one thing and want to express solidarity with another--but they are not
                 interested in the detail of what they are saying."
         */
-        content = StringUtils.replace(
+        return StringUtils.replace(
                 content,
-                MANUAL_EM_DASH_STRING,
-                SINGLE_WHITESPACE_CHAR_STRING
+                StringConstants.EM_DASH,
+                StringConstants.SINGLE_WHITESPACE
         );
+    }
 
+    private static String deleteParenthesizedRomanNumerals(String content) {
+        /*
+            Removes any denotations for parenthesized roman numerals like
+            "(iii)" or "(iv)", etc.
+        */
+        return content.replaceAll(
+                RegExpConstants.PARENTHESIZED_ROMAN_NUMERALS,
+                StringConstants.EMPTY_STRING
+        );
+    }
 
-        // key is the word name and the integer is how many occurrences of said word
-        Map<String, Integer> wordCounts = new HashMap<>();
-        for (String line : splitLines(content)) {
-            // skip to next iteration if line is metadata
-            if (isMetadataLine(line)) {
-                continue;
-            }
-            /*
-                splitWords() will parse words, but will not consider number labels as words
-                (e.g., `(i)`, `(iv)` or `(1)`, `(100)`, etc.
-            */
-            for (String word : splitWords(line)) {
-                word = word.toLowerCase();
-                if (StringUtils.isNotBlank(word)) {
-                    updateWordCount(wordCounts, word);
-                }
-            }
-        }
-
-        return wordCounts;
+    private static String deleteParenthesizedNumbers(String content) {
+        /*
+            Removes any denotations for a numbered list item that are a number wrapped
+            in parentheses like "(1)", "(2)", etc.
+        */
+        return content.replaceAll(
+                RegExpConstants.PARENTHESIZED_NUMBERS,
+                StringConstants.EMPTY_STRING
+        );
     }
 
     private static void checkIfBlankContent(String content) {
@@ -142,8 +147,8 @@ public class WordCounterUtils {
 
     private static String[] splitLines(String content) {
         final String lineSeparatorCharacters =
-                CARRIAGE_RETURN_CHAR_STRING
-                        + NEWLINE_CHAR_STRING;
+                StringConstants.CARRIAGE_RETURN
+                        + StringConstants.NEWLINE;
 
         return StringUtils.split(
                 content,
@@ -170,37 +175,26 @@ public class WordCounterUtils {
         };
 
         // true if the line starts with any of the items in metadataLabels
-        boolean isTrue = false;
-        for (String metadatumLabel : metadataLabels) {
-            if (StringUtils.startsWith(line, metadatumLabel)) {
-                isTrue = true;
-                break;
-            }
-        }
-
-        return isTrue;
+        return Arrays.stream(metadataLabels)
+                .anyMatch(metadatumLabel -> StringUtils.startsWith(line, metadatumLabel));
     }
 
     public static ArrayList<String> splitWords(String line) {
         try {
-            String[] splitWordsArray = line.split(SEPARATOR_CHARS);
+            String[] splitWordsArray = line.split(RegExpConstants.SEPARATOR_CHARS);
 
             ArrayList<String> wordsList = new ArrayList<>();
 
-            for (String word : splitWordsArray) {
-                // ensure `word` is not null or an empty string
-                if (StringUtils.isNotBlank(word)) {
-
-                    // remove single quotation marks from word if it has them
-                    word = StringUtils.strip(
-                            word,
-                            SINGLE_QUOTATION
-                    );
-
-                    // add word to list
-                    wordsList.add(word);
-                }
-            }
+            Arrays.stream(splitWordsArray)
+                    .forEach(word -> {
+                        if (StringUtils.isNotBlank(word)) {
+                            word = StringUtils.strip(
+                                    word,
+                                    StringConstants.SINGLE_QUOTATION
+                            );
+                        }
+                        wordsList.add(word);
+                    });
 
             return wordsList;
 

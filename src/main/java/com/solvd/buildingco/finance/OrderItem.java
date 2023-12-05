@@ -4,8 +4,8 @@ import com.solvd.buildingco.exception.InventoryItemNotFoundException;
 import com.solvd.buildingco.inventory.BuyableItem;
 import com.solvd.buildingco.inventory.Priceable;
 import com.solvd.buildingco.inventory.RentableItem;
-import com.solvd.buildingco.utilities.FieldUtils;
 import com.solvd.buildingco.utilities.BigDecimalUtils;
+import com.solvd.buildingco.utilities.StringFormatters;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -75,29 +75,19 @@ public class OrderItem {
 
     @Override
     public String toString() {
-        String className = this.getClass().getSimpleName();
-        StringBuilder builder = new StringBuilder(className + "{");
+        Class<?> currClass = OrderItem.class;
+        String[] fieldNames = {
+                "item",
+                "quantity"
+        };
 
-        String[] fieldNames = {"item", "quantity"};
+        String parentToString = super.toString();
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = FieldUtils.getField(this, fieldName);
-            if (fieldValue != null) {
-                builder
-                        .append(fieldName)
-                        .append("=")
-                        .append(fieldValue)
-                        .append(", ");
-            }
-        }
+        return StringFormatters.buildToString(currClass, fieldNames, parentToString,
+                fieldsString);
 
-        if (builder.length() > className.length() + 1) {
-            builder.setLength(builder.length() - 2);
-        }
-
-        builder.append("}");
-
-        return builder.toString();
     }
 
 }

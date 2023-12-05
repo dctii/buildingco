@@ -1,7 +1,6 @@
 package com.solvd.buildingco.finance;
 
-// TODO: add category for annual rate
-// TODO: add overtime rate consideration
+import com.solvd.buildingco.utilities.StringFormatters;
 
 public abstract class PayRate<T extends Number> {
     private T rate;
@@ -28,13 +27,12 @@ public abstract class PayRate<T extends Number> {
 
     @Override
     public String toString() {
-        String className = this.getClass().getSimpleName();
-        StringBuilder builder = new StringBuilder(className + "{");
+        Class<?> currClass = PayRate.class;
+        String[] fieldNames = {"rate"};
 
-        builder.append("rate=")
-                .append(rate.toString());
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
 
-        builder.append("}");
-        return builder.toString();
+        return StringFormatters.buildToString(currClass, fieldNames, fieldsString);
     }
 }

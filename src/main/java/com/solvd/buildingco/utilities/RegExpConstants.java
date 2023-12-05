@@ -1,6 +1,6 @@
 package com.solvd.buildingco.utilities;
 
-public final class RegExpPatternConstants {
+public final class RegExpConstants {
     /*
         https://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html
         Contains reference for regexp constructs
@@ -21,7 +21,7 @@ public final class RegExpPatternConstants {
             - if `i` and `v` appear, then it accounts for `vi`, `vii`, and `viii`
 
      */
-    public static final String ROMAN_NUMERAL_IN_PARENTHESES_PATTERN =
+    public static final String PARENTHESIZED_ROMAN_NUMERALS =
             "\\(\\s*(?i)(ix|iv|v?i{0,3}|x)\\s*\\)";
 
     /*
@@ -30,7 +30,7 @@ public final class RegExpPatternConstants {
         `\d` - digit character [0-9]
         `X+` - postfix to denote one or more times
      */
-    public static final String NUMBERS_IN_PARENTHESES_PATTERN = "\\(\\d+\\)";
+    public static final String PARENTHESIZED_NUMBERS = "\\(\\d+\\)";
 
     /*
             Characters to split words by:
@@ -45,7 +45,7 @@ public final class RegExpPatternConstants {
      */
     public static final String SEPARATOR_CHARS = "[ ,.!?;:\"()\\[\\]{}<>\\t\\n]+";
 
-    private RegExpPatternConstants() {
+    private RegExpConstants() {
         final String NO_CONSTANTS_INSTANTIATION_MESSAGE =
                 "This is a constants class and instances cannot be made of it.";
 

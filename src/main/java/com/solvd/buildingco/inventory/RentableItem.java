@@ -1,8 +1,8 @@
 package com.solvd.buildingco.inventory;
 
-import com.solvd.buildingco.exception.InvalidValueException;
 import com.solvd.buildingco.exception.InvalidPriceException;
-import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.exception.InvalidValueException;
+import com.solvd.buildingco.utilities.StringFormatters;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -75,28 +75,13 @@ public class RentableItem<T extends Number> implements Priceable<T> {
 
     @Override
     public String toString() {
-        String className = this.getClass().getSimpleName();
-        StringBuilder builder = new StringBuilder(className + "{");
-
+        Class<?> currClass = RentableItem.class;
         String[] fieldNames = {"name", "pricePerMonth"};
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = FieldUtils.getField(this, fieldName);
-            if (fieldValue != null) {
-                builder
-                        .append(fieldName)
-                        .append("=")
-                        .append(fieldValue)
-                        .append(", ");
-            }
-        }
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
 
-        if (builder.length() > className.length() + 1) {
-            builder.setLength(builder.length() - 2);
-        }
+        return StringFormatters.buildToString(currClass, fieldNames, fieldsString);
 
-        builder.append("}");
-
-        return builder.toString();
     }
 }

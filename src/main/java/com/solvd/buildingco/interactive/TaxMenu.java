@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.RoundingMode;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class TaxMenu extends Menu {
@@ -16,12 +17,13 @@ public class TaxMenu extends Menu {
     public void display() {
         LOGGER.info("Select which Californian county the home will be built in: ");
 
-        for (TaxRate taxRate : TaxRate.values()) {
-            String optionNumber = "[" + (taxRate.ordinal() + 1) + "] ";
-            String countyOption = optionNumber + taxRate.getCountyName();
+        Arrays.stream(TaxRate.values())
+                .forEach(taxRate -> {
+                    String optionNumber = "[" + (taxRate.ordinal() + 1) + "] ";
+                    String countyOption = optionNumber + taxRate.getCountyName();
 
-            LOGGER.info(countyOption);
-        }
+                    LOGGER.info(countyOption);
+                });
     }
 
     @Override

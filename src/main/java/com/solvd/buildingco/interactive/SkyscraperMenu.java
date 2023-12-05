@@ -1,14 +1,13 @@
 package com.solvd.buildingco.interactive;
 
 import com.solvd.buildingco.buildings.Skyscraper;
+import com.solvd.buildingco.utilities.BuildingUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Scanner;
 
 import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.SKYSCRAPER;
-import static com.solvd.buildingco.utilities.BuildingUtils.hasInvalidNumberOfLevels;
-import static com.solvd.buildingco.utilities.BuildingUtils.hasInvalidSquareFootagePerLevel;
 
 public class SkyscraperMenu extends BuildingMenu {
     private static final Logger LOGGER = LogManager.getLogger(SkyscraperMenu.class);
@@ -68,13 +67,13 @@ public class SkyscraperMenu extends BuildingMenu {
 
             squareFootagePerLevel = scanner.nextInt();
 
-            if (hasInvalidSquareFootagePerLevel(squareFootagePerLevel)) {
+            if (BuildingUtils.hasInvalidSquareFootagePerLevel(squareFootagePerLevel)) {
                 LOGGER.warn("Square footage per level must be between {} and {}. Please try again.",
                         SKYSCRAPER.getMinSquareFootage(),
                         SKYSCRAPER.getMaxSquareFootage()
                 );
             }
-        } while (hasInvalidSquareFootagePerLevel(squareFootagePerLevel));
+        } while (BuildingUtils.hasInvalidSquareFootagePerLevel(squareFootagePerLevel));
 
         int numberOfLevels = 0;
 
@@ -87,14 +86,14 @@ public class SkyscraperMenu extends BuildingMenu {
 
             numberOfLevels = scanner.nextInt();
 
-            if (hasInvalidNumberOfLevels(numberOfLevels)) {
+            if (BuildingUtils.hasInvalidNumberOfLevels(numberOfLevels)) {
                 LOGGER.warn(
                         "The number of levels must be between {} and {}. Please try again.",
                         SKYSCRAPER.getMinLevels(),
                         SKYSCRAPER.getMaxLevels()
                 );
             }
-        } while (hasInvalidNumberOfLevels(numberOfLevels));
+        } while (BuildingUtils.hasInvalidNumberOfLevels(numberOfLevels));
 
         return new Skyscraper(squareFootagePerLevel, numberOfLevels);
     }

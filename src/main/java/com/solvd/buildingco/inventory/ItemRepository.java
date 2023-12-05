@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class ItemRepository {
     private static final Logger LOGGER = LogManager.getLogger(ItemRepository.class);
@@ -15,9 +16,8 @@ public class ItemRepository {
     private static final Map<String, Priceable<BigDecimal>> items = new HashMap<>();
 
     static {
-        for (Item item : Item.values()) {
-            loadItem(item);
-        }
+        Stream.of(Item.values())
+                .forEach(item -> loadItem(item));
     }
 
     private static void loadItem(Item item) {
@@ -31,7 +31,7 @@ public class ItemRepository {
                             item.getPrice()
                     )
             );
-        } else if (Priceable.BUYABLE_TYPE.equals(itemType)){
+        } else if (Priceable.BUYABLE_TYPE.equals(itemType)) {
             items.put(
                     item.getName(),
                     new BuyableItem<>(
@@ -47,6 +47,7 @@ public class ItemRepository {
             throw new InvalidItemTypeException(INVALID_ITEM_TYPE_MESSAGE);
         }
     }
+
     // retrieves item from ItemRepository by String name
     public static Priceable<BigDecimal> getItem(String name) {
         Priceable<BigDecimal> item = items.get(name);

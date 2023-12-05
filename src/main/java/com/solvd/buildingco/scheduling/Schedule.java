@@ -1,10 +1,13 @@
 package com.solvd.buildingco.scheduling;
 
+import com.solvd.buildingco.utilities.StringFormatters;
+
 import java.time.DayOfWeek;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class Schedule {
     private Map<DayOfWeek, List<ScheduledActivity>> weeklyActivities = new HashMap<>();
@@ -29,9 +32,8 @@ public class Schedule {
     Create initializer so when calling on addActivity, it has a usable reference
     */
     private void initializeDefaultSchedule() {
-        for (DayOfWeek day : DayOfWeek.values()) {
-            weeklyActivities.put(day, new LinkedList<>());
-        }
+        Stream.of(DayOfWeek.values())
+                .forEach(day -> weeklyActivities.put(day, new LinkedList<>()));
     }
 
     // chainable activity adder for Schedule
@@ -49,22 +51,11 @@ public class Schedule {
 
     @Override
     public String toString() {
-        String className = "Schedule";
-        StringBuilder builder = new StringBuilder(className + "{");
+        Class<?> currClass = Schedule.class;
+        String[] fieldNames = {"weeklyActivities"};
 
-        for (Map.Entry<DayOfWeek, List<ScheduledActivity>> entry : weeklyActivities.entrySet()) {
-            builder.append(entry.getKey()).append(": [");
-            for (ScheduledActivity activity : entry.getValue()) {
-                builder.append("ScheduledActivity{")
-                        .append("description: ").append(activity.getDescription())
-                        .append(", startTime: ").append(activity.getStartTime())
-                        .append(", endTime: ").append(activity.getEndTime())
-                        .append("}, ");
-            }
-            builder.append("], ");
-        }
-        builder.append("}");
-        return builder.toString();
+        String fieldsString = StringFormatters.buildFieldsString(this, fieldNames);
+
+        return StringFormatters.buildToString(currClass, fieldNames, fieldsString);
     }
-
 }

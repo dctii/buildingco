@@ -2,6 +2,7 @@ package com.solvd.buildingco.scheduling;
 
 import com.solvd.buildingco.exception.InvalidValueException;
 import com.solvd.buildingco.utilities.ScheduleUtils;
+import com.solvd.buildingco.utilities.StringFormatters;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -63,7 +64,7 @@ public class ScheduledActivity {
 
     public ScheduledActivity(String description, String location, ZonedDateTime startTime,
                              ZonedDateTime endTime
-                             ) {
+    ) {
         if (StringUtils.isBlank(description)) {
             LOGGER.warn(BLANK_DESCRIPTION_MESSAGE);
             throw new InvalidValueException(BLANK_DESCRIPTION_MESSAGE);
@@ -137,5 +138,23 @@ public class ScheduledActivity {
 
     public void setDay(DayOfWeek day) {
         this.day = day;
+    }
+
+    @Override
+    public String toString() {
+        Class<?> currClass = ScheduledActivity.class;
+        String[] fieldNames = {
+                "description",
+                "location",
+                "day",
+                "startTime",
+                "endTime"
+        };
+
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
+
+        return StringFormatters.buildToString(currClass, fieldNames, fieldsString);
+
     }
 }

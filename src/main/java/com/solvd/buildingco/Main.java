@@ -1,13 +1,14 @@
 package com.solvd.buildingco;
 
 import com.solvd.buildingco.buildings.Building;
+import com.solvd.buildingco.buildings.House;
+import com.solvd.buildingco.buildings.IndustrialBuilding;
+import com.solvd.buildingco.buildings.Skyscraper;
 import com.solvd.buildingco.interactive.HouseMenu;
 import com.solvd.buildingco.interactive.IndustrialBuildingMenu;
 import com.solvd.buildingco.interactive.SkyscraperMenu;
 import com.solvd.buildingco.interactive.TaxMenu;
-import com.solvd.buildingco.utilities.BigDecimalUtils;
-import com.solvd.buildingco.utilities.BuildingCostCalculator;
-import com.solvd.buildingco.utilities.ITax;
+import com.solvd.buildingco.utilities.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -67,7 +68,7 @@ public class Main {
             // TODO: have customer input a desired completion date, then it will see if the
             //  building can be completed by that time, if not, prompt for a further date
             // hardcoded future completion date
-            ZonedDateTime completionDate = ZonedDateTime.now().plusMonths(64);
+            ZonedDateTime completionDate = ZonedDateTime.now().plusMonths(200);
 
 
             /*
@@ -104,13 +105,32 @@ public class Main {
                                 completionDate
                         );
                 BigDecimal calculatedBuildingCostWithTax =
-                        BigDecimalUtils.add(calculatedBuildingCost, materialsTaxAmount);
+                        calculatedBuildingCost.add(materialsTaxAmount);
 
+                // display specs of building
+                int totalConstructionDays;
+                if (building instanceof House) {
+                    totalConstructionDays = ((House) building).getConstructionDays();
+                    BuildingUtils.displayBuildingProfile((House) building);
+                } else if (building instanceof IndustrialBuilding) {
+                    totalConstructionDays = ((IndustrialBuilding) building).getConstructionDays();
+                    BuildingUtils.displayBuildingProfile((IndustrialBuilding) building);
+                } else {
+                    totalConstructionDays = ((Skyscraper) building).getConstructionDays();
+                    BuildingUtils.displayBuildingProfile((Skyscraper) building);
+                }
 
                 LOGGER.info("Material Cost: " + calculatedMaterialCost);
                 LOGGER.info("Material Cost Sales Tax: " + materialsTaxAmount);
                 LOGGER.info("Labor Cost: " + calculatedLaborCost);
                 LOGGER.info("Total Building Cost: " + calculatedBuildingCostWithTax);
+                LOGGER.info("Estimated Construction Days: " + totalConstructionDays);
+                LOGGER.info("Expected to Build Between: "
+                        + ScheduleUtils.toReadableDateString(completionDate.minusDays(totalConstructionDays))
+                        + " to "
+                        + ScheduleUtils.toReadableDateString(completionDate)
+                );
+                LOGGER.info(StringConstants.NEWLINE);
             }
 
 

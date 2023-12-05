@@ -2,14 +2,14 @@ package com.solvd.buildingco.buildings;
 
 import com.solvd.buildingco.finance.Order;
 import com.solvd.buildingco.utilities.BuildingCostCalculator;
-import com.solvd.buildingco.utilities.FieldUtils;
+import com.solvd.buildingco.utilities.BuildingUtils;
 import com.solvd.buildingco.utilities.MaterialOrderGenerator;
+import com.solvd.buildingco.utilities.StringFormatters;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 
-import static com.solvd.buildingco.buildings.BuildingConstants.*;
-import static com.solvd.buildingco.utilities.BuildingUtils.*;
+import static com.solvd.buildingco.buildings.ResidentialBuildingSpecifications.HOUSE;
 
 public class House extends Building<BigDecimal> implements IEstimate {
     private int numRooms; // number of rooms user chooses in house
@@ -28,9 +28,9 @@ public class House extends Building<BigDecimal> implements IEstimate {
     public House(int numRooms, int numBathrooms, int garageCapacity) {
         super();
 
-        validateNumberOfRooms(numRooms);
-        validateNumberOfBathrooms(numBathrooms, numRooms);
-        validateGarageCapacity(garageCapacity, numRooms);
+        BuildingUtils.validateNumberOfRooms(numRooms);
+        BuildingUtils.validateNumberOfBathrooms(numBathrooms, numRooms);
+        BuildingUtils.validateGarageCapacity(garageCapacity, numRooms);
 
         this.numRooms = numRooms;
         this.numBathrooms = numBathrooms;
@@ -41,9 +41,9 @@ public class House extends Building<BigDecimal> implements IEstimate {
                  int constructionDays) {
         super();
 
-        validateNumberOfRooms(numRooms);
-        validateNumberOfBathrooms(numBathrooms, numRooms);
-        validateGarageCapacity(garageCapacity, numRooms);
+        BuildingUtils.validateNumberOfRooms(numRooms);
+        BuildingUtils.validateNumberOfBathrooms(numBathrooms, numRooms);
+        BuildingUtils.validateGarageCapacity(garageCapacity, numRooms);
 
         this.numRooms = numRooms;
         this.numBathrooms = numBathrooms;
@@ -72,22 +72,22 @@ public class House extends Building<BigDecimal> implements IEstimate {
     public BigDecimal calculateLaborCost(ZonedDateTime customerEndDate) {
         return BuildingCostCalculator.calculateLaborCost(
                 customerEndDate,
-                constructionDays
+                getConstructionDays()
         );
     }
 
 
     public static House createHouse(int numRooms, int numBathrooms, int garageCapacity) {
         // calculate square footage for house
-        int garageSquareFootage = (HOUSE_ADDITIONAL_SQUARE_FOOTAGE_PER_CAR * garageCapacity);
-        int extraRoomsSquareFootage = // get the square footage for each additional room
-                (HOUSE_AVERAGE_ROOM_LENGTH * HOUSE_AVERAGE_ROOM_WIDTH) * (numRooms - 1);
-        int squareFootage = HOUSE_BASE_SQUARE_FOOTAGE + extraRoomsSquareFootage + garageSquareFootage;
+        int garageSquareFootage = (HOUSE.getExtraSquareFootagePerCar() * garageCapacity);
+        int extraSquareFootagePerRoom = // get the square footage for each additional room
+                (HOUSE.getAverageRoomLength() * HOUSE.getAverageRoomWidth()) * (numRooms - 1);
+        int squareFootage = HOUSE.getBaseSquareFootage() + extraSquareFootagePerRoom + garageSquareFootage;
 
         // set scaled amount of days to complete construction
-        int extraDaysForGarage = HOUSE_ADDITIONAL_CONSTRUCTION_DAYS_PER_CAR * garageCapacity;
-        int extraDaysForMoreRooms = 20 * (numRooms - 1);
-        int constructionDays = HOUSE_BASE_CONSTRUCTION_DAYS + extraDaysForMoreRooms + extraDaysForGarage;
+        int extraDaysForGarage = HOUSE.getExtraConstructionDaysPerCar() * garageCapacity;
+        int extraDaysPerRoom = 20 * (numRooms - 1); // 0 if only one bedroom
+        int constructionDays = HOUSE.getBaseConstructionDays() + extraDaysPerRoom + extraDaysForGarage;
 
         return new House(
                 numRooms,
@@ -121,7 +121,7 @@ public class House extends Building<BigDecimal> implements IEstimate {
     }
 
     public void setNumRooms(int numRooms) {
-        validateNumberOfRooms(numRooms);
+        BuildingUtils.validateNumberOfRooms(numRooms);
 
         this.numRooms = numRooms;
     }
@@ -131,7 +131,7 @@ public class House extends Building<BigDecimal> implements IEstimate {
     }
 
     public void setNumBathrooms(int numBathrooms) {
-        validateNumberOfBathrooms(numBathrooms, this.numRooms);
+        BuildingUtils.validateNumberOfBathrooms(numBathrooms, this.numRooms);
 
         this.numBathrooms = numBathrooms;
     }
@@ -142,7 +142,7 @@ public class House extends Building<BigDecimal> implements IEstimate {
     }
 
     public void setGarageCapacity(int garageCapacity) {
-        validateGarageCapacity(garageCapacity, this.numRooms);
+        BuildingUtils.validateGarageCapacity(garageCapacity, this.numRooms);
 
         this.garageCapacity = garageCapacity;
     }
@@ -150,28 +150,20 @@ public class House extends Building<BigDecimal> implements IEstimate {
 
     @Override
     public String toString() {
-        String className = this.getClass().getSimpleName();
-        StringBuilder builder = new StringBuilder(super.toString()); // Start with the Building's toString information
+        Class<?> currClass = House.class;
+        String[] fieldNames = {
+                "squareFootage",
+                "numRooms",
+                "numBathrooms",
+                "garageCapacity",
+                "constructionDays"
+        };
 
-        // Append House-specific field information
-        String[] fieldNames = {"squareFootage", "numRooms", "numBathrooms", "garageCapacity", "constructionDays"};
+        String parentToString = super.toString();
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
 
-        for (String fieldName : fieldNames) {
-            Object fieldValue = FieldUtils.getField(this, fieldName);
-            if (fieldValue != null) {
-                builder
-                        .append(", ")
-                        .append(fieldName)
-                        .append("=")
-                        .append(fieldValue);
-            }
-        }
-
-        builder.append("}");
-
-        int startIndex = builder.indexOf("Building{") + "Building".length();
-        builder.replace(startIndex, startIndex + 1, className + "{");
-
-        return builder.toString();
+        return StringFormatters.buildToString(currClass, fieldNames, parentToString,
+                fieldsString);
     }
 }

@@ -2,10 +2,21 @@ package com.solvd.buildingco.utilities;
 
 import java.math.BigDecimal;
 import java.math.MathContext;
+import java.util.Arrays;
+import java.util.function.BinaryOperator;
 
 public class BigDecimalUtils {
 
     private static final MathContext mathContext = new MathContext(10);
+
+    public static final BinaryOperator<BigDecimal> ADD_OPERATION =
+            (currentSum, currentValue) -> currentSum.add(currentValue);
+    public static final BinaryOperator<BigDecimal> SUBTRACT_OPERATION =
+            (currentDifference, currentValue) -> currentDifference.subtract(currentValue);
+    public static final BinaryOperator<BigDecimal> MULTIPLY_OPERATION =
+            (currentProduct, currentValue) -> currentProduct.multiply(currentValue);
+    public static final BinaryOperator<BigDecimal> DIVIDE_OPERATION =
+            (currentQuotient, currentValue) -> currentQuotient.divide(currentValue, mathContext);
 
 
     public static Number sqrt(Number value) {
@@ -26,8 +37,8 @@ public class BigDecimalUtils {
         } else if (value instanceof Long) {
             return sqrtValue.longValue();
         } else {
-            final String ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE = "Number type not supported";
-            throw new IllegalArgumentException(ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE);
+            final String ILLEGAL_ARGUMENT_MESSAGE = "Number type not supported";
+            throw new IllegalArgumentException(ILLEGAL_ARGUMENT_MESSAGE);
         }
     }
 
@@ -36,131 +47,110 @@ public class BigDecimalUtils {
     }
 
     public static BigDecimal divide(Number... values) {
-        if (values.length != 2) {
-            final String ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE =
-                    "divide() requires exactly two values. Use divideAll for more than two values.";
-            throw new IllegalArgumentException(ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE);
-        }
-        return BigDecimal
-                .valueOf(values[0].doubleValue())
-                .divide(BigDecimal.valueOf(values[1].doubleValue()), mathContext);
+        return arithmetize(values, StringConstants.DIVIDE_STRING);
     }
 
     public static BigDecimal divideAll(Number... values) {
-        if (values.length < 3) {
-            final String ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE =
-                    "divideAll() requires at least three values.";
-            throw new IllegalArgumentException(ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE);
-        }
-
-        boolean isFirst = true;
-        BigDecimal result = null;
-
-        for (Number value : values) {
-            if (!isFirst) {
-                result =
-                        result.divide(
-                                BigDecimal.valueOf(value.doubleValue()),
-                                mathContext
-                        );
-            } else {
-                result = BigDecimal.valueOf(value.doubleValue());
-                isFirst = false;
-            }
-        }
-
-        return result;
+        return arithmetizeAll(values, StringConstants.DIVIDE_STRING);
     }
 
+
     public static BigDecimal multiply(Number... values) {
-        if (values.length != 2) {
-            final String ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE =
-                    "multiply requires exactly two values. Use multiplyAll for more than two values.";
-            throw new IllegalArgumentException(ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE);
-        }
-        return BigDecimal
-                .valueOf(values[0].doubleValue())
-                .multiply(BigDecimal.valueOf(values[1].doubleValue()));
+        return arithmetize(values, StringConstants.MULTIPLY_STRING);
     }
 
     public static BigDecimal multiplyAll(Number... values) {
-        if (values.length < 3) {
-            final String ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE =
-                    "multiplyAll() requires at least three values.";
-            throw new IllegalArgumentException(ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE);
-        }
-
-        BigDecimal result = BigDecimal.ONE;
-
-        for (Number value : values) {
-            result =
-                    result.multiply(
-                            BigDecimal.valueOf(value.doubleValue())
-                    );
-        }
-
-        return result;
+        return arithmetizeAll(values, StringConstants.MULTIPLY_STRING);
     }
 
+
     public static BigDecimal add(Number... values) {
-        if (values.length != 2) {
-            final String ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE =
-                    "add() requires exactly two values. Use addAll() for more than two values.";
-            throw new IllegalArgumentException(ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE);
-        }
-        return BigDecimal
-                .valueOf(values[0].doubleValue())
-                .add(BigDecimal.valueOf(values[1].doubleValue()));
+        return arithmetize(values, StringConstants.ADD_STRING);
     }
 
     public static BigDecimal addAll(Number... values) {
-        if (values.length < 3) {
-            final String ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE =
-                    "addAll() requires at least three values.";
-            throw new IllegalArgumentException(ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE);
-        }
-
-        BigDecimal result = BigDecimal.ONE;
-
-        for (Number value : values) {
-            result =
-                    result.add(
-                            BigDecimal.valueOf(value.doubleValue())
-                    );
-        }
-
-        return result;
+        return arithmetizeAll(values, StringConstants.ADD_STRING);
     }
 
+
     public static BigDecimal subtract(Number... values) {
-        if (values.length != 2) {
-            final String ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE =
-                    "subtract requires exactly two values. Use subtractAll() for more than two values.";
-            throw new IllegalArgumentException(ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE);
-        }
-        return BigDecimal
-                .valueOf(values[0].doubleValue())
-                .subtract(BigDecimal.valueOf(values[1].doubleValue()));
+        return arithmetize(values, StringConstants.SUBTRACT_STRING);
     }
 
     public static BigDecimal subtractAll(Number... values) {
-        if (values.length < 3) {
+        return arithmetizeAll(values, StringConstants.SUBTRACT_STRING);
+    }
+
+    public static BigDecimal arithmetize(Number[] values, String operationType) {
+        if (values.length != 2) {
             final String ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE =
-                    "subtractAll requires at least three values.";
+                    "Exactly two values required.";
             throw new IllegalArgumentException(ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE);
         }
 
-        BigDecimal result = BigDecimal.ONE;
+        BigDecimal leftOperand = BigDecimal.valueOf(values[0].doubleValue());
+        BigDecimal rightOperand = BigDecimal.valueOf(values[1].doubleValue());
 
-        for (Number value : values) {
-            result =
-                    result.subtract(
-                            BigDecimal.valueOf(value.doubleValue())
-                    );
+
+        switch (operationType.toLowerCase()) {
+            case StringConstants.ADD_STRING:
+                return leftOperand.add(rightOperand);
+            case StringConstants.SUBTRACT_STRING:
+                return leftOperand.subtract(rightOperand);
+            case StringConstants.MULTIPLY_STRING:
+                return leftOperand.multiply(rightOperand);
+            case StringConstants.DIVIDE_STRING:
+                return leftOperand.divide(rightOperand, mathContext);
+            default:
+                final String ILLEGAL_ARGUMENT_MESSAGE = "Invalid operation type.";
+                throw new IllegalArgumentException(ILLEGAL_ARGUMENT_MESSAGE);
+        }
+    }
+
+    public static BigDecimal arithmetizeAll(Number[] values, String operationType) {
+        if (values == null || values.length < 2) {
+            final String ILLEGAL_ARGUMENT_MESSAGE = "Invalid operation type.";
+            throw new IllegalArgumentException(ILLEGAL_ARGUMENT_MESSAGE);
+        } else if (values.length == 2) {
+            return arithmetize(values, operationType);
         }
 
-        return result;
+        BinaryOperator<BigDecimal> arithmeticOperation;
+        BigDecimal initialValue;
+
+        switch (operationType) {
+            case StringConstants.ADD_STRING:
+                arithmeticOperation = ADD_OPERATION;
+                initialValue = BigDecimal.ZERO;
+                break;
+            case StringConstants.SUBTRACT_STRING:
+                arithmeticOperation = SUBTRACT_OPERATION;
+                initialValue = BigDecimal.valueOf(values[0].doubleValue());
+                break;
+            case StringConstants.MULTIPLY_STRING:
+                arithmeticOperation = MULTIPLY_OPERATION;
+                initialValue = BigDecimal.ONE;
+                break;
+            case StringConstants.DIVIDE_STRING:
+                arithmeticOperation = DIVIDE_OPERATION;
+                initialValue = BigDecimal.valueOf(values[0].doubleValue());
+                break;
+            default:
+                final String ILLEGAL_ARGUMENT_MESSAGE = "Invalid operation type.";
+                throw new IllegalArgumentException(ILLEGAL_ARGUMENT_MESSAGE);
+        }
+
+        return Arrays.stream(values)
+                .skip(isCommutative(operationType) ? 0 : 1)
+                .map(value -> BigDecimal.valueOf(value.doubleValue()))
+                .reduce(initialValue, arithmeticOperation);
     }
+
+    private static boolean isCommutative(String operationType) {
+        return Arrays.stream(StringConstants.COMMUTATIVE_OPERATIONS)
+                .anyMatch(operation -> operation.equalsIgnoreCase(operationType));
+    }
+
 
     private BigDecimalUtils() {
         final String NO_UTILITY_CLASS_INSTANTIATION_MESSAGE =

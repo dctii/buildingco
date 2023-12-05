@@ -1,14 +1,13 @@
 package com.solvd.buildingco.interactive;
 
 import com.solvd.buildingco.buildings.IndustrialBuilding;
+import com.solvd.buildingco.utilities.BuildingUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Scanner;
 
 import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.INDUSTRIAL_BUILDING;
-import static com.solvd.buildingco.utilities.BuildingUtils.hasInvalidNumberOfFloors;
-import static com.solvd.buildingco.utilities.BuildingUtils.hasInvalidSquareFootage;
 
 public class IndustrialBuildingMenu extends BuildingMenu {
     private static final Logger LOGGER = LogManager.getLogger(IndustrialBuildingMenu.class);
@@ -69,14 +68,14 @@ public class IndustrialBuildingMenu extends BuildingMenu {
             );
 
             squareFootage = scanner.nextInt();
-            if (hasInvalidSquareFootage(squareFootage)) {
+            if (BuildingUtils.hasInvalidSquareFootage(squareFootage)) {
                 LOGGER.warn(
                         "Square footage must be between {} and {}. Please try again.",
                         INDUSTRIAL_BUILDING.getMinSquareFootage(),
                         INDUSTRIAL_BUILDING.getMaxSquareFootage()
                 );
             }
-        } while (hasInvalidSquareFootage(squareFootage));
+        } while (BuildingUtils.hasInvalidSquareFootage(squareFootage));
 
         int numberOfFloors = 0;
 
@@ -89,14 +88,14 @@ public class IndustrialBuildingMenu extends BuildingMenu {
 
             numberOfFloors = scanner.nextInt();
 
-            if (hasInvalidNumberOfFloors(numberOfFloors)) {
+            if (BuildingUtils.hasInvalidNumberOfFloors(numberOfFloors)) {
                 LOGGER.warn(
                         "Number of floors must be between {} and {}. Please try again.",
                         INDUSTRIAL_BUILDING.getMinLevels(),
                         INDUSTRIAL_BUILDING.getMaxLevels()
                 );
             }
-        } while (hasInvalidNumberOfFloors(numberOfFloors));
+        } while (BuildingUtils.hasInvalidNumberOfFloors(numberOfFloors));
 
         return new IndustrialBuilding(squareFootage, numberOfFloors);
     }
