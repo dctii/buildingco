@@ -32,8 +32,11 @@ public class StringFormatters {
         return string;
     }
 
+    public static String nestInSingleQuotations(String string) {
+        return StringConstants.SINGLE_QUOTATION + string + StringConstants.SINGLE_QUOTATION;
+    }
     public static String nestInCurlyBraces(String string) {
-        return "{" + string + "}";
+        return StringConstants.OPENING_CURLY_BRACE + string + StringConstants.CLOSING_CURLY_BRACE;
     }
 
     public static String stateEquivalence(Object leftOperand, Object rightOperand) {
@@ -73,7 +76,7 @@ public class StringFormatters {
                     if (fieldValue == null) {
                         return stateEquivalence(
                                 fieldName,
-                                "null"
+                                StringConstants.NULL_STRING
                         );
                     } else {
                         if (fieldValue.getClass().isArray()) {
