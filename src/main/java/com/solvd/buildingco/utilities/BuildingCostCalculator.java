@@ -75,9 +75,7 @@ public class BuildingCostCalculator {
             );
 
             Arrays.stream(employeeSchedules)
-                    .forEach(schedule -> {
-                        validateSchedule(schedule, constructionDays);
-                    });
+                    .forEach(schedule -> validateSchedule(schedule, constructionDays));
         } catch (ScheduleMismatchException e) {
             LOGGER.error(e);
         }

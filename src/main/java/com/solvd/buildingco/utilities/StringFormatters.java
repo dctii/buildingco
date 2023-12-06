@@ -1,8 +1,6 @@
 package com.solvd.buildingco.utilities;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
@@ -12,7 +10,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class StringFormatters {
-    private static final Logger LOGGER = LogManager.getLogger(StringFormatters.class);
 
     public static String removeEdges(String string) {
         int stringLength = string.length();
@@ -35,6 +32,7 @@ public class StringFormatters {
     public static String nestInSingleQuotations(String string) {
         return StringConstants.SINGLE_QUOTATION + string + StringConstants.SINGLE_QUOTATION;
     }
+
     public static String nestInCurlyBraces(String string) {
         return StringConstants.OPENING_CURLY_BRACE + string + StringConstants.CLOSING_CURLY_BRACE;
     }
@@ -56,7 +54,7 @@ public class StringFormatters {
 
     public static String listToString(List<?> list) {
         return list.stream()
-                .map(object -> object.toString())
+                .map(Object::toString)
                 .collect(Collectors.joining(StringConstants.COMMA_DELIMITER));
     }
 

@@ -14,14 +14,14 @@ public class OrderUtils {
         Order order = ReflectionUtils.createObject(Order.class);
 
         // populate order with each item in orderItems
-        orderItems.forEach(orderItem -> order.addOrderItem(orderItem));
+        orderItems.forEach(order::addOrderItem);
 
         return order;
     }
 
     public static BigDecimal sumItemCosts(List<OrderItem> orderItems) {
         return orderItems.stream()
-                .map(orderItem -> orderItem.getTotalPrice())
+                .map(OrderItem::getTotalPrice)
                 // (total, price) -> total.add(price)
                 .reduce(BigDecimal.ZERO, BigDecimalUtils.ADD_OPERATION);
     }

@@ -15,7 +15,7 @@ import java.util.List;
 
 public class Order {
     private static final Logger LOGGER = LogManager.getLogger(Order.class);
-    private List<OrderItem> orderItems;
+    private final List<OrderItem> orderItems;
 
     // exception messages
     final static String NOT_BUYABLE_ITEM_MESSAGE = "Must be a buyable type of item.";

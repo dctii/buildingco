@@ -9,13 +9,14 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+import java.util.Objects;
 
 public class BooleanUtils {
     // check if array is empty or null, or if an array full of null items
     public static boolean isEmptyOrNullArray(Object[] array) {
         return array == null
                 || array.length == 0
-                || Arrays.stream(array).allMatch(item -> item == null);
+                || Arrays.stream(array).allMatch(Objects::isNull);
     }
 
     public static boolean isNotEmptyOrNullArray(Object[] array) {

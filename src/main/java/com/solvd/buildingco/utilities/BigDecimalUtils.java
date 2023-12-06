@@ -10,11 +10,11 @@ public class BigDecimalUtils {
     private static final MathContext mathContext = new MathContext(10);
 
     public static final BinaryOperator<BigDecimal> ADD_OPERATION =
-            (currentSum, currentValue) -> currentSum.add(currentValue);
+            BigDecimal::add;
     public static final BinaryOperator<BigDecimal> SUBTRACT_OPERATION =
-            (currentDifference, currentValue) -> currentDifference.subtract(currentValue);
+            BigDecimal::subtract;
     public static final BinaryOperator<BigDecimal> MULTIPLY_OPERATION =
-            (currentProduct, currentValue) -> currentProduct.multiply(currentValue);
+            BigDecimal::multiply;
     public static final BinaryOperator<BigDecimal> DIVIDE_OPERATION =
             (currentQuotient, currentValue) -> currentQuotient.divide(currentValue, mathContext);
 
