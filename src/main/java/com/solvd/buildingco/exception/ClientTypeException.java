@@ -1,6 +1,7 @@
 package com.solvd.buildingco.exception;
-public class ClientTypeException {
-    public static void main(String[] args) {
-        
+
+public class ClientTypeException extends RuntimeException{
+    public ClientTypeException(String message) {
+        super(message);
     }
 }
