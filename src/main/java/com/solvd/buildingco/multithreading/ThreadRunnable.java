@@ -6,11 +6,11 @@ import com.solvd.buildingco.utilities.StringFormatters;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class RunnableClient implements Runnable {
-    private static final Logger LOGGER = LogManager.getLogger(RunnableClient.class);
-    private final ConnectionPool pool;
+public class ThreadRunnable implements Runnable {
+    private static final Logger LOGGER = LogManager.getLogger(ThreadRunnable.class);
+    private ConnectionPool pool;
 
-    public RunnableClient(ConnectionPool pool) {
+    public ThreadRunnable(ConnectionPool pool) {
         this.pool = pool;
     }
 
@@ -27,7 +27,7 @@ public class RunnableClient implements Runnable {
                         connection.getName()
                 );
                 LOGGER.info(
-                        "{}{} acquired {}{}",
+                        "{}{} claimed {}{}",
                         AnsiCodes.GREEN,
                         currentThreadName,
                         connectionName,
@@ -51,4 +51,24 @@ public class RunnableClient implements Runnable {
         }
     }
 
+    public ConnectionPool getPool() {
+        return pool;
+    }
+
+    public void setPool(ConnectionPool pool) {
+        this.pool = pool;
+    }
+
+    @Override
+    public String toString() {
+        Class<?> currClass = ThreadRunnable.class;
+        String[] fieldNames = {
+                "pool"
+        };
+
+        String fieldsString =
+                StringFormatters.buildFieldsString(this, fieldNames);
+
+        return StringFormatters.buildToString(currClass, fieldNames, fieldsString);
+    }
 }
