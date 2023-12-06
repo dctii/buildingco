@@ -17,7 +17,7 @@ public class ItemRepository {
 
     static {
         Stream.of(Item.values())
-                .forEach(item -> loadItem(item));
+                .forEach(ItemRepository::loadItem);
     }
 
     private static void loadItem(Item item) {

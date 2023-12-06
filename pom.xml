@@ -24,6 +24,7 @@
         <exec-maven-plugin.version>3.1.0</exec-maven-plugin.version>
         <mainEntrypoint>com.solvd.buildingco.Main</mainEntrypoint>
         <wordCounterEntrypoint>com.solvd.buildingco.WordCounter</wordCounterEntrypoint>
+        <multithreadingProofEntrypoint>com.solvd.buildingco.MultithreadingProof</multithreadingProofEntrypoint>
 
         <!--
         For these warning flags:
@@ -76,6 +77,21 @@
                         <version>${exec-maven-plugin.version}</version>
                         <configuration>
                             <mainClass>${wordCounterEntrypoint}</mainClass>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>run-multithreading-proof</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>${exec-maven-plugin.version}</version>
+                        <configuration>
+                            <mainClass>${multithreadingProofEntrypoint}</mainClass>
                         </configuration>
                     </plugin>
                 </plugins>

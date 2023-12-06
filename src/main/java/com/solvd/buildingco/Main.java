@@ -65,9 +65,6 @@ public class Main {
                     break;
             }
 
-            // TODO: have customer input a desired completion date, then it will see if the
-            //  building can be completed by that time, if not, prompt for a further date
-            // hardcoded future completion date
             ZonedDateTime completionDate = ZonedDateTime.now().plusMonths(200);
 
 
@@ -90,7 +87,6 @@ public class Main {
 
                  The last is the sum of the material and labor costs.
             */
-
             if (building != null) {
                 ITax taxCalculator = TaxMenu.runMenu(scanner);
 

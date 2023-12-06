@@ -96,7 +96,7 @@ public class ScheduleUtils {
         if (includeWeekends) {
             return datesBetween(start, end);
         } else {
-            return Stream.iterate(start, date -> nextWeekday(date))
+            return Stream.iterate(start, ScheduleUtils::nextWeekday)
                     .limit(ChronoUnit.DAYS.between(start, end))
                     .filter(date -> isNotWeekend(date.getDayOfWeek()));
         }
@@ -206,7 +206,7 @@ public class ScheduleUtils {
                 activity -> 1;
 
         int workDaysCount = allActivities.stream()
-                .flatMap(activityList -> activityList.stream())
+                .flatMap(Collection::stream)
                 .mapToInt(countActivityAsOne)
                 .sum();
 

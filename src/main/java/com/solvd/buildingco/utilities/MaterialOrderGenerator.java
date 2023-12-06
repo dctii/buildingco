@@ -42,8 +42,8 @@ public class MaterialOrderGenerator {
     private static Order generateBuildingOrder(Building building) {
         OrderBuilder orderBuilder = new OrderBuilder();
 
-        Map<String, Integer> buyableItems = null;
-        Map<String, Integer[]> rentableItems = null;
+        Map<String, Integer> buyableItems;
+        Map<String, Integer[]> rentableItems;
 
         if (building instanceof House) {
             buyableItems = generateBuyableItemMap((House) building);
@@ -60,15 +60,13 @@ public class MaterialOrderGenerator {
         }
 
         buyableItems.forEach(
-                (itemName, quantity) -> orderBuilder.addItem(itemName, quantity)
+                orderBuilder::addItem
         );
         rentableItems.forEach(
-                (itemName, quantityArray) -> orderBuilder.addItem(itemName, quantityArray)
+                orderBuilder::addItem
         );
 
-        Order order = orderBuilder.build();
-
-        return order;
+        return orderBuilder.build();
     }
 
     private static Map<String, Integer> generateBuyableItemMap(House house) {
@@ -157,16 +155,6 @@ public class MaterialOrderGenerator {
         }
 
         Map<String, Integer> items = new HashMap<>();
-
-        int concreteQuantity, interiorFinishingQuantity;
-        concreteQuantity = interiorFinishingQuantity = calculateAllSquareFootage(skyscraper);
-        int steelBeamsQuantity = calculateSteelBeamsQuantity(skyscraper);
-        int glassQuantity = calculateGlassQuantity(skyscraper);
-        int insulationQuantity = calculateInsulationQuantity(skyscraper);
-        int claddingMaterialsQuantity = calculateCladdingMaterialsQuantity(skyscraper);
-        int electricalSuppliesQuantity, plumbingSuppliesQuantity, hvacSuppliesQuantity;
-        electricalSuppliesQuantity = plumbingSuppliesQuantity = hvacSuppliesQuantity =
-                skyscraper.getNumberOfLevels();
 
         items.put(CONCRETE_HIGH_GRADE.getName(), calculateConcreteQuantity(skyscraper));
         items.put(INTERIOR_FINISHING_MATERIALS.getName(),

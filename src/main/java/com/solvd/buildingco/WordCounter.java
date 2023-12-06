@@ -25,7 +25,7 @@ public class WordCounter {
         try {
             Scanner scanner = new Scanner(System.in);
             LOGGER.info("Choose an option, input '1' or '2':");
-            LOGGER.info("1. Count these words only: " + wordsToCount.toString());
+            LOGGER.info("1. Count these words only: " + wordsToCount);
             LOGGER.info("2. Count all words");
             int choice = scanner.nextInt();
             scanner.close();
