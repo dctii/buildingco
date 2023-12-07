@@ -20,7 +20,11 @@ public enum ResidentialBuildingSpecifications {
             12,
             0.5,
             3.0 / 12.0,
-            375
+            375,
+            0.5 / 1000,
+            2.0 / 1000,
+            1.0 / 1000,
+            8.0 / 1000
     );
 
 
@@ -62,6 +66,12 @@ public enum ResidentialBuildingSpecifications {
     // how much square footage is covered by one gallon of paint
     private final int paintCoverageBySquareFeet;
 
+    // per every 1000 square feet
+    private final double architectsPerSquareFoot;
+    private final double projectManagersPerSquareFoot;
+    private final double workersPerSquareFoot;
+    private final double engineersPerSquareFoot;
+
 
     ResidentialBuildingSpecifications(String buildingType, int minNumRooms, int maxNumRooms,
                                       int minNumBathrooms, int maxNumBathrooms,
@@ -72,7 +82,10 @@ public enum ResidentialBuildingSpecifications {
                                       int extraConstructionDaysPerCar, int roomHeight,
                                       int averageRoomLength, int averageRoomWidth,
                                       double woodUsageFactorPerFoot, double insulationThickness,
-                                      int paintCoverageBySquareFeet) {
+                                      int paintCoverageBySquareFeet, double architectsPerSquareFoot,
+                                      double projectManagersPerSquareFoot,
+                                      double workersPerSquareFoot,
+                                      double engineersPerSquareFoot) {
         this.buildingType = buildingType;
         this.minNumRooms = minNumRooms;
         this.maxNumRooms = maxNumRooms;
@@ -92,6 +105,10 @@ public enum ResidentialBuildingSpecifications {
         this.woodUsageFactorPerFoot = woodUsageFactorPerFoot;
         this.insulationThickness = insulationThickness;
         this.paintCoverageBySquareFeet = paintCoverageBySquareFeet;
+        this.architectsPerSquareFoot = architectsPerSquareFoot;
+        this.projectManagersPerSquareFoot = projectManagersPerSquareFoot;
+        this.engineersPerSquareFoot = engineersPerSquareFoot;
+        this.workersPerSquareFoot = workersPerSquareFoot;
     }
 
     public String getBuildingType() {
@@ -174,5 +191,21 @@ public enum ResidentialBuildingSpecifications {
 
     public int getPaintCoverageBySquareFeet() {
         return paintCoverageBySquareFeet;
+    }
+
+    public double getArchitectsPerSquareFoot() {
+        return architectsPerSquareFoot;
+    }
+
+    public double getProjectManagersPerSquareFoot() {
+        return projectManagersPerSquareFoot;
+    }
+
+    public double getWorkersPerSquareFoot() {
+        return workersPerSquareFoot;
+    }
+
+    public double getEngineersPerSquareFoot() {
+        return engineersPerSquareFoot;
     }
 }

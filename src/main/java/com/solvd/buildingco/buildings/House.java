@@ -15,7 +15,7 @@ public class House extends Building<BigDecimal> implements IEstimate {
     private int numRooms; // number of rooms user chooses in house
     private int numBathrooms; // number of bathrooms user chooses in house
     private int garageCapacity; // number of user wants to fit in garage
-    private int constructionDays; // how many business days to build
+    //    private int constructionDays; // how many business days to build
     private int squareFootage;
 
 
@@ -39,7 +39,7 @@ public class House extends Building<BigDecimal> implements IEstimate {
 
     public House(int numRooms, int numBathrooms, int garageCapacity, int squareFootage,
                  int constructionDays) {
-        super();
+        super(constructionDays);
 
         BuildingUtils.validateNumberOfRooms(numRooms);
         BuildingUtils.validateNumberOfBathrooms(numBathrooms, numRooms);
@@ -49,7 +49,6 @@ public class House extends Building<BigDecimal> implements IEstimate {
         this.numBathrooms = numBathrooms;
         this.garageCapacity = garageCapacity;
         this.squareFootage = squareFootage;
-        this.constructionDays = constructionDays;
     }
 
 
@@ -71,8 +70,8 @@ public class House extends Building<BigDecimal> implements IEstimate {
     @Override
     public BigDecimal calculateLaborCost(ZonedDateTime customerEndDate) {
         return BuildingCostCalculator.calculateLaborCost(
-                customerEndDate,
-                getConstructionDays()
+                this,
+                customerEndDate
         );
     }
 
@@ -98,15 +97,6 @@ public class House extends Building<BigDecimal> implements IEstimate {
     }
 
     // getters and setters
-
-    public int getConstructionDays() {
-        return constructionDays;
-    }
-
-    public void setConstructionDays(int constructionDays) {
-        this.constructionDays = constructionDays;
-    }
-
 
     public int getSquareFootage() {
         return squareFootage;
@@ -156,7 +146,6 @@ public class House extends Building<BigDecimal> implements IEstimate {
                 "numRooms",
                 "numBathrooms",
                 "garageCapacity",
-                "constructionDays"
         };
 
         String parentToString = super.toString();

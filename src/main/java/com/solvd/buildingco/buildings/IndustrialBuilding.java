@@ -14,7 +14,6 @@ import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.IN
 public class IndustrialBuilding extends Building<BigDecimal> implements IEstimate {
     private int squareFootage; // square footage user chooses building to be
     private int numberOfFloors; // number of floors user chooses building to be
-    private int constructionDays; // number of business days to construct building
 
     public IndustrialBuilding() {
         super();
@@ -31,6 +30,16 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
 
     public IndustrialBuilding(int squareFootage, int numberOfFloors) {
         super();
+
+        BuildingUtils.validateSquareFootage(squareFootage);
+        BuildingUtils.validateNumberOfFloors(numberOfFloors);
+
+        this.squareFootage = squareFootage;
+        this.numberOfFloors = numberOfFloors;
+    }
+
+    public IndustrialBuilding(int squareFootage, int numberOfFloors, int constructionDays) {
+        super(constructionDays);
 
         BuildingUtils.validateSquareFootage(squareFootage);
         BuildingUtils.validateNumberOfFloors(numberOfFloors);
@@ -66,21 +75,13 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
         setConstructionDays(calculatedConstructionDays);
 
         return BuildingCostCalculator.calculateLaborCost(
-                customerEndDate,
-                calculatedConstructionDays
+                this,
+                customerEndDate
         );
     }
 
 
     // getters and setters
-    public int getConstructionDays() {
-        return constructionDays;
-    }
-
-    public void setConstructionDays(int constructionDays) {
-        this.constructionDays = constructionDays;
-    }
-
 
     public int getSquareFootage() {
         return squareFootage;
@@ -108,7 +109,6 @@ public class IndustrialBuilding extends Building<BigDecimal> implements IEstimat
         String[] fieldNames = {
                 "squareFootage",
                 "numberOfFloors",
-                "constructionDays"
         };
 
         String parentToString = super.toString();

@@ -1,6 +1,9 @@
 package com.solvd.buildingco.utilities;
 
 import com.solvd.buildingco.buildings.Building;
+import com.solvd.buildingco.buildings.House;
+import com.solvd.buildingco.buildings.IndustrialBuilding;
+import com.solvd.buildingco.buildings.Skyscraper;
 import com.solvd.buildingco.exception.BuildingTypeException;
 import com.solvd.buildingco.exception.ScheduleMismatchException;
 import com.solvd.buildingco.finance.Order;
@@ -11,11 +14,12 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
+import java.util.stream.IntStream;
 
 import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.INDUSTRIAL_BUILDING;
 import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.SKYSCRAPER;
+import static com.solvd.buildingco.buildings.ResidentialBuildingSpecifications.HOUSE;
 import static com.solvd.buildingco.stakeholders.employees.Personnel.*;
 
 public class BuildingCostCalculator {
@@ -33,110 +37,258 @@ public class BuildingCostCalculator {
     }
 
     public static BigDecimal calculateMaterialCost(Order order) {
-        BigDecimal totalMaterialCost = order.getTotalCost();
-
-        return totalMaterialCost;
+        return order.getTotalCost();
     }
 
-    public static BigDecimal calculateLaborCost(ZonedDateTime customerEndDate,
-                                                int constructionDays) {
+    public static BigDecimal calculateLaborCost(House house, ZonedDateTime endDate) {
+        int totalSquareFootage = house.getSquareFootage();
+        int numArchitects =
+                Math.max(NumberUtils.roundToInt(totalSquareFootage * HOUSE.getArchitectsPerSquareFoot()), 1);
+        int numProjectManagers =
+                Math.max(NumberUtils.roundToInt(totalSquareFootage * HOUSE.getProjectManagersPerSquareFoot()), 1);
+        int numEngineers =
+                Math.max(NumberUtils.roundToInt(totalSquareFootage * HOUSE.getEngineersPerSquareFoot()), 1);
+        int numWorkers =
+                Math.max(NumberUtils.roundToInt(totalSquareFootage * HOUSE.getWorkersPerSquareFoot()), 1);
 
-        Schedule architectureSchedule = ScheduleUtils.generateEmployeeSchedule(
-                customerEndDate,
-                constructionDays,
-                ARCHITECT.getDefaultActivityDescription()
-        );
-        Schedule constructionWorkerSchedule = ScheduleUtils.generateEmployeeSchedule(
-                customerEndDate,
-                constructionDays,
-                CONSTRUCTION_WORKER.getDefaultActivityDescription()
-        );
-        Schedule projectManagerSchedule = ScheduleUtils.generateEmployeeSchedule(
-                customerEndDate,
-                constructionDays,
-                PROJECT_MANAGER.getDefaultActivityDescription()
-        );
-        Schedule engineerSchedule = ScheduleUtils.generateEmployeeSchedule(
-                customerEndDate,
-                constructionDays,
-                ENGINEER.getDefaultActivityDescription()
+
+        BigDecimal totalLaborCost = calculateEmployeesLaborCost(
+                house,
+                endDate,
+                ARCHITECT,
+                numArchitects
         );
 
-        try {
-            Schedule[] employeeSchedules = {
-                    constructionWorkerSchedule,
-                    projectManagerSchedule,
-                    engineerSchedule
-            };
+        totalLaborCost = totalLaborCost.add(
+                calculateEmployeesLaborCost(
+                        house,
+                        endDate,
+                        PROJECT_MANAGER,
+                        numProjectManagers
+                )
+        );
 
-            validateSchedule(
-                    architectureSchedule,
-                    NumberUtils.roundToInt(constructionDays * 0.25)
+        totalLaborCost = totalLaborCost.add(
+                calculateEmployeesLaborCost(
+                        house,
+                        endDate,
+                        ENGINEER,
+                        numEngineers
+                )
+        );
+
+        totalLaborCost = totalLaborCost.add(
+                calculateEmployeesLaborCost(
+                        house,
+                        endDate,
+                        CONSTRUCTION_WORKER,
+                        numWorkers
+                )
+        );
+
+        return totalLaborCost;
+    }
+
+    public static BigDecimal calculateLaborCost(IndustrialBuilding industrialBuilding, ZonedDateTime endDate) {
+        int totalSquareFootage = industrialBuilding.getSquareFootage();
+        int numArchitects =
+                Math.max(NumberUtils.roundToInt(totalSquareFootage * INDUSTRIAL_BUILDING.getArchitectsPerSquareFoot()), 1);
+        int numProjectManagers =
+                Math.max(NumberUtils.roundToInt(totalSquareFootage * INDUSTRIAL_BUILDING.getProjectManagersPerSquareFoot()), 1);
+        int numEngineers =
+                Math.max(NumberUtils.roundToInt(totalSquareFootage * INDUSTRIAL_BUILDING.getEngineersPerSquareFoot()), 1);
+        int numWorkers =
+                Math.max(NumberUtils.roundToInt(totalSquareFootage * INDUSTRIAL_BUILDING.getWorkersPerSquareFoot())
+                        , 1);
+
+        BigDecimal totalLaborCost = calculateEmployeesLaborCost(
+                industrialBuilding,
+                endDate,
+                ARCHITECT,
+                numArchitects
+        );
+
+        totalLaborCost = totalLaborCost.add(
+                calculateEmployeesLaborCost(
+                        industrialBuilding,
+                        endDate,
+                        PROJECT_MANAGER,
+                        numProjectManagers
+                )
+        );
+
+        totalLaborCost = totalLaborCost.add(
+                calculateEmployeesLaborCost(
+                        industrialBuilding,
+                        endDate,
+                        ENGINEER,
+                        numEngineers
+                )
+        );
+
+        totalLaborCost = totalLaborCost.add(
+                calculateEmployeesLaborCost(
+                        industrialBuilding,
+                        endDate,
+                        CONSTRUCTION_WORKER,
+                        numWorkers
+                )
+        );
+
+        return totalLaborCost;
+    }
+
+    public static BigDecimal calculateLaborCost(Skyscraper skyscraper, ZonedDateTime endDate) {
+        int totalSquareFootage = skyscraper.getSquareFootagePerLevel();
+        int numArchitects =
+                Math.max(NumberUtils.roundToInt(totalSquareFootage * SKYSCRAPER.getArchitectsPerSquareFoot()), 1);
+        int numProjectManagers =
+                Math.max(NumberUtils.roundToInt(totalSquareFootage * SKYSCRAPER.getProjectManagersPerSquareFoot()), 1);
+        int numEngineers =
+                Math.max(NumberUtils.roundToInt(totalSquareFootage * SKYSCRAPER.getEngineersPerSquareFoot()), 1);
+        int numWorkers =
+                Math.max(NumberUtils.roundToInt(totalSquareFootage * SKYSCRAPER.getWorkersPerSquareFoot())
+                        , 1);
+
+        BigDecimal totalLaborCost = calculateEmployeesLaborCost(
+                skyscraper,
+                endDate,
+                ARCHITECT,
+                numArchitects
+        );
+
+        totalLaborCost = totalLaborCost.add(
+                calculateEmployeesLaborCost(
+                        skyscraper,
+                        endDate,
+                        PROJECT_MANAGER,
+                        numProjectManagers
+                )
+        );
+
+        totalLaborCost = totalLaborCost.add(
+                calculateEmployeesLaborCost(
+                        skyscraper,
+                        endDate,
+                        ENGINEER,
+                        numEngineers
+                )
+        );
+
+        totalLaborCost = totalLaborCost.add(
+                calculateEmployeesLaborCost(
+                        skyscraper,
+                        endDate,
+                        CONSTRUCTION_WORKER,
+                        numWorkers
+                )
+        );
+
+        return totalLaborCost;
+    }
+
+    private static BigDecimal calculateEmployeesLaborCost(
+            Building building,
+            ZonedDateTime endDate,
+            Personnel PERSONNEL,
+            int numEmployees
+    ) {
+        int constructionDays = building.getConstructionDays();
+
+        return IntStream.range(0, numEmployees).mapToObj(i -> {
+                    Schedule schedule = ScheduleUtils.generateEmployeeSchedule(
+                            endDate,
+                            constructionDays,
+                            PERSONNEL.getDefaultActivityDescription()
+                    );
+                    validateSchedule(
+                            schedule,
+                            !PERSONNEL.equals(ARCHITECT)
+                                    ? constructionDays
+                                    : NumberUtils.roundToInt(constructionDays * 0.25)
+                    );
+
+                    Employee employee = generateEmployee(PERSONNEL, schedule);
+
+                    return calculateEmployeeCost(employee, building, endDate);
+                })
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    private static Employee generateEmployee(Personnel PERSONNEL, Schedule schedule) {
+        Employee employee = null;
+
+        if (PERSONNEL.equals(ARCHITECT)) {
+            employee = Architect.createEmployee(
+                    schedule,
+                    PERSONNEL.getAverageRatePerHour()
             );
-
-            Arrays.stream(employeeSchedules)
-                    .forEach(schedule -> validateSchedule(schedule, constructionDays));
-        } catch (ScheduleMismatchException e) {
-            LOGGER.error(e);
+        } else if (PERSONNEL.equals(PROJECT_MANAGER)) {
+            employee = ProjectManager.createEmployee(
+                    schedule,
+                    PERSONNEL.getAverageRatePerHour()
+            );
+        } else if (PERSONNEL.equals(ENGINEER)) {
+            employee = Engineer.createEmployee(
+                    schedule,
+                    PERSONNEL.getAverageRatePerHour()
+            );
+        } else if (PERSONNEL.equals(CONSTRUCTION_WORKER)) {
+            employee = ConstructionWorker.createEmployee(
+                    schedule,
+                    PERSONNEL.getAverageRatePerHour()
+            );
         }
-
-        Employee architect, manager, engineer, worker;
-
-        architect = Architect.createEmployee(architectureSchedule, new BigDecimal("35.0"));
-        manager = ProjectManager.createEmployee(projectManagerSchedule, new BigDecimal("40.0"));
-        engineer = Engineer.createEmployee(engineerSchedule, new BigDecimal("30.0"));
-        worker = ConstructionWorker.createEmployee(constructionWorkerSchedule, new BigDecimal("15.0"));
-
-        final DateTimeFormatter dateFormat = ScheduleUtils.getDateFormat();
-
-        String startDateStr =
-                customerEndDate
-                        .minusDays(constructionDays)
-                        .toLocalDate()
-                        .format(dateFormat);
-        String endDateStr =
-                customerEndDate
-                        .toLocalDate()
-                        .format(dateFormat);
-
-        int architectDays = NumberUtils.roundToInt(Math.ceil(constructionDays / 5.0));
-        String architectEndDateStr =
-                customerEndDate
-                        .minusDays(architectDays)
-                        .toLocalDate()
-                        .format(dateFormat);
-
-        Employee[] employees = {worker, engineer, architect, manager};
-
-        BigDecimal totalCost =
-                Arrays.stream(employees)
-                        .map(employee -> {
-                            // get end date for employee, if Architect, use respective spec
-                            String employeeEndDateStr =
-                                    (employee instanceof Architect)
-                                            ? architectEndDateStr
-                                            : endDateStr;
-                            // calculate number of hours, use getWorkHours and pass in date
-                            // boundaries
-                            BigDecimal employeeHours = new BigDecimal(
-                                    employee.getWorkHours(
-                                            startDateStr,
-                                            employeeEndDateStr
-                                    )
-                            );
-                            // calculate the cost for the employee by multiplying their pay rate
-                            // by hours worked
-                            BigDecimal employeeCost =
-                                    employee.getPayRate()
-                                            .getRate()
-                                            .multiply(employeeHours);
-                            return employeeCost;
-                        })
-                        // sum up all individual employee costs to get the total labor cost
-                        .reduce(BigDecimal.ZERO, BigDecimalUtils.ADD_OPERATION);
-
-        return totalCost;
+        return employee;
     }
+
+    private static BigDecimal calculateEmployeeCost(
+            Employee employee,
+            Building building,
+            ZonedDateTime endDate
+    ) {
+        BigDecimal employeeHours = calculateEmployeeWorkHours(employee, building, endDate);
+
+        // return employee cost
+        return employee.getPayRate()
+                .getRate()
+                .multiply(employeeHours);
+    }
+
+    private static BigDecimal calculateEmployeeWorkHours(
+            Employee employee,
+            Building building,
+            ZonedDateTime endDate
+    ) {
+        int constructionDays = building.getConstructionDays();
+        int architectDays = NumberUtils.roundToInt(Math.ceil(constructionDays / 5.0));
+        ZonedDateTime startDate = calculateStartDate(endDate, constructionDays);
+        ZonedDateTime architectEndDate = calculateStartDate(endDate, architectDays);
+
+        String startDateStr = toLocalDateString(startDate);
+        String endDateStr = employee instanceof Architect
+                ? toLocalDateString(architectEndDate)
+                : toLocalDateString(endDate);
+
+        return new BigDecimal(
+                employee.getWorkHours(
+                        startDateStr,
+                        endDateStr
+                )
+        );
+    }
+
+    private static ZonedDateTime calculateStartDate(ZonedDateTime endDate, int constructionDays) {
+        return endDate
+                .minusDays(constructionDays);
+    }
+
+    private static String toLocalDateString(ZonedDateTime datetime) {
+        return datetime
+                .toLocalDate()
+                .format(ScheduleUtils.getDateFormat());
+    }
+
 
     // calculate construction days with respect to Building, used for generating
     // employee schedule
@@ -147,20 +299,20 @@ public class BuildingCostCalculator {
 
         final String BUILDING_TYPE_EXCEPTION_MESSAGE = "Building type not found.";
 
-        int baseConstructionDays = 0;
-        int additionalTimePerLevel = 0;
+        int baseConstructionDays;
+        int additionalTimePerLevel;
 
         if (type.equalsIgnoreCase(SKYSCRAPER.getBuildingType())) {
 
-            baseConstructionDays = squareFootage / 50;
+            baseConstructionDays = squareFootage / 275;
             additionalTimePerLevel =
-                    NumberUtils.roundToInt((double) (baseConstructionDays * numberOfLevels));
+                    NumberUtils.roundToInt((double) (baseConstructionDays * numberOfLevels) / 3.5);
 
         } else if (type.equalsIgnoreCase(INDUSTRIAL_BUILDING.getBuildingType())) {
 
             baseConstructionDays = squareFootage / 100;
             additionalTimePerLevel =
-                    NumberUtils.roundToInt((double) (baseConstructionDays * (numberOfLevels - 1)));
+                    NumberUtils.roundToInt((double) (baseConstructionDays * (numberOfLevels - 1)) / 2);
 
         } else {
             throw new BuildingTypeException(BUILDING_TYPE_EXCEPTION_MESSAGE);
@@ -184,7 +336,9 @@ public class BuildingCostCalculator {
 
     private static void validateSchedule(Schedule schedule, int constructionDays) {
         int scheduleDays = ScheduleUtils.countWorkDays(schedule);
-        if (scheduleDays != constructionDays) {
+
+        // difference can be within 2 days
+        if (Math.abs(scheduleDays - constructionDays) > 1) {
             String scheduleMismatchMessage =
                     String.format(
                             "%d != %d; Scheduled days do not match construction days.",

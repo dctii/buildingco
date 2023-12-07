@@ -16,7 +16,6 @@ import static com.solvd.buildingco.buildings.CommercialBuildingSpecifications.SK
 public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     private int squareFootagePerLevel;
     private int numberOfLevels;
-    private int constructionDays;
     private BigDecimal lobbyCost; // lobby is a unique floor, has an arbitrary fixed cost
     private BigDecimal foundationCost; // foundation cost depends on amount of levels
 
@@ -42,6 +41,19 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
     public Skyscraper(int squareFootagePerLevel, int numberOfLevels, BigDecimal lobbyCost,
                       BigDecimal foundationCost) {
         super();
+
+        BuildingUtils.validateSquareFootagePerLevel(squareFootagePerLevel);
+        BuildingUtils.validateNumberOfLevels(numberOfLevels);
+
+        this.squareFootagePerLevel = squareFootagePerLevel;
+        this.numberOfLevels = numberOfLevels;
+        this.lobbyCost = lobbyCost;
+        this.foundationCost = foundationCost;
+    }
+
+    public Skyscraper(int squareFootagePerLevel, int numberOfLevels, BigDecimal lobbyCost,
+                      BigDecimal foundationCost, int constructionDays) {
+        super(constructionDays);
 
         BuildingUtils.validateSquareFootagePerLevel(squareFootagePerLevel);
         BuildingUtils.validateNumberOfLevels(numberOfLevels);
@@ -83,20 +95,13 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
         setConstructionDays(calculatedConstructionDays);
 
         return BuildingCostCalculator.calculateLaborCost(
-                customerEndDate,
-                calculatedConstructionDays
+                this,
+                customerEndDate
         );
     }
 
 
     // getters and setters
-    public int getConstructionDays() {
-        return constructionDays;
-    }
-
-    public void setConstructionDays(int constructionDays) {
-        this.constructionDays = constructionDays;
-    }
 
     public int getSquareFootagePerLevel() {
         return squareFootagePerLevel;
@@ -141,7 +146,6 @@ public class Skyscraper extends Building<BigDecimal> implements IEstimate {
         String[] fieldNames = {
                 "squareFootagePerLevel",
                 "numberOfLevels",
-                "constructionDays",
                 "lobbyCost",
                 "foundationCost"
         };
