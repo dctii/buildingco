@@ -2,10 +2,12 @@ package com.solvd.buildingco.utilities;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -182,6 +184,18 @@ public class StringFormatters {
                 + StringConstants.DASH_STRING + datetime.getDayOfMonth()
                 + StringConstants.DASH_STRING + datetime.getYear();
 
+    }
+
+    public static String toUSD (Number cost) {
+        /*
+            "USD Currency Formatting in Java"
+            https://stackoverflow.com/questions/3075743/usd-currency-formatting-in-java
+
+            "Class Locale: US"
+            https://docs.oracle.com/javase/8/docs/api/java/util/Locale.html#US
+        */
+        NumberFormat usdFormat = NumberFormat.getCurrencyInstance(Locale.US);
+        return usdFormat.format(cost);
     }
 
     private StringFormatters() {
