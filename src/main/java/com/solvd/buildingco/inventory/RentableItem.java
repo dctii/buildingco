@@ -14,9 +14,9 @@ public class RentableItem<T extends Number> implements Priceable<T> {
     private String name;
     private T pricePerMonth;
 
-    final static String INVALID_PRICE_MESSAGE =
+    static final String INVALID_PRICE_MESSAGE =
             "Price per month cannot be less than or equal to zero.";
-    final static String BLANK_NAME_MESSAGE = "The 'name' cannot be blank or empty.";
+    static final String BLANK_NAME_MESSAGE = "The 'name' cannot be blank or empty.";
 
     public RentableItem() {
     }

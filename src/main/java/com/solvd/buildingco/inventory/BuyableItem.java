@@ -16,9 +16,9 @@ public class BuyableItem<T extends Number> implements Priceable<T> {
     private String unitMeasurement; // defined unit measurement
 
     // exception message
-    final static String INVALID_PRICE_MESSAGE =
+    static final String INVALID_PRICE_MESSAGE =
             "Price per unit cannot be less than or equal to zero.";
-    final static String BLANK_NAME_MESSAGE = "The 'name' cannot be blank or empty.";
+    static final String BLANK_NAME_MESSAGE = "The 'name' cannot be blank or empty.";
 
     public BuyableItem() {
     }
