@@ -308,7 +308,7 @@ mvn exec:java -P run-multithreading-proof
 1. Add 3 interfaces to your application (please keep in mind their purpose and use polymorphism with
    them as explained on the lesson)
     - 1a. Whoever has menus in main classes, please use interfaces with them
-2. Add 5 `final static` constants.
+2. Add 5 `static final` constants.
 
 <hr />
 

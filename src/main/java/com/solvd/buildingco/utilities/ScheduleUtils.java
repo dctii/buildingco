@@ -26,9 +26,9 @@ public class ScheduleUtils {
     private static final Logger LOGGER = LogManager.getLogger(ScheduleUtils.class);
     // short-form to create the Date formatter used throughout the project
     private static final String DATE_PATTERN = "MM/dd/yyyy";
-    final static String IDENTICAL_TIMES_MESSAGE =
+    static final String IDENTICAL_TIMES_MESSAGE =
             "The 'startTime' and 'endTime' cannot be identical.";
-    final static String START_AFTER_END_MESSAGE =
+    static final String START_AFTER_END_MESSAGE =
             "The 'startTime' cannot be after the 'endTime'.";
 
     public static DateTimeFormatter getDateFormat() {

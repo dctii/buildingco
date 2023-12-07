@@ -18,8 +18,8 @@ public class ScheduledActivity {
     private ZonedDateTime startTime;
     private ZonedDateTime endTime;
 
-    final static String BLANK_DESCRIPTION_MESSAGE = "The 'description' cannot be blank.";
-    final static String BLANK_LOCATION_MESSAGE = "The 'location' cannot be blank.";
+    static final String BLANK_DESCRIPTION_MESSAGE = "The 'description' cannot be blank.";
+    static final String BLANK_LOCATION_MESSAGE = "The 'location' cannot be blank.";
 
     public ScheduledActivity() {
 

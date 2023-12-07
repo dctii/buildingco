@@ -18,8 +18,8 @@ public class Order {
     private final List<OrderItem> orderItems;
 
     // exception messages
-    final static String NOT_BUYABLE_ITEM_MESSAGE = "Must be a buyable type of item.";
-    final static String NOT_RENTABLE_ITEM_MESSAGE = "Must be a rentable type of item.";
+    static final String NOT_BUYABLE_ITEM_MESSAGE = "Must be a buyable type of item.";
+    static final String NOT_RENTABLE_ITEM_MESSAGE = "Must be a rentable type of item.";
 
     public Order() {
         this.orderItems = new LinkedList<>();
