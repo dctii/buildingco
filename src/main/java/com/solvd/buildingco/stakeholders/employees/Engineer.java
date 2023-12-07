@@ -9,8 +9,6 @@ import java.math.BigDecimal;
 
 import static com.solvd.buildingco.stakeholders.employees.Personnel.ENGINEER;
 
-// TODO: add options for different kinds of Engineers
-
 public class Engineer extends Employee {
 
     public Engineer() {

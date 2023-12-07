@@ -9,8 +9,6 @@ import java.math.BigDecimal;
 
 import static com.solvd.buildingco.stakeholders.employees.Personnel.CONSTRUCTION_WORKER;
 
-// TODO: add options for different kinds of Construction Workers
-
 public class ConstructionWorker extends Employee {
 
     public ConstructionWorker() {
