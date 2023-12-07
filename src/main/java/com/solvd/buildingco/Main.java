@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.Scanner;
 
+import static com.solvd.buildingco.utilities.StringFormatters.toUSD;
+
 public class Main {
     private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
@@ -35,7 +37,19 @@ public class Main {
             LOGGER.info("[3] Skyscraper");
             LOGGER.info("[0] Exit");
             LOGGER.info("Your choice: ");
-            choice = scanner.nextInt();
+
+            while (true) {
+                if (scanner.hasNextInt()) {
+                    choice = scanner.nextInt();
+                    break;
+                } else {
+                    LOGGER.info(
+                            "Invalid choice. Please enter a number from 0-3 as accords with the options above."
+                    );
+                    scanner.next();
+                }
+            }
+
 
             // Building instance will be used to calculate costs at the end
             Building<BigDecimal> building;
@@ -65,7 +79,12 @@ public class Main {
                     break;
             }
 
-            ZonedDateTime completionDate = ZonedDateTime.now().plusMonths(200);
+
+            /*
+                Fixed future completion date, expected completion time will count backward from 20
+                years in the future to set the expected start time.
+            */
+            ZonedDateTime completionDate = ZonedDateTime.now().plusMonths(12 * 20);
 
 
             /*
@@ -116,10 +135,10 @@ public class Main {
                     BuildingUtils.displayBuildingProfile((Skyscraper) building);
                 }
 
-                LOGGER.info("Material Cost: " + calculatedMaterialCost);
-                LOGGER.info("Material Cost Sales Tax: " + materialsTaxAmount);
-                LOGGER.info("Labor Cost: " + calculatedLaborCost);
-                LOGGER.info("Total Building Cost: " + calculatedBuildingCostWithTax);
+                LOGGER.info("Material Cost: " + toUSD(calculatedMaterialCost));
+                LOGGER.info("Material Cost Sales Tax: " + toUSD(materialsTaxAmount));
+                LOGGER.info("Labor Cost: " + toUSD(calculatedLaborCost));
+                LOGGER.info("Total Building Cost: " + toUSD(calculatedBuildingCostWithTax));
                 LOGGER.info("Estimated Construction Days: " + totalConstructionDays);
                 LOGGER.info("Expected to Build Between: "
                         + ScheduleUtils.toReadableDateString(completionDate.minusDays(totalConstructionDays))
@@ -131,7 +150,11 @@ public class Main {
 
 
             // ask to restart the prompt sequence after finishing a BuildingPrompt sequence
-            LOGGER.info("Do you want to calculate for another building? (y/n)");
+            LOGGER.info(
+                    "Do you want to calculate for another building? "
+                            + StringConstants.NEWLINE
+                            + "Enter 'y' to start over or any other key to exit. "
+            );
         } while (scanner.next().equalsIgnoreCase("y"));
 
         scanner.close();
