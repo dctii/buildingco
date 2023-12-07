@@ -62,7 +62,7 @@ public class MultithreadingProof {
     private static int getChoice() {
         Scanner scanner = new Scanner(System.in);
         LOGGER.info(
-                "How would you like to emulate multithreading? Input '1', '2', or '3':"
+                "How would you like to emulate multithreading? Input '1' or '2':"
         );
         LOGGER.info("1. Start a {}java.lang.Thread{} with a {}Runnable{} passed into it. ",
                 AnsiCodes.BOLD, AnsiCodes.RESET_ALL, AnsiCodes.BOLD, AnsiCodes.RESET_ALL
