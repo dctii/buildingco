@@ -6,7 +6,7 @@ import static com.solvd.buildingco.inventory.UnitMeasurement.*;
 
 public enum Item {
     CONCRETE("Concrete",
-            "3.00",
+            "2.00",
             SQUARE_FOOT.getName(),
             Priceable.BUYABLE_TYPE
     ),
@@ -72,25 +72,25 @@ public enum Item {
     ),
     CONCRETE_INDUSTRIAL(
             "Industrial Concrete",
-            "5.00",
+            "3.00",
             SQUARE_FOOT.getName(),
             Priceable.BUYABLE_TYPE
     ),
     GLASS_INDUSTRIAL(
             "Industrial Glass",
-            "50.00",
+            "35.00",
             SQUARE_FOOT.getName(),
             Priceable.BUYABLE_TYPE
     ),
     ROOFING_INDUSTRIAL(
             "Industrial Roofing",
-            "10.00",
+            "7.00",
             SQUARE_FOOT.getName(),
             Priceable.BUYABLE_TYPE
     ),
     CLADDING_MATERIAL(
             "Cladding Material",
-            "25.00",
+            "15.00",
             SQUARE_FOOT.getName(),
             Priceable.BUYABLE_TYPE
     ),
@@ -108,13 +108,13 @@ public enum Item {
     ),
     INTERIOR_FINISHING_MATERIALS(
             "Interior Finishing Materials",
-            "25.00",
+            "15.00",
             SQUARE_FOOT.getName(),
             Priceable.BUYABLE_TYPE
     ),
     STEEL_BEAMS_HIGH_GRADE(
             "High Grade Steel Beams",
-            "200.00",
+            "100.00",
             UNIT.getName(),
             Priceable.BUYABLE_TYPE
     ),
@@ -126,7 +126,7 @@ public enum Item {
     ),
     GLASS_HIGH_GRADE_INDUSTRIAL(
             "High Grade Industrial Glass",
-            "100.00",
+            "40.00",
             SQUARE_FOOT.getName(),
             Priceable.BUYABLE_TYPE
     ),
