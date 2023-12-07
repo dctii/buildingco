@@ -6,17 +6,12 @@ import java.util.Arrays;
 import java.util.function.BinaryOperator;
 
 public class BigDecimalUtils {
+    private static final MathContext MATH_CONTEXT = new MathContext(10);
 
-    private static final MathContext mathContext = new MathContext(10);
-
-    public static final BinaryOperator<BigDecimal> ADD_OPERATION =
-            BigDecimal::add;
-    public static final BinaryOperator<BigDecimal> SUBTRACT_OPERATION =
-            BigDecimal::subtract;
-    public static final BinaryOperator<BigDecimal> MULTIPLY_OPERATION =
-            BigDecimal::multiply;
-    public static final BinaryOperator<BigDecimal> DIVIDE_OPERATION =
-            (currentQuotient, currentValue) -> currentQuotient.divide(currentValue, mathContext);
+    public static final BinaryOperator<BigDecimal> ADD_OPERATION = BigDecimalUtils::add;
+    public static final BinaryOperator<BigDecimal> SUBTRACT_OPERATION = BigDecimalUtils::subtract;
+    public static final BinaryOperator<BigDecimal> MULTIPLY_OPERATION = BigDecimalUtils::multiply;
+    public static final BinaryOperator<BigDecimal> DIVIDE_OPERATION = BigDecimalUtils::divide;
 
 
     public static Number sqrt(Number value) {
@@ -26,7 +21,7 @@ public class BigDecimalUtils {
     */
         BigDecimal sqrtValue =
                 new BigDecimal(value.toString())
-                        .sqrt(mathContext);
+                        .sqrt(MATH_CONTEXT);
 
         if (value instanceof BigDecimal) {
             return sqrtValue;
@@ -88,9 +83,8 @@ public class BigDecimalUtils {
             throw new IllegalArgumentException(ILLEGAL_ARGUMENT_EXCEPTION_MESSAGE);
         }
 
-        BigDecimal leftOperand = BigDecimal.valueOf(values[0].doubleValue());
-        BigDecimal rightOperand = BigDecimal.valueOf(values[1].doubleValue());
-
+        BigDecimal leftOperand = NumberUtils.ensureBigDecimal(values[0]);
+        BigDecimal rightOperand = NumberUtils.ensureBigDecimal(values[1]);
 
         switch (operationType.toLowerCase()) {
             case StringConstants.ADD_STRING:
@@ -100,7 +94,7 @@ public class BigDecimalUtils {
             case StringConstants.MULTIPLY_STRING:
                 return leftOperand.multiply(rightOperand);
             case StringConstants.DIVIDE_STRING:
-                return leftOperand.divide(rightOperand, mathContext);
+                return leftOperand.divide(rightOperand, MATH_CONTEXT);
             default:
                 final String ILLEGAL_ARGUMENT_MESSAGE = "Invalid operation type.";
                 throw new IllegalArgumentException(ILLEGAL_ARGUMENT_MESSAGE);
