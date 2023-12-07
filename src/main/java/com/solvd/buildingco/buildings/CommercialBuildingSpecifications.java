@@ -9,7 +9,11 @@ public enum CommercialBuildingSpecifications {
             4,
             18.0,
             1000,
-            6.0 / 12.0
+            6.0 / 12.0,
+            1.5 / 1000,
+            3.0 / 1000,
+            2.0 / 1000,
+            15.0 / 1000
     ),
     SKYSCRAPER(
             "skyscraper",
@@ -19,7 +23,11 @@ public enum CommercialBuildingSpecifications {
             100,
             9.0,
             40,
-            1.0 / 12.0
+            1.0 / 12.0,
+            1.5 / 1000,
+            3.0 / 1000,
+            10.0 / 1000,
+            25.0 / 1000
     );
 
     private final String buildingType;
@@ -34,10 +42,19 @@ public enum CommercialBuildingSpecifications {
     private final int squareFeetPerSteelBeam;
     // thickness of commercial building insulation in feet
     private final double insulationThickness;
+    private final double architectsPerSquareFoot;
+    private final double projectManagersPerSquareFoot;
+    private final double engineersPerSquareFoot;
+    private final double workersPerSquareFoot;
 
-    CommercialBuildingSpecifications(String buildingType, int minSquareFootage, int maxSquareFootage,
-                                     int minLevels, int maxLevels, double heightPerLevel,
-                                     int squareFeetPerSteelBeam, double insulationThickness) {
+    CommercialBuildingSpecifications(String buildingType, int minSquareFootage,
+                                     int maxSquareFootage, int minLevels, int maxLevels,
+                                     double heightPerLevel, int squareFeetPerSteelBeam,
+                                     double insulationThickness, double architectsPerSquareFoot,
+                                     double projectManagersPerSquareFoot,
+                                     double engineersPerSquareFoot,
+                                     double workersPerSquareFoot
+    ) {
         this.buildingType = buildingType;
         this.minSquareFootage = minSquareFootage;
         this.maxSquareFootage = maxSquareFootage;
@@ -46,8 +63,11 @@ public enum CommercialBuildingSpecifications {
         this.heightPerLevel = heightPerLevel;
         this.squareFeetPerSteelBeam = squareFeetPerSteelBeam;
         this.insulationThickness = insulationThickness;
+        this.architectsPerSquareFoot = architectsPerSquareFoot;
+        this.projectManagersPerSquareFoot = projectManagersPerSquareFoot;
+        this.engineersPerSquareFoot = engineersPerSquareFoot;
+        this.workersPerSquareFoot = workersPerSquareFoot;
     }
-
 
     public String getBuildingType() {
         return buildingType;
@@ -79,5 +99,21 @@ public enum CommercialBuildingSpecifications {
 
     public double getInsulationThickness() {
         return insulationThickness;
+    }
+
+    public double getArchitectsPerSquareFoot() {
+        return architectsPerSquareFoot;
+    }
+
+    public double getProjectManagersPerSquareFoot() {
+        return projectManagersPerSquareFoot;
+    }
+
+    public double getEngineersPerSquareFoot() {
+        return engineersPerSquareFoot;
+    }
+
+    public double getWorkersPerSquareFoot() {
+        return workersPerSquareFoot;
     }
 }
