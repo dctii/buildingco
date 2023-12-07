@@ -24,20 +24,23 @@ Plugins:
 ### Run `Main.class`
 
 ```shell
-mvn clean install exec:java
+mvn clean install
+mvn exec:java
 ```
 
 ### Run `WordCounter.class`
 
 ```shell
 # specifically for assignment 9
-mvn clean install exec:java -P run-word-counter
+mvn clean install
+mvn exec:java -P run-word-counter
 ```
 
 ### Run `MultithreadingProof.class`
 ```shell
 # specifically for assignment 12
-mvn clean install exec:java -P run-multithreading-proof
+mvn clean install
+mvn exec:java -P run-multithreading-proof
 ```
 
 ## Assignments
