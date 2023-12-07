@@ -116,24 +116,20 @@ public class BigDecimalUtils {
         }
 
         BinaryOperator<BigDecimal> arithmeticOperation;
-        BigDecimal initialValue;
+        BigDecimal initialValue = BigDecimal.valueOf(values[0].doubleValue());
 
         switch (operationType) {
             case StringConstants.ADD_STRING:
                 arithmeticOperation = ADD_OPERATION;
-                initialValue = BigDecimal.ZERO;
                 break;
             case StringConstants.SUBTRACT_STRING:
                 arithmeticOperation = SUBTRACT_OPERATION;
-                initialValue = BigDecimal.valueOf(values[0].doubleValue());
                 break;
             case StringConstants.MULTIPLY_STRING:
                 arithmeticOperation = MULTIPLY_OPERATION;
-                initialValue = BigDecimal.ONE;
                 break;
             case StringConstants.DIVIDE_STRING:
                 arithmeticOperation = DIVIDE_OPERATION;
-                initialValue = BigDecimal.valueOf(values[0].doubleValue());
                 break;
             default:
                 final String ILLEGAL_ARGUMENT_MESSAGE = "Invalid operation type.";
@@ -141,16 +137,10 @@ public class BigDecimalUtils {
         }
 
         return Arrays.stream(values)
-                .skip(isCommutative(operationType) ? 0 : 1)
+                .skip(1)
                 .map(value -> BigDecimal.valueOf(value.doubleValue()))
                 .reduce(initialValue, arithmeticOperation);
     }
-
-    private static boolean isCommutative(String operationType) {
-        return Arrays.stream(StringConstants.COMMUTATIVE_OPERATIONS)
-                .anyMatch(operation -> operation.equalsIgnoreCase(operationType));
-    }
-
 
     private BigDecimalUtils() {
         final String NO_UTILITY_CLASS_INSTANTIATION_MESSAGE =

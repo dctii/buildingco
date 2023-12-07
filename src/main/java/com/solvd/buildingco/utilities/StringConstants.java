@@ -22,19 +22,6 @@ public final class StringConstants {
     public static final String DASH_STRING = "-";
     public static final String SCREAMING_THREAD_STRING = "THREAD";
 
-    public static final String AND_STRING = "and";
-    public static final String OR_STRING = "or";
-    public static final String UNION_STRING = "union";
-    public static final String INTERSECTION_STRING = "intersection";
-    public static final String[] COMMUTATIVE_OPERATIONS = {
-            ADD_STRING,
-            MULTIPLY_STRING,
-            AND_STRING,
-            OR_STRING,
-            UNION_STRING,
-            INTERSECTION_STRING
-    };
-
 
     private StringConstants() {
         final String NO_CONSTANTS_INSTANTIATION_MESSAGE =
