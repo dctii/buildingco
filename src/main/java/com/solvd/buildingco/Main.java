@@ -123,17 +123,15 @@ public class Main {
                         calculatedBuildingCost.add(materialsTaxAmount);
 
                 // display specs of building
-                int totalConstructionDays;
                 if (building instanceof House) {
-                    totalConstructionDays = ((House) building).getConstructionDays();
                     BuildingUtils.displayBuildingProfile((House) building);
                 } else if (building instanceof IndustrialBuilding) {
-                    totalConstructionDays = ((IndustrialBuilding) building).getConstructionDays();
                     BuildingUtils.displayBuildingProfile((IndustrialBuilding) building);
                 } else {
-                    totalConstructionDays = ((Skyscraper) building).getConstructionDays();
                     BuildingUtils.displayBuildingProfile((Skyscraper) building);
                 }
+
+                int totalConstructionDays = building.getConstructionDays();
 
                 LOGGER.info("Material Cost: " + toUSD(calculatedMaterialCost));
                 LOGGER.info("Material Cost Sales Tax: " + toUSD(materialsTaxAmount));
