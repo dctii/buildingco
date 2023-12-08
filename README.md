@@ -43,6 +43,19 @@ mvn clean install
 mvn exec:java -P run-multithreading-proof
 ```
 
+## Final
+
+<hr />
+
+#### Status: 
+    
+✅ ACCEPTED
+
+##### Comments and Required changes to consider for finalization:
+- none for the requirements of the assignment at this stage
+
+<hr />
+
 ## Assignments
 
 <hr />
