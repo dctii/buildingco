@@ -1,12 +1,28 @@
 package com.solvd.buildingco.utilities;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.core.pattern.AnsiEscape;
+
 public final class AnsiCodes {
-    public static final String RED = "\033[31m";
-    public static final String YELLOW = "\033[33m";
-    public static final String GREEN = "\033[32m";
-    public static final String BLUE = "\033[34m";
-    public static final String BOLD = "\033[1m";
-    public static final String RESET_ALL = "\033[0m";
+    public static final String RED = toAnsiString(AnsiEscape.RED);
+    public static final String YELLOW = toAnsiString(AnsiEscape.YELLOW);
+    public static final String GREEN = toAnsiString(AnsiEscape.GREEN);
+    public static final String BLUE = toAnsiString(AnsiEscape.BLUE);
+    public static final String BOLD = toAnsiString(AnsiEscape.BOLD);
+    public static final String RESET_ALL = toAnsiString(AnsiEscape.NORMAL);
+
+    private static String toAnsiString(AnsiEscape STYLE) {
+        return wrapAnsiStyleCode(STYLE.getCode());
+    }
+
+    private static String wrapAnsiStyleCode(String STYLE_CODE) {
+        return StringUtils.join(
+                StringConstants.ESCAPE_SEQUENCE,
+                StringConstants.OPENING_BRACKET,
+                STYLE_CODE,
+                StringConstants.LOWER_CASE_M_CHAR
+        );
+    }
 
     private AnsiCodes() {
     }

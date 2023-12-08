@@ -1,13 +1,15 @@
 package com.solvd.buildingco.utilities;
 
 public final class StringConstants {
-
+    public static final char LOWER_CASE_M_CHAR = 'm';
     public static final String EMPTY_STRING = "";
     public static final String SINGLE_WHITESPACE = " ";
     public static final String EM_DASH = "--";
     public static final String SINGLE_QUOTATION = "'";
+    public static final String OPENING_BRACKET = "[";
     public static final String OPENING_CURLY_BRACE = "{";
     public static final String CLOSING_CURLY_BRACE = "}";
+    public static final String ESCAPE_SEQUENCE = "\033";
     public static final String CARRIAGE_RETURN = "\r";
     public static final String NEWLINE = "\n";
     public static final String PADDED_EQUALS_OPERATOR = " = ";
