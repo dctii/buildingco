@@ -5,7 +5,7 @@ Uses:
 - IntelliJ IDEA 2023.2.3 (Community Edition)
 - openjdk 11.0.21 2023-10-17
 - mac os x aarch64
-- Apache Maven 3.9.5
+- Apache Maven 3.9.6
 
 Dependencies:
 
